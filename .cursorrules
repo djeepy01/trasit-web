@@ -1,0 +1,75 @@
+# .cursorrules — trasit-web
+# Projet TRASIT | Groupe KEEPLAND Holdings LLC | Jean Paul Wahi — Dubai
+# Confidentiel — Ne pas partager
+
+## IDENTITÉ DU PROJET
+
+TRASIT est une plateforme africaine de vérification terrain.
+Elle permet à toute personne qui investit sans pouvoir surveiller (construction, agrobusiness, commerce)
+de recevoir un rapport terrain structuré, photo-géolocalisé, livré en 2 heures.
+
+Ce repo contient :
+- L'espace client web (responsive) — rapport, score, photos, historique
+- Le back-office Dubai (Jean Paul) — validation rapports, suivi missions, notation agents
+
+## STACK TECHNIQUE
+
+- Framework : React (Vite)
+- Déploiement : Netlify
+- Backend : Firebase (Firestore, Auth, Storage, Functions)
+- Paiement : CinetPay
+- Styles : Tailwind CSS
+- Langue principale : Français
+
+## CONVENTIONS DE CODE
+
+- Commentaires : en français
+- Variables et fonctions : en anglais (camelCase)
+- Composants React : en anglais (PascalCase)
+- Clés API : uniquement dans les variables d'environnement (.env) — jamais en dur dans le code
+- Pas de console.log en production — utiliser un système de log structuré
+
+## IDENTITÉ VISUELLE
+
+- Couleur dominante : Blanc #FFFFFF — fond de page principal
+- Couleur accent : Rouge bordeaux #8B1A1A — CTAs et accents uniquement
+- Couleur footer : Bleu marine #0D2F4A — footer uniquement
+- Logo : "tras·it" minuscules ultra bold — point rouge bordeaux comme séparateur
+- Ton visuel : Premium, sobre, international — niveau Aerobotics
+- Police : à définir (jamais Inter, Arial, Roboto)
+
+## RÈGLES DE SESSION
+
+1. Git avant tout — commit avant toute modification
+2. Plan étape par étape avant d'agir — une étape à la fois
+3. Ne jamais enchaîner deux étapes sans validation de Jean Paul
+4. Double vérification sécurité après chaque génération de code
+5. Une seule chose à la fois — pas de changements multiples non validés
+
+## RÈGLES DE CONTENU (page publique)
+
+- Ne jamais mentionner les pays spécifiques (Cameroun, Côte d'Ivoire)
+- Ne jamais afficher le prix (15 000 FCFA visible uniquement après connexion)
+- Mots interdits sur page publique : "Vérification", "Mission", "Lancer", "BTP", "Chantier [ville]"
+- Ne jamais exposer l'existence ou le rôle des agents dans la communication publique
+
+## STRUCTURE DU SITE
+
+1. Navbar sticky — logo gauche, liens milieu, switcher FR/EN, S'inscrire + Se connecter
+2. Hero — grande photo plein écran, titre fort gauche, 2 CTA, carte rapport droite
+3. Logos partenaires — défilement horizontal
+4. Section message — texte pro + graphique donut
+5. Comment ça marche — 5 étapes client
+6. Témoignages — cartes avatar, nom, citation, étoiles
+7. CTA final — fond bleu, phrase forte gauche, 2 boutons droite
+8. Footer — fond #0D2F4A, "trasit" en filigrane, colonnes liens, réseaux, mention KEEPLAND
+
+## PROMPT DE DÉBUT DE SESSION CURSOR
+
+```
+Projet : trasit-web
+Stack : React + Firebase + Netlify + Tailwind CSS + CinetPay
+Conventions : commentaires en français, variables et fonctions en anglais, clés API en variables d'environnement uniquement.
+Règles : commit Git avant toute modification, plan étape par étape avant d'agir, une étape à la fois sans enchaîner sans validation.
+Contexte : espace client web + back-office Dubai pour la plateforme TRASIT (vérification terrain Afrique francophone).
+```
