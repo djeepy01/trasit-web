@@ -58,44 +58,44 @@ export default function ServicesPage() {
     <div className="bg-white">
       {/* En-tête : fond blanc, texte navy */}
       <header
-        className="pt-[calc(68px+3rem)] pb-12 md:pb-16 px-6 bg-white"
+        className="pt-[calc(68px+3rem)] pb-14 md:pb-20 px-6 bg-white"
         style={{ color: navy }}
       >
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
             Nos services
           </h1>
-          <p className="mt-5 text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto">
+          <p className="mt-6 md:mt-8 text-base md:text-lg leading-[1.65] max-w-3xl mx-auto text-[#1A1A1A] font-normal">
             Une vérification terrain indépendante pour chaque type d&apos;investissement.
           </p>
         </div>
       </header>
 
       {/* Section 3 verticaux : cartes côte à côte */}
-      <section className="px-6 pb-16 md:pb-24 bg-white" aria-labelledby="verticals-heading">
+      <section className="px-6 pb-20 md:pb-28 bg-white" aria-labelledby="verticals-heading">
         <h2 id="verticals-heading" className="sr-only">
           Domaines d&apos;intervention
         </h2>
-        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8 lg:gap-10">
           {verticalServices.map((card) => (
             <article
               key={card.title}
-              className="rounded-xl border border-gray-200 bg-white p-6 md:p-8 flex flex-col shadow-sm"
+              className="rounded-xl border border-gray-200 bg-white p-8 md:p-10 flex flex-col shadow-sm gap-0"
               style={{ color: navy }}
             >
-              <h3 className="text-xl font-bold tracking-tight">{card.title}</h3>
-              <p className="mt-4 text-sm md:text-[0.9375rem] leading-relaxed font-light text-[#0D2F4A]/90">
+              <h3 className="text-xl md:text-2xl font-bold tracking-tight">{card.title}</h3>
+              <p className="mt-5 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal">
                 {card.description}
               </p>
-              <p className="mt-6 text-xs font-semibold uppercase tracking-wider text-[#0D2F4A]/70">
+              <p className="mt-8 text-[16px] font-semibold uppercase tracking-wide text-[#1A1A1A]">
                 Ce qu&apos;on vérifie
               </p>
-              <ul className="mt-3 space-y-2.5 flex-1">
+              <ul className="mt-4 space-y-4 flex-1">
                 {card.checks.map((item) => (
-                  <li key={item} className="flex gap-2.5 text-sm leading-snug">
+                  <li key={item} className="flex gap-3 text-[16px] leading-[1.55] text-[#1A1A1A]">
                     <Check
                       className="shrink-0 mt-0.5 text-[#2E8B57]"
-                      size={18}
+                      size={20}
                       strokeWidth={2.5}
                       aria-hidden
                     />
@@ -110,34 +110,34 @@ export default function ServicesPage() {
 
       {/* Niveaux de service : deux colonnes */}
       <section
-        className="px-6 py-16 md:py-20 bg-gray-50 border-y border-gray-100"
+        className="px-6 py-20 md:py-24 bg-gray-50 border-y border-gray-100"
         aria-labelledby="service-levels-heading"
       >
         <div className="max-w-5xl mx-auto">
           <h2
             id="service-levels-heading"
-            className="text-2xl md:text-3xl font-black text-center mb-10 md:mb-14"
+            className="text-2xl md:text-3xl font-black text-center mb-12 md:mb-16"
             style={{ color: navy }}
           >
             Niveaux de service
           </h2>
-          <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-10">
             <div
-              className="rounded-xl border border-gray-200 bg-white p-8 md:p-10"
+              className="rounded-xl border border-gray-200 bg-white p-9 md:p-11"
               style={{ color: navy }}
             >
-              <h3 className="text-xl font-bold">Rapport Standard</h3>
-              <p className="mt-4 text-[0.9375rem] leading-relaxed font-light text-[#0D2F4A]/90">
+              <h3 className="text-xl md:text-2xl font-bold">Rapport Standard</h3>
+              <p className="mt-6 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal">
                 Un rapport unique, livré en moins de 2 heures après l&apos;intervention. Idéal pour une
                 vérification ponctuelle.
               </p>
             </div>
             <div
-              className="rounded-xl border border-gray-200 bg-white p-8 md:p-10"
+              className="rounded-xl border border-gray-200 bg-white p-9 md:p-11"
               style={{ color: navy }}
             >
-              <h3 className="text-xl font-bold">Suivi Renforcé</h3>
-              <p className="mt-4 text-[0.9375rem] leading-relaxed font-light text-[#0D2F4A]/90">
+              <h3 className="text-xl md:text-2xl font-bold">Suivi Renforcé</h3>
+              <p className="mt-6 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal">
                 Plusieurs visites planifiées à chaque étape clé. Idéal pour un suivi continu de votre
                 investissement.
               </p>
