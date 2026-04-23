@@ -1,13 +1,22 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
-const navLinks = [
-  { label: 'Comment ça marche', href: '#how-it-works' },
-  { label: 'Nos services', href: '#main-product' },
-{ label: 'Contact', href: '#footer' },
+type NavItem = {
+  label: string;
+  to: string;
+  /** Style pill bleu pour « Comment ça marche » */
+  variant?: 'primary';
+};
+
+const navItems: NavItem[] = [
+  { label: 'Comment ça marche', to: '/#how-it-works', variant: 'primary' },
+  { label: 'Nos services', to: '/nos-services' },
+  { label: 'Contact', to: '/#footer' },
 ];
 
 export default function Navbar() {
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [lang, setLang] = useState<'FR' | 'EN'>('FR');
@@ -19,10 +28,13 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (href: string) => {
-    setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  const closeMobile = () => setMobileOpen(false);
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -32,36 +44,37 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 h-[68px] flex items-center justify-between">
-        <a
-          href="#"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        <Link
+          to="/"
+          onClick={handleLogoClick}
           className="flex items-center shrink-0"
         >
           <span className="text-[2.25rem] font-black text-gray-900 tracking-tight leading-none select-none">
             tras<span className="text-[#8B1A1A]">·</span>it
           </span>
-        </a>
+        </Link>
 
         <div className="hidden md:flex items-center gap-7">
-          {navLinks.map(({ label, href }) => (
-            <button
+          {navItems.map(({ label, to, variant }) => (
+            <Link
               key={label}
-              onClick={() => handleNavClick(href)}
+              to={to}
               className={
-                label === 'Comment ça marche'
+                variant === 'primary'
                   ? 'text-white text-[0.875rem] font-medium transition-colors tracking-wide whitespace-nowrap px-4 py-2 rounded-md hover:opacity-90'
                   : 'text-gray-700 hover:text-gray-900 text-[0.875rem] font-medium transition-colors tracking-wide whitespace-nowrap'
               }
-              style={label === 'Comment ça marche' ? { backgroundColor: '#1E5FA6', borderRadius: '6px' } : undefined}
+              style={variant === 'primary' ? { backgroundColor: '#1E5FA6', borderRadius: '6px' } : undefined}
             >
               {label}
-            </button>
+            </Link>
           ))}
         </div>
 
         <div className="hidden md:flex items-center gap-2.5">
           <div className="relative">
             <button
+              type="button"
               onClick={() => setLangOpen(!langOpen)}
               className="flex items-center gap-1 text-gray-700 hover:text-gray-900 text-sm font-semibold px-2.5 py-1.5 rounded transition-colors"
             >
@@ -73,7 +86,11 @@ export default function Navbar() {
                 {(['FR', 'EN'] as const).map((l) => (
                   <button
                     key={l}
-                    onClick={() => { setLang(l); setLangOpen(false); }}
+                    type="button"
+                    onClick={() => {
+                      setLang(l);
+                      setLangOpen(false);
+                    }}
                     className={`block w-full text-left px-4 py-2 text-sm font-semibold transition-colors ${
                       lang === l ? 'text-gray-900 bg-gray-50' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                     }`}
@@ -87,15 +104,22 @@ export default function Navbar() {
 
           <div className="w-px h-5 bg-gray-200 mx-1" />
 
-          <button className="border border-gray-300 text-gray-700 px-5 py-2 text-sm font-semibold rounded-sm hover:border-gray-500 hover:text-gray-900 transition-all duration-200">
+          <button
+            type="button"
+            className="border border-gray-300 text-gray-700 px-5 py-2 text-sm font-semibold rounded-sm hover:border-gray-500 hover:text-gray-900 transition-all duration-200"
+          >
             S'inscrire
           </button>
-          <button className="bg-[#8B1A1A] text-white px-5 py-2 text-sm font-semibold rounded-sm hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap">
+          <button
+            type="button"
+            className="bg-[#8B1A1A] text-white px-5 py-2 text-sm font-semibold rounded-sm hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
+          >
             Se connecter
           </button>
         </div>
 
         <button
+          type="button"
           className="md:hidden p-2 text-gray-700"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Menu"
@@ -106,20 +130,22 @@ export default function Navbar() {
 
       {mobileOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 px-6 py-5 space-y-4">
-          {navLinks.map(({ label, href }) => (
-            <button
+          {navItems.map(({ label, to }) => (
+            <Link
               key={label}
-              onClick={() => handleNavClick(href)}
+              to={to}
+              onClick={closeMobile}
               className="block w-full text-left text-gray-800 hover:text-gray-900 text-sm font-medium py-1"
             >
               {label}
-            </button>
+            </Link>
           ))}
           <div className="flex items-center gap-3 pt-3 border-t border-gray-100">
             <span className="text-xs text-gray-600 font-medium">Langue :</span>
             {(['FR', 'EN'] as const).map((l) => (
               <button
                 key={l}
+                type="button"
                 onClick={() => setLang(l)}
                 className={`text-sm font-bold px-2 py-0.5 rounded transition-colors ${
                   lang === l ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
@@ -130,10 +156,16 @@ export default function Navbar() {
             ))}
           </div>
           <div className="flex flex-col gap-3 pt-2">
-            <button className="border border-gray-300 text-gray-700 px-5 py-2.5 text-sm font-semibold rounded-sm">
+            <button
+              type="button"
+              className="border border-gray-300 text-gray-700 px-5 py-2.5 text-sm font-semibold rounded-sm"
+            >
               S'inscrire
             </button>
-            <button className="bg-[#8B1A1A] text-white px-5 py-2.5 text-sm font-semibold rounded-sm">
+            <button
+              type="button"
+              className="bg-[#8B1A1A] text-white px-5 py-2.5 text-sm font-semibold rounded-sm"
+            >
               Se connecter
             </button>
           </div>
