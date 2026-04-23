@@ -65,8 +65,8 @@ export default function HowItWorksPage() {
         </div>
       </header>
 
-      {/* Timeline : numéro à gauche, segment de ligne jusqu'à l'étape suivante, contenu à droite */}
-      <section className="px-6 pb-20 md:pb-28 bg-white" aria-labelledby="steps-heading">
+      {/* Timeline : fond bleu clair #EBF2FA uniquement sur cette section */}
+      <section className="px-6 py-14 md:py-16 pb-20 md:pb-28 bg-[#EBF2FA]" aria-labelledby="steps-heading">
         <h2 id="steps-heading" className="sr-only">
           Les cinq étapes
         </h2>
@@ -102,7 +102,7 @@ export default function HowItWorksPage() {
 
       {/* Bloc délai */}
       <section
-        className="px-6 py-16 md:py-20 bg-[#EBF2FA]"
+        className="px-6 py-16 md:py-20 bg-white"
         aria-labelledby="delay-heading"
       >
         <div className="max-w-3xl mx-auto text-center">
