@@ -10,7 +10,7 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: 'Comment ça marche', to: '/#how-it-works', variant: 'primary' },
+  { label: 'Comment ça marche', to: '/comment-ca-marche', variant: 'primary' },
   { label: 'Nos services', to: '/nos-services' },
   { label: 'Contact', to: '/#footer' },
 ];
