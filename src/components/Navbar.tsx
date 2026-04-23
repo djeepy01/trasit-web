@@ -1,0 +1,144 @@
+import { useState, useEffect } from 'react';
+import { Menu, X, ChevronDown } from 'lucide-react';
+
+const navLinks = [
+  { label: 'Comment ça marche', href: '#how-it-works' },
+  { label: 'Nos services', href: '#main-product' },
+{ label: 'Contact', href: '#footer' },
+];
+
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [lang, setLang] = useState<'FR' | 'EN'>('FR');
+  const [langOpen, setLangOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 16);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleNavClick = (href: string) => {
+    setMobileOpen(false);
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 bg-white border-b transition-all duration-300 ${
+        scrolled ? 'border-gray-200 shadow-sm' : 'border-gray-100'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 h-[68px] flex items-center justify-between">
+        <a
+          href="#"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="flex items-center shrink-0"
+        >
+          <span className="text-[2.25rem] font-black text-gray-900 tracking-tight leading-none select-none">
+            tras<span className="text-[#8B1A1A]">·</span>it
+          </span>
+        </a>
+
+        <div className="hidden md:flex items-center gap-7">
+          {navLinks.map(({ label, href }) => (
+            <button
+              key={label}
+              onClick={() => handleNavClick(href)}
+              className={
+                label === 'Comment ça marche'
+                  ? 'text-white text-[0.875rem] font-medium transition-colors tracking-wide whitespace-nowrap px-4 py-2 rounded-md hover:opacity-90'
+                  : 'text-gray-700 hover:text-gray-900 text-[0.875rem] font-medium transition-colors tracking-wide whitespace-nowrap'
+              }
+              style={label === 'Comment ça marche' ? { backgroundColor: '#1E5FA6', borderRadius: '6px' } : undefined}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <div className="hidden md:flex items-center gap-2.5">
+          <div className="relative">
+            <button
+              onClick={() => setLangOpen(!langOpen)}
+              className="flex items-center gap-1 text-gray-700 hover:text-gray-900 text-sm font-semibold px-2.5 py-1.5 rounded transition-colors"
+            >
+              {lang}
+              <ChevronDown size={13} className={`transition-transform ${langOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {langOpen && (
+              <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden min-w-[64px]">
+                {(['FR', 'EN'] as const).map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => { setLang(l); setLangOpen(false); }}
+                    className={`block w-full text-left px-4 py-2 text-sm font-semibold transition-colors ${
+                      lang === l ? 'text-gray-900 bg-gray-50' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    }`}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="w-px h-5 bg-gray-200 mx-1" />
+
+          <button className="border border-gray-300 text-gray-700 px-5 py-2 text-sm font-semibold rounded-sm hover:border-gray-500 hover:text-gray-900 transition-all duration-200">
+            S'inscrire
+          </button>
+          <button className="bg-[#8B1A1A] text-white px-5 py-2 text-sm font-semibold rounded-sm hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap">
+            Se connecter
+          </button>
+        </div>
+
+        <button
+          className="md:hidden p-2 text-gray-700"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Menu"
+        >
+          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </div>
+
+      {mobileOpen && (
+        <div className="md:hidden bg-white border-t border-gray-100 px-6 py-5 space-y-4">
+          {navLinks.map(({ label, href }) => (
+            <button
+              key={label}
+              onClick={() => handleNavClick(href)}
+              className="block w-full text-left text-gray-800 hover:text-gray-900 text-sm font-medium py-1"
+            >
+              {label}
+            </button>
+          ))}
+          <div className="flex items-center gap-3 pt-3 border-t border-gray-100">
+            <span className="text-xs text-gray-600 font-medium">Langue :</span>
+            {(['FR', 'EN'] as const).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                className={`text-sm font-bold px-2 py-0.5 rounded transition-colors ${
+                  lang === l ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-col gap-3 pt-2">
+            <button className="border border-gray-300 text-gray-700 px-5 py-2.5 text-sm font-semibold rounded-sm">
+              S'inscrire
+            </button>
+            <button className="bg-[#8B1A1A] text-white px-5 py-2.5 text-sm font-semibold rounded-sm">
+              Se connecter
+            </button>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+}
