@@ -71,8 +71,8 @@ export default function ServicesPage() {
         </div>
       </header>
 
-      {/* Section 3 verticaux : cartes côte à côte */}
-      <section className="px-6 pb-20 md:pb-28 bg-white" aria-labelledby="verticals-heading">
+      {/* Section 3 verticaux : fond bleu clair #EBF2FA (réf. Aerobotics), cartes restent blanches */}
+      <section className="px-6 pb-20 md:pb-28 bg-[#EBF2FA]" aria-labelledby="verticals-heading">
         <h2 id="verticals-heading" className="sr-only">
           Domaines d&apos;intervention
         </h2>
