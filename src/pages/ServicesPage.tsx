@@ -71,8 +71,8 @@ export default function ServicesPage() {
         </div>
       </header>
 
-      {/* Section 3 verticaux : fond bleu clair #EBF2FA (réf. Aerobotics), cartes restent blanches */}
-      <section className="px-6 pb-20 md:pb-28 bg-[#EBF2FA]" aria-labelledby="verticals-heading">
+      {/* Section 3 verticaux : fond de section blanc ; bleu clair #EBF2FA uniquement sur chaque carte */}
+      <section className="px-6 pb-20 md:pb-28 bg-white" aria-labelledby="verticals-heading">
         <h2 id="verticals-heading" className="sr-only">
           Domaines d&apos;intervention
         </h2>
@@ -80,7 +80,7 @@ export default function ServicesPage() {
           {verticalServices.map((card) => (
             <article
               key={card.title}
-              className="rounded-xl border border-gray-200 bg-white p-8 md:p-10 flex flex-col shadow-sm gap-0"
+              className="rounded-xl border border-gray-200 bg-[#EBF2FA] p-8 md:p-10 flex flex-col shadow-sm gap-0"
               style={{ color: navy }}
             >
               <h3 className="text-xl md:text-2xl font-bold tracking-tight">{card.title}</h3>
