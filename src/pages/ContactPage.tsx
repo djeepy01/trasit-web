@@ -62,8 +62,7 @@ export default function ContactPage() {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
-                  className="w-full rounded-sm border border-gray-300 px-4 py-3 text-[16px] text-[#1A1A1A] placeholder:text-gray-400 focus:border-[#1E5FA6] focus:outline-none focus:ring-2 focus:ring-[#1E5FA6]/20"
-                  placeholder="Jean Dupont"
+                  className="w-full rounded-sm border border-gray-300 px-4 py-3 text-[16px] text-[#1A1A1A] focus:border-[#1E5FA6] focus:outline-none focus:ring-2 focus:ring-[#1E5FA6]/20"
                 />
               </div>
               <div>
@@ -78,8 +77,7 @@ export default function ContactPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full rounded-sm border border-gray-300 px-4 py-3 text-[16px] text-[#1A1A1A] placeholder:text-gray-400 focus:border-[#1E5FA6] focus:outline-none focus:ring-2 focus:ring-[#1E5FA6]/20"
-                  placeholder="vous@exemple.com"
+                  className="w-full rounded-sm border border-gray-300 px-4 py-3 text-[16px] text-[#1A1A1A] focus:border-[#1E5FA6] focus:outline-none focus:ring-2 focus:ring-[#1E5FA6]/20"
                 />
               </div>
               <div>
@@ -93,8 +91,7 @@ export default function ContactPage() {
                   autoComplete="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-sm border border-gray-300 px-4 py-3 text-[16px] text-[#1A1A1A] placeholder:text-gray-400 focus:border-[#1E5FA6] focus:outline-none focus:ring-2 focus:ring-[#1E5FA6]/20"
-                  placeholder="+33 …"
+                  className="w-full rounded-sm border border-gray-300 px-4 py-3 text-[16px] text-[#1A1A1A] focus:border-[#1E5FA6] focus:outline-none focus:ring-2 focus:ring-[#1E5FA6]/20"
                 />
               </div>
               <div>
@@ -108,8 +105,7 @@ export default function ContactPage() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
-                  className="w-full resize-y min-h-[160px] rounded-sm border border-gray-300 px-4 py-3 text-[16px] text-[#1A1A1A] placeholder:text-gray-400 focus:border-[#1E5FA6] focus:outline-none focus:ring-2 focus:ring-[#1E5FA6]/20"
-                  placeholder="Décrivez votre demande…"
+                  className="w-full resize-y min-h-[160px] rounded-sm border border-gray-300 px-4 py-3 text-[16px] text-[#1A1A1A] focus:border-[#1E5FA6] focus:outline-none focus:ring-2 focus:ring-[#1E5FA6]/20"
                 />
               </div>
               <button
