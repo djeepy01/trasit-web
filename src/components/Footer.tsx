@@ -1,20 +1,19 @@
+import { Link } from 'react-router-dom';
 import { Twitter, Linkedin, Instagram, Facebook } from 'lucide-react';
 
-const links = {
-  Services: [
-    'Audit',
-    'Audit Agrobusiness',
-    'Rapports terrain',
-    'Suivi de chantier',
-    'Due diligence',
-  ],
-  Légal: [
-    'Conditions d\'utilisation',
-    'Politique de confidentialité',
-    'Mentions légales',
-    'Cookies',
-  ],
-};
+const serviceLinks = [
+  'Audit',
+  'Audit Agrobusiness',
+  'Rapports terrain',
+  'Suivi de chantier',
+  'Due diligence',
+];
+
+const legalLinks = [
+  { label: "Conditions générales d'utilisation", to: '/cgu' },
+  { label: 'Politique de confidentialité', to: '/confidentialite' },
+  { label: 'Mentions légales', to: '/mentions-legales' },
+];
 
 const socials = [
   { icon: Twitter, label: 'Twitter' },
@@ -68,41 +67,51 @@ export default function Footer() {
             </div>
           </div>
 
-          {Object.entries(links).map(([category, items]) => (
-            <div key={category}>
-              <h4 className="text-white text-xs font-bold uppercase tracking-[0.15em] mb-5">
-                {category}
-              </h4>
-              <ul className="space-y-3">
-                {items.map((item) => (
-                  <li key={item}>
-                    <a
-                      href="#"
-                      className="text-white/70 hover:text-white text-sm transition-colors font-light"
-                    >
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div>
+            <h4 className="text-white text-xs font-bold uppercase tracking-[0.15em] mb-5">Services</h4>
+            <ul className="space-y-3">
+              {serviceLinks.map((item) => (
+                <li key={item}>
+                  <a
+                    href="#"
+                    className="text-white/70 hover:text-white text-sm transition-colors font-light"
+                  >
+                    {item}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-white text-xs font-bold uppercase tracking-[0.15em] mb-5">Légal</h4>
+            <ul className="space-y-3">
+              {legalLinks.map(({ label, to }) => (
+                <li key={to}>
+                  <Link
+                    to={to}
+                    className="text-white/70 hover:text-white text-sm transition-colors font-light"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/60 text-xs text-center md:text-left">
-            © 2026 TRASIT
-          </p>
-          <div className="flex items-center gap-6">
-            <a href="#" className="text-white/60 hover:text-white/90 text-xs transition-colors">
-              Conditions d'utilisation
-            </a>
-            <a href="#" className="text-white/60 hover:text-white/90 text-xs transition-colors">
+          <p className="text-white/60 text-xs text-center md:text-left">© 2026 TRASIT</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <Link to="/cgu" className="text-white/60 hover:text-white/90 text-xs transition-colors">
+              CGU
+            </Link>
+            <Link to="/confidentialite" className="text-white/60 hover:text-white/90 text-xs transition-colors">
               Confidentialité
-            </a>
-            <a href="#" className="text-white/60 hover:text-white/90 text-xs transition-colors">
-              Cookies
-            </a>
+            </Link>
+            <Link to="/mentions-legales" className="text-white/60 hover:text-white/90 text-xs transition-colors">
+              Mentions légales
+            </Link>
           </div>
         </div>
       </div>
