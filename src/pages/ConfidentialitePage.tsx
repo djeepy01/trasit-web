@@ -34,7 +34,7 @@ export default function ConfidentialitePage() {
 
       <LegalSection title="Durée de conservation">
         <p>
-          Les données sont conservées pendant une durée de vingt-quatre (24) mois à compter du dernier contact
+          Les données sont conservées pendant une durée de douze (12) mois à compter du dernier contact
           ou de la clôture de la mission, sauf obligation légale de conservation plus longue ou exercice de vos
           droits (suppression lorsque applicable).
         </p>
