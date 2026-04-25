@@ -143,9 +143,6 @@ export default function Hero() {
                 <p className="text-right text-[13px] font-bold text-gray-900 mt-4">TRASIT</p>
               </div>
 
-              <div className="absolute -top-4 -right-4 bg-gray-900 text-white rounded-xl px-3 py-1.5 text-xs font-bold shadow-lg">
-                Rapport livré en 2h
-              </div>
             </div>
           </div>
         </div>

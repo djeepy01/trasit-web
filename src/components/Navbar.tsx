@@ -51,7 +51,7 @@ export default function Navbar() {
         >
           <span
             className="text-2xl font-bold text-gray-900 tracking-tight leading-none select-none"
-            style={{ fontSize: '24px', fontWeight: '800' }}
+            style={{ fontSize: '28px', fontWeight: '800', color: '#1A1A1A' }}
           >
             tras<span className="text-[#8B1A1A]">·</span>it
           </span>
@@ -69,8 +69,8 @@ export default function Navbar() {
               }
               style={
                 variant === 'primary'
-                  ? { backgroundColor: '#1E5FA6', borderRadius: '6px', fontSize: '15px', fontWeight: '500' }
-                  : { fontSize: '15px', fontWeight: '500' }
+                  ? { backgroundColor: '#1E5FA6', borderRadius: '6px', fontSize: '18px', fontWeight: '500', color: '#1A1A1A' }
+                  : { fontSize: '18px', fontWeight: '500', color: '#1A1A1A' }
               }
             >
               {label}
@@ -84,6 +84,7 @@ export default function Navbar() {
               type="button"
               onClick={() => setLangOpen(!langOpen)}
               className="flex items-center gap-1 text-gray-700 hover:text-gray-900 text-sm font-semibold px-2.5 py-1.5 rounded transition-colors"
+              style={{ fontSize: '18px', color: '#1A1A1A' }}
             >
               {lang}
               <ChevronDown size={13} className={`transition-transform ${langOpen ? 'rotate-180' : ''}`} />
@@ -114,14 +115,14 @@ export default function Navbar() {
           <button
             type="button"
             className="text-sm font-medium border border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:border-gray-500 hover:text-gray-900 transition-all duration-200"
-            style={{ fontSize: '15px', fontWeight: '500' }}
+            style={{ fontSize: '18px', fontWeight: '500', padding: '10px 20px' }}
           >
             S'inscrire
           </button>
           <button
             type="button"
             className="text-sm font-semibold bg-[#8B1A1A] text-white px-4 py-2 rounded-lg hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
-            style={{ fontSize: '15px', fontWeight: '600' }}
+            style={{ fontSize: '18px', fontWeight: '600', padding: '10px 20px', backgroundColor: '#8B1A1A', color: 'white' }}
           >
             Se connecter
           </button>
