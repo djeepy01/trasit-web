@@ -145,7 +145,7 @@ export default function MainProduct() {
                 </div>
                 <div
                   className="text-[16px] text-[#666666] mt-1 whitespace-nowrap"
-                  style={{ fontSize: '15px', color: '#666666' }}
+                  style={{ fontSize: '15px', color: '#0D2F4A' }}
                 >
                   {desc}
                 </div>
