@@ -69,16 +69,22 @@ function RiskCard({
 
       <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between h-full p-8 md:p-12 gap-8">
         <div className="flex-1 max-w-xl">
-          <span className="inline-block text-[10px] font-bold tracking-[0.2em] text-white/60 uppercase mb-4">
+          <span
+            className="inline-block text-[10px] font-bold tracking-[0.2em] text-white/60 uppercase mb-4"
+            style={{ fontSize: '14px', fontWeight: '700', letterSpacing: '2px', color: 'white' }}
+          >
             {card.label}
           </span>
           <div
             className="text-5xl md:text-6xl font-black text-white leading-none mb-4"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            style={{ fontFamily: "'Playfair Display', serif", fontSize: '80px', fontWeight: '800', color: 'white' }}
           >
             {card.stat}
           </div>
-          <p className="text-white/80 text-sm md:text-base leading-relaxed font-light mb-3 max-w-md">
+          <p
+            className="text-white/80 text-sm md:text-base leading-relaxed font-light mb-3 max-w-md"
+            style={{ fontSize: '18px', fontWeight: '400', color: 'white', lineHeight: '1.7' }}
+          >
             {card.text}
           </p>
           <span className="inline-block text-white text-xs font-medium rounded-full px-3 py-1" style={{ backgroundColor: '#1E5FA6' }}>
@@ -92,10 +98,16 @@ function RiskCard({
               key={pill.label}
               className="backdrop-blur-md bg-white/10 border border-white/15 rounded-xl px-5 py-3 min-w-[200px]"
             >
-              <div className="text-white/50 text-[10px] font-semibold uppercase tracking-wider mb-1">
+              <div
+                className="text-white/50 text-[10px] font-semibold uppercase tracking-wider mb-1"
+                style={{ fontSize: '12px', fontWeight: '700', letterSpacing: '1px', color: 'white' }}
+              >
                 {pill.label}
               </div>
-              <div className="text-white text-lg font-bold leading-tight">
+              <div
+                className="text-white text-lg font-bold leading-tight"
+                style={{ fontSize: '22px', fontWeight: '700', color: 'white' }}
+              >
                 {pill.value}
               </div>
             </div>
