@@ -23,8 +23,11 @@ export default function FinalCTA() {
             <h2 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight max-w-xl">
               Prêt à investir en toute confiance ?
             </h2>
-            <p className="text-white/80 mt-4 text-lg font-light max-w-lg">
-              Lancez votre première terrain dès aujourd'hui. Rapport livré en moins de 2 heures.
+            <p
+              className="text-white/80 mt-4 text-lg font-light max-w-lg"
+              style={{ fontSize: '20px', fontWeight: '400', color: 'white' }}
+            >
+              Lancez votre première intervention dès aujourd'hui. Rapport livré en moins de 2 heures.
             </p>
           </div>
 

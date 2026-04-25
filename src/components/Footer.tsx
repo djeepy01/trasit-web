@@ -48,7 +48,10 @@ export default function Footer() {
             <div className="text-[1.55rem] font-black text-white tracking-tight leading-none mb-4">
               tras<span>·</span>it
             </div>
-            <p className="text-white/70 text-sm leading-relaxed font-light mb-6 max-w-[220px]">
+            <p
+              className="text-white/70 text-sm leading-relaxed font-light mb-6 max-w-[220px]"
+              style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+            >
               La confiance pour chaque investissement en Afrique.
             </p>
             <div className="flex items-center gap-3">
@@ -66,13 +69,19 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white text-xs font-bold uppercase tracking-[0.15em] mb-5">Services</h4>
+            <h4
+              className="text-white text-xs font-bold uppercase tracking-[0.15em] mb-5"
+              style={{ fontSize: '16px', fontWeight: '700', color: 'white', letterSpacing: '2px' }}
+            >
+              Services
+            </h4>
             <ul className="space-y-3">
               {serviceLinks.map(({ label, to }) => (
                 <li key={to}>
                   <Link
                     to={to}
                     className="text-white/70 hover:text-white text-sm transition-colors font-light"
+                    style={{ fontSize: '17px', fontWeight: '400', color: 'white' }}
                   >
                     {label}
                   </Link>
@@ -82,13 +91,19 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white text-xs font-bold uppercase tracking-[0.15em] mb-5">Légal</h4>
+            <h4
+              className="text-white text-xs font-bold uppercase tracking-[0.15em] mb-5"
+              style={{ fontSize: '16px', fontWeight: '700', color: 'white', letterSpacing: '2px' }}
+            >
+              Légal
+            </h4>
             <ul className="space-y-3">
               {legalLinks.map(({ label, to }) => (
                 <li key={to}>
                   <Link
                     to={to}
                     className="text-white/70 hover:text-white text-sm transition-colors font-light"
+                    style={{ fontSize: '17px', fontWeight: '400', color: 'white' }}
                   >
                     {label}
                   </Link>
@@ -99,15 +114,32 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/60 text-xs text-center md:text-left">© 2026 TRASIT</p>
+          <p
+            className="text-white/60 text-xs text-center md:text-left"
+            style={{ fontSize: '14px', fontWeight: '400', color: 'white' }}
+          >
+            © 2026 TRASIT
+          </p>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-            <Link to="/cgu" className="text-white/60 hover:text-white/90 text-xs transition-colors">
+            <Link
+              to="/cgu"
+              className="text-white/60 hover:text-white/90 text-xs transition-colors"
+              style={{ fontSize: '14px', fontWeight: '400', color: 'white' }}
+            >
               CGU
             </Link>
-            <Link to="/confidentialite" className="text-white/60 hover:text-white/90 text-xs transition-colors">
+            <Link
+              to="/confidentialite"
+              className="text-white/60 hover:text-white/90 text-xs transition-colors"
+              style={{ fontSize: '14px', fontWeight: '400', color: 'white' }}
+            >
               Confidentialité
             </Link>
-            <Link to="/mentions-legales" className="text-white/60 hover:text-white/90 text-xs transition-colors">
+            <Link
+              to="/mentions-legales"
+              className="text-white/60 hover:text-white/90 text-xs transition-colors"
+              style={{ fontSize: '14px', fontWeight: '400', color: 'white' }}
+            >
               Mentions légales
             </Link>
           </div>
