@@ -10,7 +10,7 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: 'Comment ça marche', to: '/comment-ca-marche', variant: 'primary' },
+  { label: 'Comment ça marche', to: '/comment-ca-marche' },
   { label: 'Nos services', to: '/nos-services' },
   { label: 'Contact', to: '/contact' },
 ];
@@ -51,27 +51,19 @@ export default function Navbar() {
         >
           <span
             className="text-3xl font-bold text-gray-900 tracking-tight leading-none select-none"
-            style={{ fontSize: '24px', fontWeight: '800' }}
+            style={{ fontSize: '22px', fontWeight: '800', color: '#1A1A1A' }}
           >
             tras<span className="text-[#8B1A1A]">·</span>it
           </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-7">
-          {navItems.map(({ label, to, variant }) => (
+        <div className="hidden md:flex items-center gap-8">
+          {navItems.map(({ label, to }) => (
             <Link
               key={label}
               to={to}
-              className={
-                variant === 'primary'
-                  ? 'text-white text-base font-medium transition-colors whitespace-nowrap px-4 py-2 rounded-md hover:opacity-90'
-                  : 'text-gray-700 hover:text-gray-900 text-base font-medium transition-colors whitespace-nowrap'
-              }
-              style={
-                variant === 'primary'
-                  ? { backgroundColor: '#1E5FA6', borderRadius: '6px', fontSize: '15px', fontWeight: '500' }
-                  : { fontSize: '15px', fontWeight: '500' }
-              }
+              className="text-gray-700 hover:text-gray-900 text-base font-medium transition-colors whitespace-nowrap"
+              style={{ fontSize: '16px', fontWeight: '500', color: '#1A1A1A' }}
             >
               {label}
             </Link>
@@ -114,14 +106,29 @@ export default function Navbar() {
           <button
             type="button"
             className="text-base font-medium border border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:border-gray-500 hover:text-gray-900 transition-all duration-200"
-            style={{ fontSize: '15px', fontWeight: '500' }}
+            style={{
+              fontSize: '16px',
+              fontWeight: '500',
+              border: '1px solid #1A1A1A',
+              borderRadius: '24px',
+              padding: '8px 20px',
+              background: 'white',
+              color: '#1A1A1A',
+            }}
           >
             S'inscrire
           </button>
           <button
             type="button"
             className="text-base font-semibold bg-[#8B1A1A] text-white px-4 py-2 rounded-lg hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
-            style={{ fontSize: '15px', fontWeight: '600' }}
+            style={{
+              fontSize: '16px',
+              fontWeight: '600',
+              background: '#8B1A1A',
+              color: 'white',
+              borderRadius: '24px',
+              padding: '8px 20px',
+            }}
           >
             Se connecter
           </button>
