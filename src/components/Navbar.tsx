@@ -50,7 +50,7 @@ export default function Navbar() {
           className="flex items-center shrink-0"
         >
           <span
-            className="text-2xl font-bold text-gray-900 tracking-tight leading-none select-none"
+            className="text-3xl font-bold text-gray-900 tracking-tight leading-none select-none"
             style={{ fontSize: '24px', fontWeight: '800' }}
           >
             tras<span className="text-[#8B1A1A]">·</span>it
@@ -64,8 +64,8 @@ export default function Navbar() {
               to={to}
               className={
                 variant === 'primary'
-                  ? 'text-white text-sm font-medium transition-colors whitespace-nowrap px-4 py-2 rounded-md hover:opacity-90'
-                  : 'text-gray-700 hover:text-gray-900 text-sm font-medium transition-colors whitespace-nowrap'
+                  ? 'text-white text-base font-medium transition-colors whitespace-nowrap px-4 py-2 rounded-md hover:opacity-90'
+                  : 'text-gray-700 hover:text-gray-900 text-base font-medium transition-colors whitespace-nowrap'
               }
               style={
                 variant === 'primary'
@@ -83,7 +83,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1 text-gray-700 hover:text-gray-900 text-sm font-semibold px-2.5 py-1.5 rounded transition-colors"
+              className="flex items-center gap-1 text-gray-700 hover:text-gray-900 text-base font-semibold px-2.5 py-1.5 rounded transition-colors"
             >
               {lang}
               <ChevronDown size={13} className={`transition-transform ${langOpen ? 'rotate-180' : ''}`} />
@@ -98,7 +98,7 @@ export default function Navbar() {
                       setLang(l);
                       setLangOpen(false);
                     }}
-                    className={`block w-full text-left px-4 py-2 text-sm font-semibold transition-colors ${
+                    className={`block w-full text-left px-4 py-2 text-base font-semibold transition-colors ${
                       lang === l ? 'text-gray-900 bg-gray-50' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                     }`}
                   >
@@ -113,14 +113,14 @@ export default function Navbar() {
 
           <button
             type="button"
-            className="text-sm font-medium border border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:border-gray-500 hover:text-gray-900 transition-all duration-200"
+            className="text-base font-medium border border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:border-gray-500 hover:text-gray-900 transition-all duration-200"
             style={{ fontSize: '15px', fontWeight: '500' }}
           >
             S'inscrire
           </button>
           <button
             type="button"
-            className="text-sm font-semibold bg-[#8B1A1A] text-white px-4 py-2 rounded-lg hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
+            className="text-base font-semibold bg-[#8B1A1A] text-white px-4 py-2 rounded-lg hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
             style={{ fontSize: '15px', fontWeight: '600' }}
           >
             Se connecter
@@ -144,19 +144,19 @@ export default function Navbar() {
               key={label}
               to={to}
               onClick={closeMobile}
-              className="block w-full text-left text-gray-800 hover:text-gray-900 text-sm font-medium py-1"
+              className="block w-full text-left text-gray-800 hover:text-gray-900 text-base font-medium py-1"
             >
               {label}
             </Link>
           ))}
           <div className="flex items-center gap-3 pt-3 border-t border-gray-100">
-            <span className="text-xs text-gray-600 font-medium">Langue :</span>
+            <span className="text-sm text-gray-600 font-medium">Langue :</span>
             {(['FR', 'EN'] as const).map((l) => (
               <button
                 key={l}
                 type="button"
                 onClick={() => setLang(l)}
-                className={`text-sm font-bold px-2 py-0.5 rounded transition-colors ${
+                className={`text-base font-bold px-2 py-0.5 rounded transition-colors ${
                   lang === l ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -167,13 +167,13 @@ export default function Navbar() {
           <div className="flex flex-col gap-3 pt-2">
             <button
               type="button"
-              className="border border-gray-300 text-gray-700 px-5 py-2.5 text-sm font-semibold rounded-sm"
+              className="border border-gray-300 text-gray-700 px-5 py-2.5 text-base font-semibold rounded-sm"
             >
               S'inscrire
             </button>
             <button
               type="button"
-              className="bg-[#8B1A1A] text-white px-5 py-2.5 text-sm font-semibold rounded-sm"
+              className="bg-[#8B1A1A] text-white px-5 py-2.5 text-base font-semibold rounded-sm"
             >
               Se connecter
             </button>
