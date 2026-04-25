@@ -56,15 +56,15 @@ export default function MessageSection() {
             <h2 className="text-3xl md:text-4xl font-black tracking-tight" style={{ color: navy }}>
               Chaque investissement mérite une réponse claire.
             </h2>
-            <p className="mt-6 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl">
-              En Afrique, des milliards sont investis chaque année sans aucun moyen de vérifier ce qui se passe
-              réellement sur le terrain. Chantiers à l'arrêt, stocks inexistants, gérants introuvables — la
-              distance crée des angles morts dangereux.
+            <p className="mt-8 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl whitespace-pre-line">
+              Chantiers à l'arrêt. Stocks inexistants. Gérants introuvables.
+              {'\n'}
+              La distance crée des angles morts dangereux.
             </p>
-            <p className="mt-5 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl">
-              TRASIT combine des agents terrain avec une technologie avancée pour analyser, compter et évaluer
-              chaque actif. Photos géolocalisées, horodatées, impossibles à falsifier. Un rapport livré en 2
-              heures.
+            <p className="mt-7 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl whitespace-pre-line">
+              TRASIT analyse, compte et évalue chaque actif sur place.
+              {'\n'}
+              Photos géolocalisées, horodatées, impossibles à falsifier. Rapport en 2 heures.
             </p>
           </div>
 
