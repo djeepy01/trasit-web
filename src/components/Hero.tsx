@@ -54,11 +54,11 @@ const ScoreGauge = ({ value }: { value: number }) => (
 );
 
 const GaugeLegend = () => (
-  <div className="grid grid-cols-2 gap-x-2 gap-y-1 mt-2">
+  <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 mt-2">
     {gaugeSegments.map(({ color, label, score }) => (
       <div key={label} className="flex items-center gap-1">
         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
-        <span className="text-[10px] text-gray-600 font-medium truncate">{label}</span>
+        <span className="text-[11px] text-gray-600 font-medium whitespace-nowrap">{label}</span>
         <span className="text-[10px] text-gray-900 font-bold ml-auto">{score}%</span>
       </div>
     ))}
@@ -111,7 +111,7 @@ export default function Hero() {
 
           <div className="hidden lg:flex justify-end">
             <div className="relative animate-float" style={{ animationDelay: '0.3s' }}>
-              <div className="bg-white rounded-2xl shadow-2xl w-72 p-5 border border-gray-100">
+              <div className="bg-white rounded-2xl shadow-2xl w-80 p-5 border border-gray-100">
                 <div className="flex items-center gap-2.5 mb-4 pb-3.5 border-b border-gray-100">
                   <div className="w-9 h-9 rounded-xl bg-gray-900 flex items-center justify-center text-white font-black text-xs">
                     TR
