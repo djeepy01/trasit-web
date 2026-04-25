@@ -67,7 +67,7 @@ export default function HowItWorks() {
             {steps.map(({ number, icon: Icon, title, desc }, i) => (
               <div
                 key={number}
-                className="relative flex flex-col items-center text-center md:min-w-[220px]"
+                className="relative flex flex-col items-center text-center w-[220px] px-4"
                 style={{
                   transitionDelay: `${i * 0.12}s`,
                   opacity: isVisible ? 1 : 0,
@@ -75,10 +75,12 @@ export default function HowItWorks() {
                   transition: `opacity 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s`,
                 }}
               >
-                <div className="relative z-10 w-[68px] h-[68px] rounded-full bg-white border-2 border-gray-200 flex items-center justify-center mb-5 group-hover:border-[#8B1A1A] transition-colors shadow-sm">
-                  <Icon size={22} className="text-gray-600" />
-                  <div className="absolute -top-3 -right-3 w-14 h-14 rounded-full bg-gray-900 flex items-center justify-center">
-                    <span className="text-white text-[16px] font-black">{number}</span>
+                <div className="flex flex-col items-center mb-5">
+                  <div className="w-12 h-12 rounded-full bg-transparent border border-[#1A1A1A] flex items-center justify-center">
+                    <span className="text-[#1A1A1A] text-[16px] font-black">{number}</span>
+                  </div>
+                  <div className="mt-4 w-[68px] h-[68px] rounded-full bg-white border-2 border-gray-200 flex items-center justify-center transition-colors shadow-sm">
+                    <Icon size={22} className="text-gray-600" />
                   </div>
                 </div>
                 <h3 className="font-bold text-gray-900 text-sm mb-2 px-2">{title}</h3>
