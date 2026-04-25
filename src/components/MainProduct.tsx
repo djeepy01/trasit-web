@@ -39,11 +39,11 @@ export default function MainProduct() {
           >
             <div className="inline-flex items-center gap-2 bg-gray-100 rounded-full px-4 py-1.5 mb-6">
               <span
-                className="text-gray-600 text-xs font-semibold tracking-wider uppercase"
+                className="text-[#0D2F4A] text-xs font-semibold tracking-wider uppercase"
                 style={{
                   fontSize: '12px',
                   fontWeight: '600',
-                  color: '#666666',
+                  color: '#0D2F4A',
                   letterSpacing: '1px',
                   border: '1px solid #DDDDDD',
                   borderRadius: '4px',
@@ -57,7 +57,7 @@ export default function MainProduct() {
               Ce que vous voyez,<br />
               c'est ce qui existe.
             </h2>
-            <p className="text-gray-600 text-lg leading-relaxed mb-8 font-light">
+            <p className="text-[#0D2F4A] text-lg leading-relaxed mb-8 font-light">
               TRASIT déploie des agents directement sur vos actifs et chantiers en Afrique. Nous vérifions la réalité de votre investissement — entrepreneur, avancement des travaux, état des équipements — et vous livrons un rapport complet, documenté et exploitable.
             </p>
 
@@ -100,25 +100,25 @@ export default function MainProduct() {
                     <ColoredBars />
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500 font-semibold">Score de conformité</div>
+                    <div className="text-xs text-[#0D2F4A] font-semibold">Score de conformité</div>
                     <div className="text-lg font-black text-gray-900 leading-tight">94%</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 py-2 border-b border-gray-100">
                   <div className="w-9 h-9 bg-gray-50 rounded-lg flex items-center justify-center shrink-0">
-                    <ScanSearch size={16} className="text-gray-500" />
+                    <ScanSearch size={16} className="text-[#0D2F4A]" />
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500 font-semibold">Sites vérifiés</div>
+                    <div className="text-xs text-[#0D2F4A] font-semibold">Sites vérifiés</div>
                     <div className="text-base font-black text-gray-900">✓</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 py-2 last:pb-0">
                   <div className="w-9 h-9 bg-gray-50 rounded-lg flex items-center justify-center shrink-0">
-                    <CheckCircle size={16} className="text-gray-500" />
+                    <CheckCircle size={16} className="text-[#0D2F4A]" />
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500 font-semibold">Rapport livré</div>
+                    <div className="text-xs text-[#0D2F4A] font-semibold">Rapport livré</div>
                     <div className="text-lg font-black text-gray-900 leading-tight">2h</div>
                   </div>
                 </div>
@@ -145,7 +145,7 @@ export default function MainProduct() {
                 </div>
                 <div
                   className="text-[16px] text-[#666666] mt-1 whitespace-nowrap"
-                  style={{ fontSize: '15px', color: '#0D2F4A' }}
+                  style={{ fontSize: '17px', fontWeight: '500', color: '#0D2F4A' }}
                 >
                   {desc}
                 </div>
