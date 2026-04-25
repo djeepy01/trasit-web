@@ -45,7 +45,7 @@ const verticalServices: ServiceCard[] = [
       'stock physique',
       'état boutique',
       'présence gérant',
-      'conformité brief client',
+      'conformité fiche de mission client',
     ],
   },
 ];

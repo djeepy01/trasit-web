@@ -18,8 +18,8 @@ export default function CguPage() {
         <p>
           TRASIT est une plateforme de vérification terrain indépendante. Elle permet aux investisseurs de
           solliciter une mission de constat sur site (chantier, exploitation agricole, commerce, etc.),
-          réalisée par un agent certifié, puis de recevoir un rapport structuré (photos, observations,
-          éléments de conformité selon le brief). TRASIT n&apos;est pas partie au contrat qui vous lie à un
+          réalisée par un agent, puis de recevoir un rapport structuré (photos, observations,
+          éléments de conformité selon la fiche de mission). TRASIT n&apos;est pas partie au contrat qui vous lie à un
           tiers vérifié : elle fournit un service d&apos;observation et de documentation factuelle.
         </p>
       </LegalSection>
@@ -36,7 +36,7 @@ export default function CguPage() {
       <LegalSection title="Obligations du client">
         <p>
           Vous vous engagez à fournir des informations exactes, complètes et licites concernant le site ou
-          l&apos;actif à vérifier, ainsi qu&apos;un brief clair. Aucune intervention sur le terrain n&apos;est
+          l&apos;actif à vérifier, ainsi qu&apos;une fiche de mission claire. Aucune intervention sur le terrain n&apos;est
           déclenchée avant confirmation du paiement conformément au processus indiqué sur la plateforme.
           Toute fausse déclaration ou tentative de détournement du service peut entraîner le refus ou
           l&apos;arrêt de la mission.
@@ -66,7 +66,7 @@ export default function CguPage() {
       <LegalSection title="Politique de remboursement">
         <p>
           Aucun remboursement n&apos;est dû lorsque l&apos;agent s&apos;est effectivement déplacé sur le site
-          pour réaliser la mission conformément au brief validé. En cas d&apos;annulation avant tout déplacement
+          pour réaliser la mission conformément à la fiche de mission validée. En cas d&apos;annulation avant tout déplacement
           ou d&apos;impossibilité avérée imputable à TRASIT, une solution commerciale pourra être examinée au
           cas par cas, sans créer de précédent.
         </p>

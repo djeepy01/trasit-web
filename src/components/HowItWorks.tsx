@@ -11,7 +11,7 @@ const steps = [
   {
     number: '02',
     icon: ClipboardCheck,
-    title: 'Validez votre brief',
+    title: 'Validez votre fiche de mission',
     desc: 'Vous confirmez les détails de votre demande. Nous vérifions la disponibilité d\'un agent sur votre zone.',
   },
   {
@@ -24,7 +24,7 @@ const steps = [
     number: '04',
     icon: UserCheck,
     title: 'Vérification effectuée sur place',
-    desc: 'Notre agent certifié se rend sur place et documente chaque détail en photos.',
+    desc: 'Notre agent se rend sur place et documente chaque détail en photos.',
   },
   {
     number: '05',
@@ -48,7 +48,7 @@ export default function HowItWorks() {
             Simple. Rapide. Fiable.
           </h2>
           <p className="text-gray-700 mt-4 text-lg font-light max-w-xl mx-auto">
-            Votre terrain en 5 étapes, du brief au rapport final.
+            Votre terrain en 5 étapes, de la fiche de mission au rapport final.
           </p>
         </div>
 

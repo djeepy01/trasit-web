@@ -20,7 +20,7 @@ const processSteps: ProcessStep[] = [
   },
   {
     displayNumber: '02',
-    title: 'Validez votre brief',
+    title: 'Validez votre fiche de mission',
     description:
       "Vous confirmez les détails de votre demande. Nous vérifions la disponibilité d'un agent sur votre zone.",
   },
@@ -34,7 +34,7 @@ const processSteps: ProcessStep[] = [
     displayNumber: '04',
     title: 'Vérification effectuée sur place',
     description:
-      'Notre agent certifié se rend sur place et documente chaque détail en photos géolocalisées et horodatées, selon votre checklist personnalisée.',
+      'Notre agent se rend sur place et documente chaque détail en photos géolocalisées et horodatées, selon votre checklist personnalisée.',
   },
   {
     displayNumber: '05',
@@ -60,7 +60,7 @@ export default function HowItWorksPage() {
             Comment ça marche
           </h1>
           <p className="mt-6 md:mt-8 text-base md:text-lg leading-[1.65] max-w-3xl mx-auto text-[#1A1A1A] font-normal">
-            De votre brief à votre rapport, voici comment TRASIT fonctionne.
+            De votre fiche de mission à votre rapport, voici comment TRASIT fonctionne.
           </p>
         </div>
       </header>

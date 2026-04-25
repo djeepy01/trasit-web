@@ -22,3 +22,21 @@
     opacity: 0;
   }
 }
+
+p, li, span, td {
+  font-size: 18px !important;
+  line-height: 1.8 !important;
+}
+
+h3, h4 {
+  font-size: 22px !important;
+}
+
+h2 {
+  font-size: 28px !important;
+}
+
+section {
+  padding-top: 80px !important;
+  padding-bottom: 80px !important;
+}

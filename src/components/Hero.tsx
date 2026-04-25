@@ -151,7 +151,7 @@ export default function Hero() {
                     <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
                       <CheckCircle size={14} className="text-gray-600" />
                     </div>
-                    <span className="text-sm text-gray-800 font-semibold">Agent certifié</span>
+                    <span className="text-sm text-gray-800 font-semibold">Agent</span>
                     <CheckCircle size={14} className="ml-auto text-green-600 shrink-0" />
                   </div>
                 </div>

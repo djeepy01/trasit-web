@@ -11,7 +11,7 @@ export default function ConfidentialitePage() {
           Dans le cadre de votre demande et de la mission de vérification, nous pouvons collecter notamment :
           votre nom, votre adresse email, votre numéro de téléphone, la localisation du site ou de
           l&apos;actif à vérifier, ainsi que les informations relatives au prestataire ou à la contrepartie
-          nécessaires au brief (sans préjudice du principe de confidentialité décrit ci-dessous).
+          nécessaires à la fiche de mission (sans préjudice du principe de confidentialité décrit ci-dessous).
         </p>
       </LegalSection>
 
@@ -28,7 +28,7 @@ export default function ConfidentialitePage() {
           Aucune donnée personnelle ou sensible du donneur d&apos;ordre n&apos;est partagée avec le
           prestataire ou la partie faisant l&apos;objet de la vérification, au-delà du strict nécessaire à
           l&apos;exécution du constat sur site (par exemple l&apos;adresse du lieu à visiter lorsque la
-          mission l&apos;exige), conformément au processus TRASIT et à votre brief.
+          mission l&apos;exige), conformément au processus TRASIT et à votre fiche de mission.
         </p>
       </LegalSection>
 
