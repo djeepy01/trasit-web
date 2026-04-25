@@ -43,7 +43,7 @@ export default function Navbar() {
         scrolled ? 'border-gray-200 shadow-sm' : 'border-gray-100'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 h-[80px] flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 h-[90px] flex items-center justify-between">
         <Link
           to="/"
           onClick={handleLogoClick}
@@ -51,7 +51,7 @@ export default function Navbar() {
         >
           <span
             className="text-3xl font-bold text-gray-900 tracking-tight leading-none select-none"
-            style={{ fontSize: '26px', fontWeight: '800', color: '#1A1A1A' }}
+            style={{ fontSize: '36px', fontWeight: '800', color: '#1A1A1A' }}
           >
             tras<span className="text-[#8B1A1A]">·</span>it
           </span>
@@ -63,7 +63,7 @@ export default function Navbar() {
               key={label}
               to={to}
               className="text-gray-700 hover:text-gray-900 text-base font-medium transition-colors whitespace-nowrap"
-              style={{ fontSize: '17px', fontWeight: '500', color: '#1A1A1A' }}
+              style={{ fontSize: '18px', fontWeight: '500', color: '#1A1A1A' }}
             >
               {label}
             </Link>
@@ -76,7 +76,7 @@ export default function Navbar() {
               type="button"
               onClick={() => setLangOpen(!langOpen)}
               className="flex items-center gap-1 text-gray-700 hover:text-gray-900 text-base font-semibold px-2.5 py-1.5 rounded transition-colors"
-              style={{ fontSize: '16px', fontWeight: '600' }}
+              style={{ fontSize: '17px', fontWeight: '600' }}
             >
               {lang}
               <ChevronDown size={13} className={`transition-transform ${langOpen ? 'rotate-180' : ''}`} />
@@ -108,11 +108,11 @@ export default function Navbar() {
             type="button"
             className="text-base font-medium border border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:border-gray-500 hover:text-gray-900 transition-all duration-200"
             style={{
-              fontSize: '16px',
+              fontSize: '17px',
               fontWeight: '500',
               border: '1px solid #1A1A1A',
               borderRadius: '24px',
-              padding: '10px 24px',
+              padding: '10px 28px',
               background: 'white',
               color: '#1A1A1A',
             }}
@@ -123,12 +123,12 @@ export default function Navbar() {
             type="button"
             className="text-base font-semibold bg-[#8B1A1A] text-white px-4 py-2 rounded-lg hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
             style={{
-              fontSize: '16px',
+              fontSize: '17px',
               fontWeight: '600',
               background: '#8B1A1A',
               color: 'white',
               borderRadius: '24px',
-              padding: '10px 24px',
+              padding: '10px 28px',
             }}
           >
             Se connecter
@@ -153,7 +153,7 @@ export default function Navbar() {
               to={to}
               onClick={closeMobile}
               className="block w-full text-left text-gray-800 hover:text-gray-900 text-base font-medium py-1"
-              style={{ fontSize: '17px', fontWeight: '500' }}
+              style={{ fontSize: '18px', fontWeight: '500' }}
             >
               {label}
             </Link>
@@ -177,14 +177,14 @@ export default function Navbar() {
             <button
               type="button"
               className="border border-gray-300 text-gray-700 px-5 py-2.5 text-base font-semibold rounded-sm"
-              style={{ fontSize: '16px', fontWeight: '600' }}
+              style={{ fontSize: '17px', fontWeight: '600' }}
             >
               S'inscrire
             </button>
             <button
               type="button"
               className="bg-[#8B1A1A] text-white px-5 py-2.5 text-base font-semibold rounded-sm"
-              style={{ fontSize: '16px', fontWeight: '600' }}
+              style={{ fontSize: '17px', fontWeight: '600' }}
             >
               Se connecter
             </button>
