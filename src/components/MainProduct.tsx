@@ -59,16 +59,16 @@ export default function MainProduct() {
               ))}
             </ul>
 
-            <div className="flex flex-wrap gap-4 mb-8">
+            <div className="flex gap-6 w-full mb-8">
               {verticals.map(({ icon, label, desc }) => (
                 <div
                   key={label}
-                  className="flex items-start gap-3 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3.5 flex-1 min-w-[160px] hover:border-gray-200 transition-colors"
+                  className="flex-1 min-w-[380px] bg-white rounded-xl border border-gray-100 p-6"
                 >
                   <span className="text-2xl leading-none">{icon}</span>
                   <div>
-                    <div className="text-[16px] font-bold text-[#1A1A1A]">{label}</div>
-                    <div className="text-[14px] text-[#666666] mt-0.5">{desc}</div>
+                    <div className="text-[20px] font-bold text-[#1A1A1A] whitespace-nowrap">{label}</div>
+                    <div className="text-[16px] text-[#666666] mt-1 whitespace-nowrap">{desc}</div>
                   </div>
                 </div>
               ))}
