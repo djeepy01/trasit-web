@@ -57,8 +57,14 @@ export default function MessageSection() {
               Chaque investissement mérite une réponse claire.
             </h2>
             <p className="mt-6 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl">
-              Nos interventions vous donnent une vision précise et indépendante de la réalité. Des données
-              factuelles, livrées en 2 heures.
+              En Afrique, des milliards sont investis chaque année sans aucun moyen de vérifier ce qui se passe
+              réellement sur le terrain. Chantiers à l'arrêt, stocks inexistants, gérants introuvables — la
+              distance crée des angles morts dangereux.
+            </p>
+            <p className="mt-5 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl">
+              TRASIT combine des agents terrain avec une technologie avancée pour analyser, compter et évaluer
+              chaque actif. Photos géolocalisées, horodatées, impossibles à falsifier. Un rapport livré en 2
+              heures.
             </p>
           </div>
 
