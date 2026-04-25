@@ -2,7 +2,14 @@ import { Link } from 'react-router-dom';
 
 export default function Inscription() {
   return (
-    <div className="min-h-screen bg-white px-6 py-12">
+    <>
+      <style>{`
+        input::placeholder {
+          color: #1A1A1A !important;
+          opacity: 1 !important;
+        }
+      `}</style>
+      <div className="min-h-screen bg-white px-6 py-12">
       <div className="max-w-[480px] mx-auto">
         <div className="text-center">
           <div style={{ fontSize: '36px', fontWeight: 800, color: '#1A1A1A' }}>
@@ -108,6 +115,7 @@ export default function Inscription() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
