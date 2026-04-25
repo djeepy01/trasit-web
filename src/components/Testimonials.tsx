@@ -81,7 +81,7 @@ export default function Testimonials() {
                 <Stars count={rating} />
               </div>
 
-              <blockquote className="text-gray-700 text-sm leading-relaxed flex-1 mb-6 font-light">
+              <blockquote className="text-gray-700 text-[16px] leading-[1.8] flex-1 mb-6 font-light">
                 "{quote}"
               </blockquote>
 
