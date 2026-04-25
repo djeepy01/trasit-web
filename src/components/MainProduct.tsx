@@ -59,21 +59,6 @@ export default function MainProduct() {
               ))}
             </ul>
 
-            <div className="flex gap-4 w-full overflow-visible mb-8">
-              {verticals.map(({ icon, label, desc }) => (
-                <div
-                  key={label}
-                  className="flex-1 bg-white rounded-xl border border-gray-100 p-6"
-                >
-                  <span className="text-2xl leading-none">{icon}</span>
-                  <div>
-                    <div className="text-[20px] font-bold text-[#1A1A1A] whitespace-nowrap">{label}</div>
-                    <div className="text-[16px] text-[#666666] mt-1 whitespace-nowrap">{desc}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
             <button className="bg-[#8B1A1A] text-white px-7 py-3.5 text-sm font-semibold rounded-sm hover:bg-[#6d1515] transition-all duration-200">
               Découvrir nos services
             </button>
@@ -131,6 +116,21 @@ export default function MainProduct() {
 
 
           </div>
+        </div>
+
+        <div className="flex gap-4 w-full overflow-visible mt-10">
+          {verticals.map(({ icon, label, desc }) => (
+            <div
+              key={label}
+              className="flex-1 bg-white rounded-xl border border-gray-100 p-6"
+            >
+              <span className="text-2xl leading-none">{icon}</span>
+              <div>
+                <div className="text-[20px] font-bold text-[#1A1A1A] whitespace-nowrap">{label}</div>
+                <div className="text-[16px] text-[#666666] mt-1 whitespace-nowrap">{desc}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
