@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
 type NavItem = {
@@ -17,6 +17,7 @@ const navItems: NavItem[] = [
 
 export default function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [lang, setLang] = useState<'FR' | 'EN'>('FR');
@@ -106,6 +107,7 @@ export default function Navbar() {
 
           <button
             type="button"
+            onClick={() => navigate('/inscription')}
             className="text-base font-medium border border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:border-gray-500 hover:text-gray-900 transition-all duration-200"
             style={{
               fontSize: '17px',
@@ -176,6 +178,7 @@ export default function Navbar() {
           <div className="flex flex-col gap-3 pt-2">
             <button
               type="button"
+              onClick={() => navigate('/inscription')}
               className="border border-gray-300 text-gray-700 px-5 py-2.5 text-base font-semibold rounded-sm"
               style={{ fontSize: '17px', fontWeight: '600' }}
             >
