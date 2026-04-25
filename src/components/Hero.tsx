@@ -1,4 +1,4 @@
-import { CheckCircle, Clock, Shield, Aperture } from 'lucide-react';
+import { Shield } from 'lucide-react';
 
 const r = 30;
 const cx = 40;
@@ -52,18 +52,6 @@ const ScoreGauge = ({ value }: { value: number }) => (
   </div>
 );
 
-const GaugeLegend = () => (
-  <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-4">
-    {gaugeSegments.map(({ color, label, score }) => (
-      <div key={label} className="flex items-center gap-2 min-w-0">
-        <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
-        <span className="text-[13px] text-gray-800 font-medium whitespace-nowrap">{label}</span>
-        <span className="text-[13px] text-gray-900 font-black ml-auto tabular-nums">{score}%</span>
-      </div>
-    ))}
-  </div>
-);
-
 export default function Hero() {
   return (
     <section
@@ -110,56 +98,49 @@ export default function Hero() {
 
           <div className="hidden lg:flex justify-end">
             <div className="relative animate-float" style={{ animationDelay: '0.3s' }}>
-              <div className="bg-white rounded-2xl shadow-2xl w-[320px] p-6 border border-gray-100 text-[14px]">
-                <div className="flex items-center gap-2.5 mb-4 pb-3.5 border-b border-gray-100">
-                  <div className="w-9 h-9 rounded-xl bg-gray-900 flex items-center justify-center text-white font-black text-xs">
-                    TR
+              <div className="bg-white rounded-2xl shadow-2xl p-6 w-[380px]">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">TR</span>
+                    </div>
+                    <div>
+                      <p className="font-bold text-[16px] text-gray-900">Rapport TRASIT</p>
+                      <p className="text-[14px] text-gray-500">Construction</p>
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <div className="font-extrabold text-gray-900 text-sm leading-tight">Rapport TRASIT</div>
-                    <div className="text-gray-700 font-medium mt-1">Construction</div>
-                  </div>
-                  <div className="ml-auto flex items-center gap-1 shrink-0">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                    <span className="text-[14px] text-green-700 font-semibold">Validé</span>
-                  </div>
+                  <span className="text-[14px] font-semibold text-green-600">● Validé</span>
                 </div>
-
-                <div className="mb-1.5">
+              
+                <div className="flex justify-center mb-2">
                   <ScoreGauge value={94} />
-                  <div className="text-center text-gray-700 font-semibold mt-2 text-[14px]">
-                    Score de conformité
-                  </div>
-                  <GaugeLegend />
                 </div>
-
-                <div className="space-y-2 mt-5">
-                  <div className="flex items-center gap-2.5 bg-gray-50 rounded-xl p-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
-                      <Aperture size={14} className="text-gray-600" />
-                    </div>
-                    <span className="text-[14px] text-gray-800 font-semibold">Intervention vérifiée</span>
-                    <CheckCircle size={14} className="ml-auto text-green-600 shrink-0" />
+              
+                <p className="text-center text-[14px] text-gray-600 mb-3">Score de conformité</p>
+              
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-5 px-2">
+                  <span className="text-[13px]"><span style={{color:'#1E5FA6'}}>●</span> Structure <strong>94%</strong></span>
+                  <span className="text-[13px]"><span style={{color:'#2E8B57'}}>●</span> Avancement <strong>91%</strong></span>
+                  <span className="text-[13px]"><span style={{color:'#F9A825'}}>●</span> Documents <strong>88%</strong></span>
+                  <span className="text-[13px]"><span style={{color:'#F26522'}}>●</span> Conformité <strong>96%</strong></span>
+                </div>
+              
+                <div className="space-y-3 border-t pt-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[14px] text-gray-700">Intervention vérifiée</span>
+                    <span className="text-green-500">✓</span>
                   </div>
-                  <div className="flex items-center gap-2.5 bg-gray-50 rounded-xl p-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
-                      <Clock size={14} className="text-gray-600" />
-                    </div>
-                    <span className="text-[14px] text-gray-800 font-semibold">Délai rapport</span>
-                    <span className="ml-auto text-[14px] font-black text-gray-900 tabular-nums">2h</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[14px] text-gray-700">Délai rapport</span>
+                    <span className="text-[14px] font-bold">2h</span>
                   </div>
-                  <div className="flex items-center gap-2.5 bg-gray-50 rounded-xl p-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
-                      <CheckCircle size={14} className="text-gray-600" />
-                    </div>
-                    <span className="text-[14px] text-gray-800 font-semibold">Agent indépendant</span>
-                    <CheckCircle size={14} className="ml-auto text-green-600 shrink-0" />
+                  <div className="flex items-center justify-between">
+                    <span className="text-[14px] text-gray-700">Agent indépendant</span>
+                    <span className="text-green-500">✓</span>
                   </div>
                 </div>
-
-                <div className="mt-3.5 pt-3.5 border-t border-gray-100 flex items-center justify-end">
-                  <span className="text-xs font-black text-gray-700 uppercase tracking-wider">TRASIT</span>
-                </div>
+              
+                <p className="text-right text-[13px] font-bold text-gray-900 mt-4">TRASIT</p>
               </div>
 
               <div className="absolute -top-4 -right-4 bg-gray-900 text-white rounded-xl px-3 py-1.5 text-xs font-bold shadow-lg">
