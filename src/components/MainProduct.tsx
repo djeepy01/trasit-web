@@ -41,13 +41,13 @@ export default function MainProduct() {
               <span
                 className="text-[#0D2F4A] text-xs font-semibold tracking-wider uppercase"
                 style={{
-                  fontSize: '12px',
+                  fontSize: '13px',
                   fontWeight: '600',
                   color: '#0D2F4A',
                   letterSpacing: '1px',
-                  border: '1px solid #DDDDDD',
+                  border: '1px solid #0D2F4A',
                   borderRadius: '4px',
-                  padding: '4px 10px',
+                  padding: '5px 12px',
                 }}
               >
                 NOS INTERVENTIONS
@@ -134,12 +134,13 @@ export default function MainProduct() {
             <div
               key={label}
               className="flex-1 bg-white rounded-xl border border-gray-100 p-6"
+              style={{ padding: '20px' }}
             >
               <span className="text-2xl leading-none">{icon}</span>
               <div>
                 <div
                   className="text-[20px] font-bold text-[#1A1A1A] whitespace-nowrap"
-                  style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A1A' }}
+                  style={{ fontSize: '19px', fontWeight: '700', color: '#1A1A1A' }}
                 >
                   {label}
                 </div>
