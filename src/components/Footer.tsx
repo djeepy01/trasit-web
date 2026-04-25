@@ -2,11 +2,9 @@ import { Link } from 'react-router-dom';
 import { Twitter, Linkedin, Instagram, Facebook } from 'lucide-react';
 
 const serviceLinks = [
-  'Audit',
-  'Audit Agrobusiness',
-  'Rapports terrain',
-  'Suivi de chantier',
-  'Due diligence',
+  { label: 'Nos services', to: '/nos-services' },
+  { label: 'Comment ça marche', to: '/comment-ca-marche' },
+  { label: 'Contact', to: '/contact' },
 ];
 
 const legalLinks = [
@@ -51,7 +49,7 @@ export default function Footer() {
               tras<span>·</span>it
             </div>
             <p className="text-white/70 text-sm leading-relaxed font-light mb-6 max-w-[220px]">
-              Audit terrain pour investisseurs en Afrique. Agrobusiness.
+              La confiance pour chaque investissement en Afrique.
             </p>
             <div className="flex items-center gap-3">
               {socials.map(({ icon: Icon, label }) => (
@@ -70,14 +68,14 @@ export default function Footer() {
           <div>
             <h4 className="text-white text-xs font-bold uppercase tracking-[0.15em] mb-5">Services</h4>
             <ul className="space-y-3">
-              {serviceLinks.map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
+              {serviceLinks.map(({ label, to }) => (
+                <li key={to}>
+                  <Link
+                    to={to}
                     className="text-white/70 hover:text-white text-sm transition-colors font-light"
                   >
-                    {item}
-                  </a>
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>
