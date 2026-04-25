@@ -24,7 +24,10 @@ export default function PartnersStrip() {
   return (
     <section className="bg-white py-12 border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6 mb-7">
-        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-600 text-center">
+        <p
+          className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-600 text-center"
+          style={{ fontSize: '32px', fontWeight: '700', color: '#1A1A1A' }}
+        >
           Ils nous font confiance
         </p>
       </div>
