@@ -49,7 +49,10 @@ export default function Testimonials() {
     <section id="testimonials" className="bg-[#F7F7F6] py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-14">
-          <p className="text-gray-600 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
+          <p
+            className="text-gray-600 text-xs font-semibold uppercase tracking-[0.2em] mb-3"
+            style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
+          >
             Témoignages
           </p>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
@@ -81,7 +84,10 @@ export default function Testimonials() {
                 <Stars count={rating} />
               </div>
 
-              <blockquote className="text-gray-700 text-[16px] leading-[1.8] flex-1 mb-6 font-light">
+              <blockquote
+                className="text-gray-700 text-[16px] leading-[1.8] flex-1 mb-6 font-light"
+                style={{ fontSize: '18px', fontWeight: '400', color: '#333333', lineHeight: '1.8' }}
+              >
                 "{quote}"
               </blockquote>
 
@@ -92,9 +98,24 @@ export default function Testimonials() {
                   className="w-10 h-10 rounded-full object-cover flex-shrink-0"
                 />
                 <div>
-                  <div className="font-bold text-gray-900 text-sm">{name}</div>
-                  <div className="text-gray-500 text-xs">{role}</div>
-                  <div className="text-gray-600 text-xs">{location}</div>
+                  <div
+                    className="font-bold text-gray-900 text-sm"
+                    style={{ fontSize: '18px', fontWeight: '700', color: '#1A1A1A' }}
+                  >
+                    {name}
+                  </div>
+                  <div
+                    className="text-gray-500 text-xs"
+                    style={{ fontSize: '15px', fontWeight: '400', color: '#0D2F4A' }}
+                  >
+                    {role}
+                  </div>
+                  <div
+                    className="text-gray-600 text-xs"
+                    style={{ fontSize: '15px', fontWeight: '400', color: '#0D2F4A' }}
+                  >
+                    {location}
+                  </div>
                 </div>
               </div>
             </div>
