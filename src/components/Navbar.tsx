@@ -51,7 +51,7 @@ export default function Navbar() {
         >
           <span
             className="text-3xl font-bold text-gray-900 tracking-tight leading-none select-none"
-            style={{ fontSize: '36px', fontWeight: '800', color: '#1A1A1A' }}
+            style={{ fontSize: '44px', fontWeight: '800', color: '#1A1A1A' }}
           >
             tras<span className="text-[#8B1A1A]">·</span>it
           </span>
