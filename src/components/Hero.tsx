@@ -69,7 +69,15 @@ export default function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 w-full py-20 md:py-28">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className="animate-fade-up">
-            <div className="inline-flex items-center gap-2.5 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-7">
+            <div
+              className="inline-flex items-center gap-2.5 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-7"
+              style={{
+                background: 'rgba(0,0,0,0.4)',
+                padding: '6px 14px',
+                borderRadius: '4px',
+                display: 'inline-block',
+              }}
+            >
               <Shield size={12} className="text-white/70" />
               <span
                 className="text-white/90 text-xs font-semibold tracking-wide"
@@ -81,7 +89,10 @@ export default function Hero() {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight mb-6">
               Votre investissement mérite plus d'attention.
             </h1>
-            <div className="mt-14 flex items-center gap-6">
+            <div
+              className="mt-14 flex items-center gap-6"
+              style={{ background: 'rgba(0,0,0,0.4)', padding: '12px 24px', borderRadius: '8px' }}
+            >
               <div className="text-center">
                 <div
                   className="text-2xl font-black text-white"
