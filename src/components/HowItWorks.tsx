@@ -39,7 +39,7 @@ export default function HowItWorks() {
 
   return (
     <section id="how-it-works" className="bg-white py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-[40px]">
         <div className="text-center mb-16">
           <p className="text-gray-600 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
             Le processus
@@ -61,8 +61,6 @@ export default function HowItWorks() {
             transition: 'opacity 0.7s ease, transform 0.7s ease',
           }}
         >
-          <div className="hidden lg:block absolute top-14 left-0 right-0 h-px bg-gray-200 mx-[10%]" />
-
           <div className="grid grid-cols-5 gap-6 w-full overflow-hidden">
             {steps.map(({ number, icon: Icon, title, desc }, i) => (
               <div
