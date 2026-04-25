@@ -59,11 +59,11 @@ export default function MainProduct() {
               ))}
             </ul>
 
-            <div className="flex gap-6 w-full mb-8">
+            <div className="flex gap-4 w-full overflow-visible mb-8">
               {verticals.map(({ icon, label, desc }) => (
                 <div
                   key={label}
-                  className="flex-1 min-w-[380px] bg-white rounded-xl border border-gray-100 p-6"
+                  className="flex-1 bg-white rounded-xl border border-gray-100 p-6"
                 >
                   <span className="text-2xl leading-none">{icon}</span>
                   <div>
