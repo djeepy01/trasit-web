@@ -25,7 +25,10 @@ export default function Domains() {
     <section className="bg-white py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-14">
-          <p className="text-gray-600 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
+          <p
+            className="text-gray-600 text-xs font-semibold uppercase tracking-[0.2em] mb-3"
+            style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
+          >
             Expertise
           </p>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
@@ -57,7 +60,10 @@ export default function Domains() {
                 <h3 className="text-white text-xl font-black tracking-tight leading-tight mb-1">
                   {title}
                 </h3>
-                <p className="text-white/80 text-sm font-light">
+                <p
+                  className="text-white/80 text-sm font-light"
+                  style={{ fontSize: '18px', fontWeight: '400', color: 'white' }}
+                >
                   {subtitle}
                 </p>
               </div>
