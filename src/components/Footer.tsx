@@ -50,7 +50,7 @@ export default function Footer() {
             </div>
             <p
               className="text-white/70 text-sm leading-relaxed font-light mb-6 max-w-[220px]"
-              style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+              style={{ fontSize: '18px', fontWeight: '400', color: 'white' }}
             >
               La confiance pour chaque investissement en Afrique.
             </p>
@@ -62,7 +62,7 @@ export default function Footer() {
                   aria-label={label}
                   className="w-9 h-9 rounded-lg bg-white/8 hover:bg-white/15 flex items-center justify-center transition-colors"
                 >
-                  <Icon size={15} className="text-white/80" />
+                  <Icon size={24} className="text-white/80" />
                 </a>
               ))}
             </div>
@@ -71,7 +71,7 @@ export default function Footer() {
           <div>
             <h4
               className="text-white text-xs font-bold uppercase tracking-[0.15em] mb-5"
-              style={{ fontSize: '16px', fontWeight: '700', color: 'white', letterSpacing: '2px' }}
+              style={{ fontSize: '18px', fontWeight: '700', color: 'white', letterSpacing: '2px' }}
             >
               Services
             </h4>
@@ -81,7 +81,7 @@ export default function Footer() {
                   <Link
                     to={to}
                     className="text-white/70 hover:text-white text-sm transition-colors font-light"
-                    style={{ fontSize: '17px', fontWeight: '400', color: 'white' }}
+                    style={{ fontSize: '19px', fontWeight: '400', color: 'white' }}
                   >
                     {label}
                   </Link>
@@ -93,7 +93,7 @@ export default function Footer() {
           <div>
             <h4
               className="text-white text-xs font-bold uppercase tracking-[0.15em] mb-5"
-              style={{ fontSize: '16px', fontWeight: '700', color: 'white', letterSpacing: '2px' }}
+              style={{ fontSize: '18px', fontWeight: '700', color: 'white', letterSpacing: '2px' }}
             >
               Légal
             </h4>
@@ -103,7 +103,7 @@ export default function Footer() {
                   <Link
                     to={to}
                     className="text-white/70 hover:text-white text-sm transition-colors font-light"
-                    style={{ fontSize: '17px', fontWeight: '400', color: 'white' }}
+                    style={{ fontSize: '19px', fontWeight: '400', color: 'white' }}
                   >
                     {label}
                   </Link>
@@ -116,7 +116,7 @@ export default function Footer() {
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p
             className="text-white/60 text-xs text-center md:text-left"
-            style={{ fontSize: '14px', fontWeight: '400', color: 'white' }}
+            style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
           >
             © 2026 TRASIT
           </p>
@@ -124,21 +124,21 @@ export default function Footer() {
             <Link
               to="/cgu"
               className="text-white/60 hover:text-white/90 text-xs transition-colors"
-              style={{ fontSize: '14px', fontWeight: '400', color: 'white' }}
+              style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
             >
               CGU
             </Link>
             <Link
               to="/confidentialite"
               className="text-white/60 hover:text-white/90 text-xs transition-colors"
-              style={{ fontSize: '14px', fontWeight: '400', color: 'white' }}
+              style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
             >
               Confidentialité
             </Link>
             <Link
               to="/mentions-legales"
               className="text-white/60 hover:text-white/90 text-xs transition-colors"
-              style={{ fontSize: '14px', fontWeight: '400', color: 'white' }}
+              style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
             >
               Mentions légales
             </Link>
