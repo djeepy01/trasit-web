@@ -63,11 +63,11 @@ export default function HowItWorks() {
         >
           <div className="hidden lg:block absolute top-14 left-0 right-0 h-px bg-gray-200 mx-[10%]" />
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-4">
+          <div className="flex gap-6 overflow-x-auto pb-2">
             {steps.map(({ number, icon: Icon, title, desc }, i) => (
               <div
                 key={number}
-                className="relative flex flex-col items-center text-center w-[220px] px-4"
+                className="relative flex flex-col items-start w-[280px] shrink-0"
                 style={{
                   transitionDelay: `${i * 0.12}s`,
                   opacity: isVisible ? 1 : 0,
@@ -75,16 +75,16 @@ export default function HowItWorks() {
                   transition: `opacity 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s`,
                 }}
               >
-                <div className="flex flex-col items-center mb-5">
-                  <div className="w-12 h-12 rounded-full bg-transparent border border-[#1A1A1A] flex items-center justify-center">
-                    <span className="text-[#1A1A1A] text-[16px] font-black">{number}</span>
-                  </div>
-                  <div className="mt-4 w-[68px] h-[68px] rounded-full bg-white border-2 border-gray-200 flex items-center justify-center transition-colors shadow-sm">
-                    <Icon size={22} className="text-gray-600" />
-                  </div>
+                <div className="w-14 h-14 rounded-full bg-white border border-[#1A1A1A] flex items-center justify-center">
+                  <span className="text-[#1A1A1A] text-[14px] font-bold">{number}</span>
                 </div>
-                <h3 className="font-bold text-gray-900 text-sm mb-2 px-2">{title}</h3>
-                <p className="text-gray-700 text-xs leading-relaxed px-1 w-full text-left">{desc}</p>
+                <div className="mt-4">
+                  <Icon size={24} className="text-[#1A1A1A]" />
+                </div>
+                <h3 className="mt-4 text-[20px] font-bold text-[#1A1A1A] text-left">{title}</h3>
+                <p className="mt-3 text-[16px] text-[#444444] text-left leading-[1.7]">
+                  {desc}
+                </p>
               </div>
             ))}
           </div>
