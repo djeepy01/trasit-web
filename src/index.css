@@ -22,3 +22,8 @@
     opacity: 0;
   }
 }
+
+::placeholder {
+  color: #1A1A1A;
+  opacity: 1;
+}
