@@ -67,7 +67,7 @@ export default function HowItWorks() {
             {steps.map(({ number, icon: Icon, title, desc }, i) => (
               <div
                 key={number}
-                className="relative flex flex-col items-center text-center"
+                className="relative flex flex-col items-center text-center md:min-w-[200px]"
                 style={{
                   transitionDelay: `${i * 0.12}s`,
                   opacity: isVisible ? 1 : 0,
@@ -82,7 +82,7 @@ export default function HowItWorks() {
                   </div>
                 </div>
                 <h3 className="font-bold text-gray-900 text-sm mb-2 px-2">{title}</h3>
-                <p className="text-gray-700 text-xs leading-relaxed px-1">{desc}</p>
+                <p className="text-gray-700 text-xs leading-relaxed px-1 w-full text-left">{desc}</p>
               </div>
             ))}
           </div>

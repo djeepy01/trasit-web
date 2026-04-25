@@ -66,7 +66,7 @@ export default function Testimonials() {
             transition: 'opacity 0.7s ease, transform 0.7s ease',
           }}
         >
-          {testimonials.map(({ name, role, location, avatar, quote, rating, vertical }, i) => (
+        {testimonials.map(({ name, role, location, avatar, quote, rating }, i) => (
             <div
               key={name}
               className="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col"
@@ -79,9 +79,6 @@ export default function Testimonials() {
             >
               <div className="flex items-start justify-between mb-5">
                 <Stars count={rating} />
-                <span className="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                  {vertical}
-                </span>
               </div>
 
               <blockquote className="text-gray-700 text-sm leading-relaxed flex-1 mb-6 font-light">
