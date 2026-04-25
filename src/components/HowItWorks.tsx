@@ -41,13 +41,19 @@ export default function HowItWorks() {
     <section id="how-it-works" className="bg-white py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-[40px]">
         <div className="text-center mb-16">
-          <p className="text-gray-600 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
+          <p
+            className="text-gray-600 text-xs font-semibold uppercase tracking-[0.2em] mb-3"
+            style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
+          >
             Le processus
           </p>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
             Simple. Rapide. Fiable.
           </h2>
-          <p className="text-gray-700 mt-4 text-lg font-light max-w-xl mx-auto">
+          <p
+            className="text-gray-700 mt-4 text-lg font-light max-w-xl mx-auto"
+            style={{ fontSize: '20px', fontWeight: '400', color: '#1A1A1A' }}
+          >
             Votre terrain en 5 étapes, de la fiche de mission au rapport final.
           </p>
         </div>
@@ -74,15 +80,26 @@ export default function HowItWorks() {
                 }}
               >
                 <div className="w-12 h-12 rounded-full bg-white border border-[#1A1A1A] flex items-center justify-center">
-                  <span className="text-[#1A1A1A] text-[14px] font-bold">{number}</span>
+                  <span
+                    className="text-[#1A1A1A] text-[14px] font-bold"
+                    style={{ fontSize: '14px', fontWeight: '700', color: '#1A1A1A' }}
+                  >
+                    {number}
+                  </span>
                 </div>
                 <div className="mt-4">
                   <Icon size={24} className="text-[#1A1A1A]" />
                 </div>
-                <h3 className="mt-4 text-[18px] font-bold text-[#1A1A1A] text-left">
+                <h3
+                  className="mt-4 text-[18px] font-bold text-[#1A1A1A] text-left"
+                  style={{ fontSize: '18px', fontWeight: '700', color: '#1A1A1A' }}
+                >
                   {title}
                 </h3>
-                <p className="mt-3 text-[16px] text-[#444444] text-left leading-[1.7]">
+                <p
+                  className="mt-3 text-[16px] text-[#444444] text-left leading-[1.7]"
+                  style={{ fontSize: '16px', fontWeight: '400', color: '#333333', lineHeight: '1.7' }}
+                >
                   {desc}
                 </p>
               </div>
