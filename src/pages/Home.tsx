@@ -6,6 +6,7 @@ import MainProduct from '../components/MainProduct';
 import RiskCards from '../components/RiskCards';
 import Stats from '../components/Stats';
 import Dashboard from '../components/Dashboard';
+import MessageSection from '../components/MessageSection';
 import Domains from '../components/Domains';
 import HowItWorks from '../components/HowItWorks';
 import Testimonials from '../components/Testimonials';
@@ -37,6 +38,7 @@ export default function Home() {
       <RiskCards />
       <Stats />
       <Dashboard />
+      <MessageSection />
       <Domains />
       <HowItWorks />
       <Testimonials />
