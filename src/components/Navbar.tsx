@@ -123,6 +123,7 @@ export default function Navbar() {
           </button>
           <button
             type="button"
+            onClick={() => navigate('/connexion')}
             className="text-base font-semibold bg-[#8B1A1A] text-white px-4 py-2 rounded-lg hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
             style={{
               fontSize: '17px',
@@ -186,6 +187,10 @@ export default function Navbar() {
             </button>
             <button
               type="button"
+              onClick={() => {
+                navigate('/connexion');
+                closeMobile();
+              }}
               className="bg-[#8B1A1A] text-white px-5 py-2.5 text-base font-semibold rounded-sm"
               style={{ fontSize: '17px', fontWeight: '600' }}
             >

@@ -5,6 +5,7 @@ import ServicesPage from './pages/ServicesPage';
 import HowItWorksPage from './pages/HowItWorksPage';
 import ContactPage from './pages/ContactPage';
 import Inscription from './pages/Inscription';
+import Connexion from './pages/Connexion';
 import Dashboard from './pages/Dashboard';
 import CguPage from './pages/CguPage';
 import ConfidentialitePage from './pages/ConfidentialitePage';
@@ -21,6 +22,7 @@ function App() {
           <Route path="/comment-ca-marche" element={<HowItWorksPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/inscription" element={<Inscription />} />
+          <Route path="/connexion" element={<Connexion />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/cgu" element={<CguPage />} />
           <Route path="/confidentialite" element={<ConfidentialitePage />} />
