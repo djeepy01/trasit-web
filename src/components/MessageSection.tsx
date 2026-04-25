@@ -56,12 +56,18 @@ export default function MessageSection() {
             <h2 className="text-3xl md:text-4xl font-black tracking-tight" style={{ color: navy }}>
               Chaque investissement mérite une réponse claire.
             </h2>
-            <p className="mt-8 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl whitespace-pre-line">
+            <p
+              className="mt-8 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl whitespace-pre-line"
+              style={{ fontSize: '18px', fontWeight: '400', color: '#1A1A1A', lineHeight: '1.8' }}
+            >
               Chantiers à l'arrêt. Stocks inexistants. Gérants introuvables.
               {'\n'}
               La distance crée des angles morts dangereux.
             </p>
-            <p className="mt-7 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl whitespace-pre-line">
+            <p
+              className="mt-7 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl whitespace-pre-line"
+              style={{ fontSize: '18px', fontWeight: '400', color: '#1A1A1A', lineHeight: '1.8' }}
+            >
               TRASIT analyse, compte et évalue chaque actif sur place.
               {'\n'}
               Photos géolocalisées, horodatées, impossibles à falsifier. Rapport en 2 heures.
