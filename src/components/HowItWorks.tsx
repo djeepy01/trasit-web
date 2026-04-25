@@ -63,11 +63,11 @@ export default function HowItWorks() {
         >
           <div className="hidden lg:block absolute top-14 left-0 right-0 h-px bg-gray-200 mx-[10%]" />
 
-          <div className="flex gap-6 overflow-x-auto pb-2">
+          <div className="grid grid-cols-5 gap-6 w-full overflow-hidden">
             {steps.map(({ number, icon: Icon, title, desc }, i) => (
               <div
                 key={number}
-                className="relative flex flex-col items-start w-[280px] shrink-0"
+                className="relative flex flex-col items-start px-2 min-w-0"
                 style={{
                   transitionDelay: `${i * 0.12}s`,
                   opacity: isVisible ? 1 : 0,
@@ -75,13 +75,15 @@ export default function HowItWorks() {
                   transition: `opacity 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s`,
                 }}
               >
-                <div className="w-14 h-14 rounded-full bg-white border border-[#1A1A1A] flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-white border border-[#1A1A1A] flex items-center justify-center">
                   <span className="text-[#1A1A1A] text-[14px] font-bold">{number}</span>
                 </div>
                 <div className="mt-4">
                   <Icon size={24} className="text-[#1A1A1A]" />
                 </div>
-                <h3 className="mt-4 text-[20px] font-bold text-[#1A1A1A] text-left">{title}</h3>
+                <h3 className="mt-4 text-[18px] font-bold text-[#1A1A1A] text-left">
+                  {title}
+                </h3>
                 <p className="mt-3 text-[16px] text-[#444444] text-left leading-[1.7]">
                   {desc}
                 </p>
