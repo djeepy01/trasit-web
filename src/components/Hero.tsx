@@ -71,8 +71,11 @@ export default function Hero() {
           <div className="animate-fade-up">
             <div className="inline-flex items-center gap-2.5 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-7">
               <Shield size={12} className="text-white/70" />
-              <span className="text-white/90 text-xs font-semibold tracking-wide">
-                Décisions fondées sur des preuves terrain
+              <span
+                className="text-white/90 text-xs font-semibold tracking-wide"
+                style={{ fontSize: '16px', fontWeight: '500', color: 'white' }}
+              >
+                Décisions fondées sur la réalité.
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight mb-6">
@@ -80,18 +83,48 @@ export default function Hero() {
             </h1>
             <div className="mt-14 flex items-center gap-6">
               <div className="text-center">
-                <div className="text-2xl font-black text-white">300+</div>
-                <div className="text-white/75 text-xs font-medium mt-0.5">Audits</div>
+                <div
+                  className="text-2xl font-black text-white"
+                  style={{ fontSize: '48px', fontWeight: '800', color: 'white' }}
+                >
+                  300+
+                </div>
+                <div
+                  className="text-white/75 text-xs font-medium mt-0.5"
+                  style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+                >
+                  Interventions
+                </div>
               </div>
               <div className="w-px h-8 bg-white/20" />
               <div className="text-center">
-                <div className="text-2xl font-black text-white">17</div>
-                <div className="text-white/75 text-xs font-medium mt-0.5">Pays couverts</div>
+                <div
+                  className="text-2xl font-black text-white"
+                  style={{ fontSize: '48px', fontWeight: '800', color: 'white' }}
+                >
+                  17
+                </div>
+                <div
+                  className="text-white/75 text-xs font-medium mt-0.5"
+                  style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+                >
+                  Pays couverts
+                </div>
               </div>
               <div className="w-px h-8 bg-white/20" />
               <div className="text-center">
-                <div className="text-2xl font-black text-white">2h</div>
-                <div className="text-white/75 text-xs font-medium mt-0.5">Délai rapport</div>
+                <div
+                  className="text-2xl font-black text-white"
+                  style={{ fontSize: '48px', fontWeight: '800', color: 'white' }}
+                >
+                  2h
+                </div>
+                <div
+                  className="text-white/75 text-xs font-medium mt-0.5"
+                  style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+                >
+                  Délai rapport
+                </div>
               </div>
             </div>
           </div>
