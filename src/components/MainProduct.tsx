@@ -10,8 +10,9 @@ const ColoredBars = () => (
 );
 
 const verticals = [
-  { icon: '🏗', label: '', desc: 'Chantiers, entrepreneurs, matériaux' },
+  { icon: '🏗', label: 'Construction & BTP', desc: 'Chantiers, entrepreneurs, matériaux' },
   { icon: '🌾', label: 'Agrobusiness', desc: 'Exploitations, récoltes, équipements' },
+  { icon: '🏪', label: 'Commerce & Gestion', desc: 'Boutiques, stocks, gérants' },
 ];
 
 const features = [
@@ -52,8 +53,8 @@ export default function MainProduct() {
             <ul className="space-y-3.5 mb-10">
               {features.map((f) => (
                 <li key={f} className="flex items-start gap-3">
-                  <span className="text-green-600 text-sm font-bold mt-0.5 shrink-0">&#10003;</span>
-                  <span className="text-gray-700 text-sm font-medium">{f}</span>
+                  <span className="text-green-600 text-[18px] font-normal mt-0.5 shrink-0">&#10003;</span>
+                  <span className="text-[#1A1A1A] text-[18px] font-normal leading-[1.6]">{f}</span>
                 </li>
               ))}
             </ul>
@@ -66,8 +67,8 @@ export default function MainProduct() {
                 >
                   <span className="text-2xl leading-none">{icon}</span>
                   <div>
-                    <div className="font-bold text-gray-900 text-sm">{label}</div>
-                    <div className="text-gray-500 text-xs mt-0.5">{desc}</div>
+                    <div className="text-[16px] font-bold text-[#1A1A1A]">{label}</div>
+                    <div className="text-[14px] text-[#666666] mt-0.5">{desc}</div>
                   </div>
                 </div>
               ))}
