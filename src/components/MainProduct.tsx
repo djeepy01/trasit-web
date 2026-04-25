@@ -38,8 +38,19 @@ export default function MainProduct() {
             }}
           >
             <div className="inline-flex items-center gap-2 bg-gray-100 rounded-full px-4 py-1.5 mb-6">
-              <span className="text-gray-600 text-xs font-semibold tracking-wider uppercase">
-                Audit terrain
+              <span
+                className="text-gray-600 text-xs font-semibold tracking-wider uppercase"
+                style={{
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  color: '#666666',
+                  letterSpacing: '1px',
+                  border: '1px solid #DDDDDD',
+                  borderRadius: '4px',
+                  padding: '4px 10px',
+                }}
+              >
+                NOS INTERVENTIONS
               </span>
             </div>
             <h2 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight tracking-tight mb-6">
@@ -47,7 +58,7 @@ export default function MainProduct() {
               c'est ce qui existe.
             </h2>
             <p className="text-gray-600 text-lg leading-relaxed mb-8 font-light">
-              TRASIT déploie des agents qualifiés directement sur vos actifs et chantiers en Afrique. Nous vérifions la réalité de votre investissement — entrepreneur, avancement des travaux, état des équipements — et vous livrons un rapport complet, documenté et exploitable.
+              TRASIT déploie des agents directement sur vos actifs et chantiers en Afrique. Nous vérifions la réalité de votre investissement — entrepreneur, avancement des travaux, état des équipements — et vous livrons un rapport complet, documenté et exploitable.
             </p>
 
             <ul className="space-y-3.5 mb-10">
@@ -126,8 +137,18 @@ export default function MainProduct() {
             >
               <span className="text-2xl leading-none">{icon}</span>
               <div>
-                <div className="text-[20px] font-bold text-[#1A1A1A] whitespace-nowrap">{label}</div>
-                <div className="text-[16px] text-[#666666] mt-1 whitespace-nowrap">{desc}</div>
+                <div
+                  className="text-[20px] font-bold text-[#1A1A1A] whitespace-nowrap"
+                  style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A1A' }}
+                >
+                  {label}
+                </div>
+                <div
+                  className="text-[16px] text-[#666666] mt-1 whitespace-nowrap"
+                  style={{ fontSize: '15px', color: '#666666' }}
+                >
+                  {desc}
+                </div>
               </div>
             </div>
           ))}
