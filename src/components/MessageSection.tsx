@@ -58,7 +58,7 @@ export default function MessageSection() {
             </h2>
             <p
               className="mt-8 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl whitespace-pre-line"
-              style={{ fontSize: '18px', fontWeight: '400', color: '#1A1A1A', lineHeight: '1.8' }}
+              style={{ fontSize: '20px', fontWeight: '400', color: '#1A1A1A', lineHeight: '1.8' }}
             >
               Chantiers à l'arrêt. Stocks inexistants. Gérants introuvables.
               {'\n'}
@@ -66,7 +66,7 @@ export default function MessageSection() {
             </p>
             <p
               className="mt-7 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl whitespace-pre-line"
-              style={{ fontSize: '18px', fontWeight: '400', color: '#1A1A1A', lineHeight: '1.8' }}
+              style={{ fontSize: '20px', fontWeight: '400', color: '#1A1A1A', lineHeight: '1.8' }}
             >
               TRASIT analyse, compte et évalue chaque actif sur place.
               {'\n'}
