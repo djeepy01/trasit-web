@@ -53,15 +53,12 @@ const ScoreGauge = ({ value }: { value: number }) => (
 );
 
 const GaugeLegend = () => (
-  <div className="grid grid-cols-2 gap-x-6 gap-y-3 mt-4">
+  <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-4">
     {gaugeSegments.map(({ color, label, score }) => (
       <div key={label} className="flex items-center gap-2 min-w-0">
-        <span
-          className="w-2.5 h-2.5 rounded-full shrink-0"
-          style={{ backgroundColor: label === 'Conformité' ? '#F26522' : color }}
-        />
-        <span className="text-[14px] text-gray-800 font-medium whitespace-nowrap">{label}</span>
-        <span className="text-[14px] text-gray-900 font-black ml-auto tabular-nums">{score}%</span>
+        <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
+        <span className="text-[13px] text-gray-800 font-medium whitespace-nowrap">{label}</span>
+        <span className="text-[13px] text-gray-900 font-black ml-auto tabular-nums">{score}%</span>
       </div>
     ))}
   </div>
@@ -113,7 +110,7 @@ export default function Hero() {
 
           <div className="hidden lg:flex justify-end">
             <div className="relative animate-float" style={{ animationDelay: '0.3s' }}>
-              <div className="bg-white rounded-2xl shadow-2xl w-[22rem] p-6 border border-gray-100 text-[14px]">
+              <div className="bg-white rounded-2xl shadow-2xl w-[320px] p-6 border border-gray-100 text-[14px]">
                 <div className="flex items-center gap-2.5 mb-4 pb-3.5 border-b border-gray-100">
                   <div className="w-9 h-9 rounded-xl bg-gray-900 flex items-center justify-center text-white font-black text-xs">
                     TR
@@ -136,7 +133,7 @@ export default function Hero() {
                   <GaugeLegend />
                 </div>
 
-                <div className="space-y-2 mt-6">
+                <div className="space-y-2 mt-5">
                   <div className="flex items-center gap-2.5 bg-gray-50 rounded-xl p-2.5">
                     <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
                       <Aperture size={14} className="text-gray-600" />
