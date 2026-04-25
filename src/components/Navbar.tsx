@@ -49,7 +49,7 @@ export default function Navbar() {
           onClick={handleLogoClick}
           className="flex items-center shrink-0"
         >
-          <span className="text-[2.25rem] font-black text-gray-900 tracking-tight leading-none select-none">
+          <span className="text-[24px] font-extrabold text-[#1A1A1A] tracking-tight leading-none select-none">
             tras<span className="text-[#8B1A1A]">·</span>it
           </span>
         </Link>
@@ -61,8 +61,8 @@ export default function Navbar() {
               to={to}
               className={
                 variant === 'primary'
-                  ? 'text-white text-[0.875rem] font-medium transition-colors tracking-wide whitespace-nowrap px-4 py-2 rounded-md hover:opacity-90'
-                  : 'text-gray-700 hover:text-gray-900 text-[0.875rem] font-medium transition-colors tracking-wide whitespace-nowrap'
+                  ? 'text-white text-[16px] font-medium transition-colors whitespace-nowrap px-4 py-2 rounded-md hover:opacity-90'
+                  : 'text-[#1A1A1A] hover:opacity-80 text-[16px] font-medium transition-colors whitespace-nowrap'
               }
               style={variant === 'primary' ? { backgroundColor: '#1E5FA6', borderRadius: '6px' } : undefined}
             >
@@ -76,7 +76,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1 text-gray-700 hover:text-gray-900 text-sm font-semibold px-2.5 py-1.5 rounded transition-colors"
+              className="flex items-center gap-1 text-[#1A1A1A] hover:opacity-80 text-[16px] font-medium px-2.5 py-1.5 rounded transition-colors"
             >
               {lang}
               <ChevronDown size={13} className={`transition-transform ${langOpen ? 'rotate-180' : ''}`} />
@@ -106,13 +106,13 @@ export default function Navbar() {
 
           <button
             type="button"
-            className="border border-gray-300 text-gray-700 px-5 py-2 text-sm font-semibold rounded-sm hover:border-gray-500 hover:text-gray-900 transition-all duration-200"
+            className="border border-gray-300 text-[#1A1A1A] px-5 py-2 text-[16px] font-medium rounded-sm hover:border-gray-500 transition-all duration-200"
           >
             S'inscrire
           </button>
           <button
             type="button"
-            className="bg-[#8B1A1A] text-white px-5 py-2 text-sm font-semibold rounded-sm hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
+            className="bg-[#8B1A1A] text-white px-5 py-2 text-[16px] font-semibold rounded-sm hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
           >
             Se connecter
           </button>
