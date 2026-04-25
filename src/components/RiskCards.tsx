@@ -133,7 +133,10 @@ export default function RiskCards() {
             transition: 'opacity 0.7s ease, transform 0.7s ease',
           }}
         >
-          <span className="inline-block text-xs font-bold tracking-[0.2em] uppercase mb-4 text-[#8B1A1A]">
+          <span
+            className="inline-block text-xs font-bold tracking-[0.2em] uppercase mb-4 text-[#8B1A1A]"
+            style={{ fontSize: '16px', fontWeight: '700', color: '#8B1A1A', letterSpacing: '2px' }}
+          >
             Le constat
           </span>
           <h2
