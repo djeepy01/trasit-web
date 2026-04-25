@@ -48,18 +48,17 @@ const ScoreGauge = ({ value }: { value: number }) => (
     </svg>
     <div className="flex flex-col items-center">
       <span className="text-xl font-black text-gray-900 leading-none">{value}%</span>
-      <span className="text-[8px] text-gray-500 font-semibold mt-0.5 uppercase tracking-wider">Score</span>
     </div>
   </div>
 );
 
 const GaugeLegend = () => (
-  <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 mt-2">
+  <div className="grid grid-cols-2 gap-x-6 gap-y-3 mt-4">
     {gaugeSegments.map(({ color, label, score }) => (
-      <div key={label} className="flex items-center gap-1">
-        <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
-        <span className="text-[11px] text-gray-600 font-medium whitespace-nowrap">{label}</span>
-        <span className="text-[10px] text-gray-900 font-bold ml-auto">{score}%</span>
+      <div key={label} className="flex items-center gap-2 min-w-0">
+        <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
+        <span className="text-[14px] text-gray-800 font-medium whitespace-nowrap">{label}</span>
+        <span className="text-[14px] text-gray-900 font-black ml-auto tabular-nums">{score}%</span>
       </div>
     ))}
   </div>
@@ -111,24 +110,23 @@ export default function Hero() {
 
           <div className="hidden lg:flex justify-end">
             <div className="relative animate-float" style={{ animationDelay: '0.3s' }}>
-              <div className="bg-white rounded-2xl shadow-2xl w-80 p-5 border border-gray-100">
+              <div className="bg-white rounded-2xl shadow-2xl w-[22rem] p-6 border border-gray-100 text-[14px]">
                 <div className="flex items-center gap-2.5 mb-4 pb-3.5 border-b border-gray-100">
                   <div className="w-9 h-9 rounded-xl bg-gray-900 flex items-center justify-center text-white font-black text-xs">
                     TR
                   </div>
                   <div className="min-w-0">
                     <div className="font-extrabold text-gray-900 text-sm leading-tight">Rapport TRASIT</div>
-                    <div className="text-gray-600 text-xs font-medium mt-0.5 truncate">Sites</div>
+                    <div className="text-gray-700 font-medium mt-1">Construction</div>
                   </div>
                   <div className="ml-auto flex items-center gap-1 shrink-0">
                     <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                    <span className="text-xs text-green-700 font-semibold">Validé</span>
+                    <span className="text-[14px] text-green-700 font-semibold">Validé</span>
                   </div>
                 </div>
 
                 <div className="mb-1.5">
                   <ScoreGauge value={94} />
-                  <p className="text-center text-gray-700 text-xs font-semibold mt-1">Score de conformité</p>
                   <GaugeLegend />
                 </div>
 
@@ -137,21 +135,21 @@ export default function Hero() {
                     <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
                       <Aperture size={14} className="text-gray-600" />
                     </div>
-                    <span className="text-sm text-gray-800 font-semibold">Sites vérifiés</span>
+                    <span className="text-[14px] text-gray-800 font-semibold">Intervention vérifiée</span>
                     <CheckCircle size={14} className="ml-auto text-green-600 shrink-0" />
                   </div>
                   <div className="flex items-center gap-2.5 bg-gray-50 rounded-xl p-2.5">
                     <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
                       <Clock size={14} className="text-gray-600" />
                     </div>
-                    <span className="text-sm text-gray-800 font-semibold">Délai rapport</span>
-                    <span className="ml-auto text-sm font-black text-gray-900">2h</span>
+                    <span className="text-[14px] text-gray-800 font-semibold">Délai rapport</span>
+                    <span className="ml-auto text-[14px] font-black text-gray-900 tabular-nums">2h</span>
                   </div>
                   <div className="flex items-center gap-2.5 bg-gray-50 rounded-xl p-2.5">
                     <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
                       <CheckCircle size={14} className="text-gray-600" />
                     </div>
-                    <span className="text-sm text-gray-800 font-semibold">Agent</span>
+                    <span className="text-[14px] text-gray-800 font-semibold">Agent indépendant</span>
                     <CheckCircle size={14} className="ml-auto text-green-600 shrink-0" />
                   </div>
                 </div>
