@@ -31,8 +31,18 @@ export default function Stats() {
               <div className="text-5xl md:text-6xl font-black text-gray-900 tracking-tight leading-none">
                 {number}
               </div>
-              <div className="mt-3 text-gray-800 font-semibold text-sm md:text-base">{label}</div>
-              <div className="mt-1 text-gray-600 text-xs md:text-sm">{sub}</div>
+              <div
+                className="mt-3 text-gray-800 font-semibold text-sm md:text-base"
+                style={{ fontSize: '18px', fontWeight: '600', color: '#1A1A1A' }}
+              >
+                {label}
+              </div>
+              <div
+                className="mt-1 text-gray-600 text-xs md:text-sm"
+                style={{ fontSize: '16px', fontWeight: '500', color: '#0D2F4A' }}
+              >
+                {sub}
+              </div>
             </div>
           ))}
         </div>
