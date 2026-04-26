@@ -57,16 +57,16 @@ export default function MessageSection() {
               Chaque investissement mérite une réponse claire.
             </h2>
             <p
-              className="mt-8 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl whitespace-pre-line"
-              style={{ fontSize: '20px', fontWeight: '400', color: '#1A1A1A', lineHeight: '1.8' }}
+              className="mt-8 leading-[1.65] max-w-xl whitespace-pre-line"
+              style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.8' }}
             >
               Chantiers à l'arrêt. Stocks inexistants. Gérants introuvables.
               {'\n'}
               La distance crée des angles morts dangereux.
             </p>
             <p
-              className="mt-7 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal max-w-xl whitespace-pre-line"
-              style={{ fontSize: '20px', fontWeight: '400', color: '#1A1A1A', lineHeight: '1.8' }}
+              className="mt-7 leading-[1.65] max-w-xl whitespace-pre-line"
+              style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.8' }}
             >
               TRASIT analyse, compte et évalue chaque actif sur place.
               {'\n'}
@@ -114,8 +114,8 @@ export default function MessageSection() {
               </svg>
 
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-                <p className="text-[16px] font-semibold text-[#1A1A1A]">TRASIT</p>
-                <p className="mt-1 text-sm text-[#1A1A1A]/70">Indicateurs</p>
+                <p style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>TRASIT</p>
+                <p style={{ marginTop: '4px', fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>Indicateurs</p>
               </div>
             </div>
 
@@ -130,7 +130,7 @@ export default function MessageSection() {
                   <div className="min-w-0">
                     <p className="text-[16px] leading-snug font-semibold text-[#1A1A1A]">
                       {item.value}{' '}
-                      <span className="font-normal text-[#1A1A1A]">{item.label}</span>
+                      <span style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>{item.label}</span>
                     </p>
                   </div>
                 </div>

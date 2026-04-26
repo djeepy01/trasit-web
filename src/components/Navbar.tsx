@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase';
 
 type NavItem = {
   label: string;
@@ -22,11 +24,19 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [lang, setLang] = useState<'FR' | 'EN'>('FR');
   const [langOpen, setLangOpen] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 16);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setIsAuthed(!!user);
+    });
+    return () => unsub();
   }, []);
 
   const closeMobile = () => setMobileOpen(false);
@@ -105,37 +115,58 @@ export default function Navbar() {
 
           <div className="w-px h-5 bg-gray-200 mx-1" />
 
-          <button
-            type="button"
-            onClick={() => navigate('/inscription')}
-            className="text-base font-medium border border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:border-gray-500 hover:text-gray-900 transition-all duration-200"
-            style={{
-              fontSize: '17px',
-              fontWeight: '500',
-              border: '1px solid #1A1A1A',
-              borderRadius: '24px',
-              padding: '10px 28px',
-              background: 'white',
-              color: '#1A1A1A',
-            }}
-          >
-            S'inscrire
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate('/connexion')}
-            className="text-base font-semibold bg-[#8B1A1A] text-white px-4 py-2 rounded-lg hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
-            style={{
-              fontSize: '17px',
-              fontWeight: '600',
-              background: '#8B1A1A',
-              color: 'white',
-              borderRadius: '24px',
-              padding: '10px 28px',
-            }}
-          >
-            Se connecter
-          </button>
+          {isAuthed ? (
+            <button
+              type="button"
+              onClick={() => navigate('/dashboard')}
+              className="text-base font-semibold bg-[#8B1A1A] text-white px-4 py-2 rounded-lg hover:opacity-95 transition-all duration-200 whitespace-nowrap"
+              style={{
+                fontSize: '17px',
+                fontWeight: '700',
+                background: '#8B1A1A',
+                color: '#FFFFFF',
+                borderRadius: '24px',
+                padding: '10px 28px',
+                border: 'none',
+              }}
+            >
+              Mon espace
+            </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() => navigate('/inscription')}
+                className="text-base font-medium border border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:border-gray-500 hover:text-gray-900 transition-all duration-200"
+                style={{
+                  fontSize: '17px',
+                  fontWeight: '500',
+                  border: '1px solid #1A1A1A',
+                  borderRadius: '24px',
+                  padding: '10px 28px',
+                  background: 'white',
+                  color: '#1A1A1A',
+                }}
+              >
+                S'inscrire
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/connexion')}
+                className="text-base font-semibold bg-[#8B1A1A] text-white px-4 py-2 rounded-lg hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
+                style={{
+                  fontSize: '17px',
+                  fontWeight: '600',
+                  background: '#8B1A1A',
+                  color: 'white',
+                  borderRadius: '24px',
+                  padding: '10px 28px',
+                }}
+              >
+                Se connecter
+              </button>
+            </>
+          )}
         </div>
 
         <button
@@ -177,25 +208,41 @@ export default function Navbar() {
             ))}
           </div>
           <div className="flex flex-col gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => navigate('/inscription')}
-              className="border border-gray-300 text-gray-700 px-5 py-2.5 text-base font-semibold rounded-sm"
-              style={{ fontSize: '17px', fontWeight: '600' }}
-            >
-              S'inscrire
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                navigate('/connexion');
-                closeMobile();
-              }}
-              className="bg-[#8B1A1A] text-white px-5 py-2.5 text-base font-semibold rounded-sm"
-              style={{ fontSize: '17px', fontWeight: '600' }}
-            >
-              Se connecter
-            </button>
+            {isAuthed ? (
+              <button
+                type="button"
+                onClick={() => {
+                  navigate('/dashboard');
+                  closeMobile();
+                }}
+                className="bg-[#8B1A1A] text-white px-5 py-2.5 text-base font-semibold rounded-sm"
+                style={{ fontSize: '17px', fontWeight: '700' }}
+              >
+                Mon espace
+              </button>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => navigate('/inscription')}
+                  className="border border-gray-300 text-gray-700 px-5 py-2.5 text-base font-semibold rounded-sm"
+                  style={{ fontSize: '17px', fontWeight: '600' }}
+                >
+                  S'inscrire
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate('/connexion');
+                    closeMobile();
+                  }}
+                  className="bg-[#8B1A1A] text-white px-5 py-2.5 text-base font-semibold rounded-sm"
+                  style={{ fontSize: '17px', fontWeight: '600' }}
+                >
+                  Se connecter
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

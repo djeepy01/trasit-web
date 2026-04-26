@@ -67,6 +67,8 @@ export default function Testimonials() {
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(32px)',
             transition: 'opacity 0.7s ease, transform 0.7s ease',
+            fontFamily:
+              'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"',
           }}
         >
         {testimonials.map(({ name, role, location, avatar, quote, rating }, i) => (
@@ -78,6 +80,8 @@ export default function Testimonials() {
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
                 transition: `opacity 0.6s ease ${i * 0.12}s, transform 0.6s ease ${i * 0.12}s, box-shadow 0.2s ease`,
+                padding: '28px',
+                minHeight: '320px',
               }}
             >
               <div className="flex items-start justify-between mb-5">
@@ -86,7 +90,7 @@ export default function Testimonials() {
 
               <blockquote
                 className="text-gray-700 text-[16px] leading-[1.8] flex-1 mb-6 font-light"
-                style={{ fontSize: '18px', fontWeight: '400', color: '#333333', lineHeight: '1.8' }}
+                style={{ fontSize: '18px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.85' }}
               >
                 "{quote}"
               </blockquote>
@@ -100,19 +104,19 @@ export default function Testimonials() {
                 <div>
                   <div
                     className="font-bold text-gray-900 text-sm"
-                    style={{ fontSize: '18px', fontWeight: '700', color: '#1A1A1A' }}
+                    style={{ fontSize: '19px', fontWeight: '800', color: '#1A1A1A' }}
                   >
                     {name}
                   </div>
                   <div
                     className="text-gray-500 text-xs"
-                    style={{ fontSize: '15px', fontWeight: '400', color: '#0D2F4A' }}
+                    style={{ fontSize: '17px', fontWeight: 500, color: '#1A1A1A' }}
                   >
                     {role}
                   </div>
                   <div
                     className="text-gray-600 text-xs"
-                    style={{ fontSize: '15px', fontWeight: '400', color: '#0D2F4A' }}
+                    style={{ fontSize: '17px', fontWeight: 500, color: '#1A1A1A' }}
                   >
                     {location}
                   </div>

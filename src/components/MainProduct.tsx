@@ -133,20 +133,26 @@ export default function MainProduct() {
           {verticals.map(({ icon, label, desc }) => (
             <div
               key={label}
-              className="flex-1 bg-white rounded-xl border border-gray-100 p-6"
-              style={{ padding: '20px' }}
+              className="flex-1 rounded-xl p-6"
+              style={{
+                background: '#EBF2FA',
+                border: '1px solid #CBD5E1',
+                borderRadius: '14px',
+                padding: '20px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+              }}
             >
               <span className="text-2xl leading-none">{icon}</span>
               <div>
                 <div
                   className="text-[20px] font-bold text-[#1A1A1A] whitespace-nowrap"
-                  style={{ fontSize: '19px', fontWeight: '700', color: '#1A1A1A' }}
+                  style={{ fontSize: '21px', fontWeight: '800', color: '#1A1A1A' }}
                 >
                   {label}
                 </div>
                 <div
-                  className="text-[16px] text-[#666666] mt-1 whitespace-nowrap"
-                  style={{ fontSize: '17px', fontWeight: '500', color: '#0D2F4A' }}
+                  className="text-[16px] mt-1 whitespace-nowrap"
+                  style={{ fontSize: '18px', fontWeight: '500', color: '#0D2F4A' }}
                 >
                   {desc}
                 </div>

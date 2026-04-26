@@ -1,14 +1,12 @@
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
-
 const domains = [
   {
     title: 'Construction & BTP',
-    subtitle: 'Chantiers, entrepreneurs, prestataires',
+    subtitle: 'Chantiers, entrepreneurs, matériaux',
     photo: 'https://images.unsplash.com/photo-1740825961434-e9287638592b?w=800&auto=format&fit=crop&q=80',
   },
   {
     title: 'Agrobusiness & Élevage',
-    subtitle: 'Fermes, cultures, élevages',
+    subtitle: 'Exploitations, récoltes, équipements',
     photo: 'https://images.unsplash.com/photo-1664803667707-b55b13e1614b?w=800&auto=format&fit=crop&q=80',
   },
   {
@@ -19,8 +17,6 @@ const domains = [
 ];
 
 export default function Domains() {
-  const { ref, isVisible } = useScrollAnimation(0.1);
-
   return (
     <section className="bg-white py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6">
@@ -36,37 +32,25 @@ export default function Domains() {
           </h2>
         </div>
 
-        <div
-          ref={ref}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          {domains.map(({ title, subtitle, photo }, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {domains.map(({ title, subtitle }) => (
             <div
               key={title}
-              className="group relative overflow-hidden rounded-2xl aspect-square cursor-pointer"
               style={{
-                opacity: isVisible ? 1 : 0,
-                transform: isVisible ? 'translateY(0)' : 'translateY(32px)',
-                transition: `opacity 0.6s ease ${i * 0.12}s, transform 0.6s ease ${i * 0.12}s`,
+                background: '#EBF2FA',
+                border: '1px solid #CBD5E1',
+                borderRadius: '14px',
+                padding: '24px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+                minHeight: '140px',
               }}
             >
-              <img
-                src={photo}
-                alt={title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10 transition-opacity duration-300 group-hover:from-black/80" />
-              <div className="absolute inset-0 flex flex-col justify-end p-7">
-                <h3 className="text-white text-xl font-black tracking-tight leading-tight mb-1">
-                  {title}
-                </h3>
-                <p
-                  className="text-white/80 text-sm font-light"
-                  style={{ fontSize: '18px', fontWeight: '400', color: 'white' }}
-                >
-                  {subtitle}
-                </p>
-              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0D2F4A', marginBottom: '8px' }}>
+                {title}
+              </h3>
+              <p style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>
+                {subtitle}
+              </p>
             </div>
           ))}
         </div>

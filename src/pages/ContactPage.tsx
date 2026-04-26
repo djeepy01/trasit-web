@@ -32,7 +32,10 @@ export default function ContactPage() {
           <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
             Contactez-nous
           </h1>
-          <p className="mt-6 md:mt-8 text-base md:text-lg leading-[1.65] max-w-3xl mx-auto text-[#1A1A1A] font-normal">
+          <p
+            className="mt-6 md:mt-8 leading-[1.65] max-w-3xl mx-auto"
+            style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}
+          >
             Une question ? Une demande particulière ? Nous vous répondons dans les plus brefs délais.
           </p>
         </div>
@@ -116,7 +119,7 @@ export default function ContactPage() {
                 Envoyer le message
               </button>
               {submitted && (
-                <p className="text-[16px] leading-[1.65] text-[#1A1A1A]" role="status">
+                <p className="leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }} role="status">
                   Merci pour votre message. Nous vous recontacterons très bientôt.
                 </p>
               )}
@@ -138,7 +141,7 @@ export default function ContactPage() {
                     WhatsApp
                   </span>
                 </div>
-                <p className="text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal">
+                <p className="leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
                   Contactez-nous directement sur WhatsApp pour soumettre une demande
                 </p>
               </div>
@@ -157,7 +160,7 @@ export default function ContactPage() {
                 <p className="text-[16px] font-bold mb-2" style={{ color: navy }}>
                   Délai de réponse
                 </p>
-                <p className="text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal">
+                <p className="leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
                   Nous répondons sous 24 heures
                 </p>
               </div>

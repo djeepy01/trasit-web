@@ -65,7 +65,10 @@ export default function ServicesPage() {
           <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
             Nos services
           </h1>
-          <p className="mt-6 md:mt-8 text-base md:text-lg leading-[1.65] max-w-3xl mx-auto text-[#1A1A1A] font-normal">
+          <p
+            className="mt-6 md:mt-8 leading-[1.65] max-w-3xl mx-auto"
+            style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}
+          >
             Une vérification terrain indépendante pour chaque type d&apos;investissement.
           </p>
         </div>
@@ -84,7 +87,7 @@ export default function ServicesPage() {
               style={{ color: navy }}
             >
               <h3 className="text-xl md:text-2xl font-bold tracking-tight">{card.title}</h3>
-              <p className="mt-5 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal">
+              <p className="mt-5 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
                 {card.description}
               </p>
               <p className="mt-8 text-[16px] font-semibold uppercase tracking-wide text-[#1A1A1A]">
@@ -127,7 +130,7 @@ export default function ServicesPage() {
               style={{ color: navy }}
             >
               <h3 className="text-xl md:text-2xl font-bold">Rapport Standard</h3>
-              <p className="mt-6 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal">
+              <p className="mt-6 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
                 Un rapport unique, livré en moins de 2 heures après l&apos;intervention. Idéal pour une
                 vérification ponctuelle.
               </p>
@@ -137,7 +140,7 @@ export default function ServicesPage() {
               style={{ color: navy }}
             >
               <h3 className="text-xl md:text-2xl font-bold">Suivi Renforcé</h3>
-              <p className="mt-6 text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal">
+              <p className="mt-6 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
                 Plusieurs visites planifiées à chaque étape clé. Idéal pour un suivi continu de votre
                 investissement.
               </p>

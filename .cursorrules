@@ -1,0 +1,12 @@
+# RÈGLES COULEURS — OBLIGATOIRES
+- Jamais de bloc <style> avec des règles globales utilisant !important
+- Jamais de sélecteurs globaux comme :where(div, span, p) pour forcer des couleurs
+- Toujours corriger les couleurs élément par élément avec style inline explicite
+- color, fontSize, fontWeight doivent toujours être définis directement sur chaque élément concerné
+- Aucune règle CSS globale ne doit écraser les styles inline
+- Zéro text-gray-400, text-gray-500, text-gray-600, #666666, #999999, #6B7280 dans tout le projet
+- Taille de texte minimum 16px partout — aucune exception
+- Couleur de texte par défaut : #1A1A1A sur fond blanc
+- Titres de section : #0D2F4A uniquement
+- Boutons avec texte blanc : toujours color: '#FFFFFF' explicite
+

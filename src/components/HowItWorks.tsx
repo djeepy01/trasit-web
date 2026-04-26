@@ -52,7 +52,7 @@ export default function HowItWorks() {
           </h2>
           <p
             className="text-gray-700 mt-4 text-lg font-light max-w-xl mx-auto"
-            style={{ fontSize: '20px', fontWeight: '400', color: '#1A1A1A' }}
+            style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}
           >
             Votre terrain en 5 étapes, de la fiche de mission au rapport final.
           </p>
@@ -98,7 +98,7 @@ export default function HowItWorks() {
                 </h3>
                 <p
                   className="mt-3 text-[16px] text-[#444444] text-left leading-[1.7]"
-                  style={{ fontSize: '16px', fontWeight: '400', color: '#333333', lineHeight: '1.7' }}
+                  style={{ fontSize: '18px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.7' }}
                 >
                   {desc}
                 </p>
