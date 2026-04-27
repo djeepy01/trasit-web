@@ -116,9 +116,12 @@ export default function Dashboard() {
           borderBottom: '1px solid #DDDDDD',
           marginBottom: '32px'
         }}>
-          <h1 style={{ fontSize: '22px', fontWeight: 800, color: '#0D2F4A', margin: 0 }}>
-            <Link to="/">← Retour au site</Link> Vos missions
-          </h1>
+          <div>
+            <Link to="/">← Retour au site</Link>
+            <h1 style={{ fontSize: '22px', fontWeight: 800, color: '#0D2F4A', margin: 0 }}>
+              Vos missions
+            </h1>
+          </div>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <button
               type="button"
