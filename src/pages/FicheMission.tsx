@@ -15,7 +15,9 @@ type AgroSpeciesMain = 'poulet' | 'lapin' | 'porc' | 'autre' | '';
 type AgroElevageStage = 'demarrage' | 'croissance' | 'pret-a-vendre' | '';
 type AgroCultureStage = 'semis' | 'croissance' | 'floraison' | 'recolte' | '';
 
-type AgroFormData = {
+type CommerceType = 'boutique' | 'entrepot' | 'point-de-vente' | 'autre' | '';
+
+type FormData = {
   agroExploitationType: AgroExploitationType;
 
   agroSpeciesMain: AgroSpeciesMain;
@@ -28,6 +30,13 @@ type AgroFormData = {
   agroCultureStage: AgroCultureStage;
 
   agroToVerify: string;
+
+  commerceType: CommerceType;
+  commerceTypeOther: string;
+  commerceStockDeclared: string;
+  commerceRevenueDeclared: string;
+  commerceEmployeesDeclared: string;
+  commerceToVerify: string;
 };
 
 const COLORS = {
@@ -211,7 +220,7 @@ export default function FicheMission() {
   const [btpCurrentState, setBtpCurrentState] = useState('Fondations et dalle du rez-de-chaussée posées selon l entrepreneur');
   const [btpToVerify, setBtpToVerify] = useState('Vérifier l avancement réel des travaux et la qualité des matériaux utilisés');
 
-  const [formData, setFormData] = useState<AgroFormData>({
+  const [formData, setFormData] = useState<FormData>({
     agroExploitationType: '',
     agroSpeciesMain: '',
     agroSpeciesOther: '',
@@ -221,10 +230,14 @@ export default function FicheMission() {
     agroAreaHa: '',
     agroCultureStage: '',
     agroToVerify: '',
-  });
 
-  const [commerceActivity, setCommerceActivity] = useState('');
-  const [commerceToVerify, setCommerceToVerify] = useState('');
+    commerceType: '',
+    commerceTypeOther: '',
+    commerceStockDeclared: '',
+    commerceRevenueDeclared: '',
+    commerceEmployeesDeclared: '',
+    commerceToVerify: '',
+  });
 
   // SECTION E
   const [frequency, setFrequency] = useState<Frequency>('unique');
@@ -262,8 +275,8 @@ export default function FicheMission() {
     const errs: string[] = [];
     if (!providerName.trim()) errs.push('Prestataire: Nom complet ou raison sociale (obligatoire).');
     if (!siteAddress.trim()) errs.push('Localisation: Adresse complète (obligatoire).');
-    if (missionType !== 'agro' && !siteDistrict.trim()) errs.push('Localisation: Quartier (obligatoire).');
-    if (missionType !== 'agro' && !siteLandmarks.trim()) errs.push('Localisation: Deux repères visibles proches (obligatoire).');
+    if (missionType !== 'agro' && missionType !== 'commerce' && !siteDistrict.trim()) errs.push('Localisation: Quartier (obligatoire).');
+    if (missionType !== 'agro' && missionType !== 'commerce' && !siteLandmarks.trim()) errs.push('Localisation: Deux repères visibles proches (obligatoire).');
     if (!onSiteContactName.trim()) errs.push('Contact sur place: Nom du contact (obligatoire).');
     if (!onSiteContactPhone.trim()) errs.push('Contact sur place: Téléphone du contact (obligatoire).');
     if (!frequency) errs.push('Fréquence: sélection obligatoire.');
@@ -297,8 +310,11 @@ export default function FicheMission() {
       if (!formData.agroToVerify.trim()) errs.push('Mission Agrobusiness: Ce que vous souhaitez vérifier (obligatoire).');
     }
     if (missionType === 'commerce') {
-      if (!commerceActivity.trim()) errs.push('Mission Commerce: Type d’activité (obligatoire).');
-      if (!commerceToVerify.trim()) errs.push('Mission Commerce: Ce que vous souhaitez vérifier (obligatoire).');
+      if (!formData.commerceType) errs.push('Mission Commerce: Type de commerce (obligatoire).');
+      if (formData.commerceType === 'autre' && !formData.commerceTypeOther.trim()) {
+        errs.push('Mission Commerce: Précisez le type (obligatoire).');
+      }
+      if (!formData.commerceToVerify.trim()) errs.push('Mission Commerce: Ce que vous souhaitez vérifier (obligatoire).');
     }
     return errs;
   }, [
@@ -314,8 +330,6 @@ export default function FicheMission() {
     btpCurrentState,
     btpToVerify,
     formData,
-    commerceActivity,
-    commerceToVerify,
     frequency,
     followupSteps,
     serviceLevel,
@@ -414,7 +428,11 @@ export default function FicheMission() {
                   formData.agroCropType || ''
                 }\nSuperficie (ha): ${formData.agroAreaHa || ''}\nStade culture: ${formData.agroCultureStage || ''}\nÀ vérifier: ${formData.agroToVerify || ''}`
               : missionType === 'commerce'
-                ? `Activité: ${commerceActivity || ''}\nÀ vérifier: ${commerceToVerify || ''}`
+                ? `Type de commerce: ${
+                    formData.commerceType === 'autre' ? formData.commerceTypeOther || '' : formData.commerceType || ''
+                  }\nStock déclaré: ${formData.commerceStockDeclared || ''}\nChiffre d'affaires déclaré: ${
+                    formData.commerceRevenueDeclared || ''
+                  }\nEmployés déclarés: ${formData.commerceEmployeesDeclared || ''}\nÀ vérifier: ${formData.commerceToVerify || ''}`
                 : '',
         frequency,
         serviceLevel,
@@ -655,6 +673,61 @@ export default function FicheMission() {
                   </div>
                 ) : null}
 
+                {missionType === 'commerce' ? (
+                  <div
+                    style={{
+                      background: COLORS.white,
+                      border: `1px solid ${COLORS.border}`,
+                      borderRadius: '16px',
+                      padding: '22px',
+                    }}
+                  >
+                    <h2 style={{ fontSize: '22px', fontWeight: 800, color: COLORS.navy }}>Type de commerce *</h2>
+                    <div style={{ marginTop: '14px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '12px' }}>
+                      {[
+                        { key: 'boutique' as const, label: 'Boutique' },
+                        { key: 'entrepot' as const, label: 'Entrepôt' },
+                        { key: 'point-de-vente' as const, label: 'Point de vente' },
+                        { key: 'autre' as const, label: 'Autre' },
+                      ].map((opt) => {
+                        const selected = formData.commerceType === opt.key;
+                        return (
+                          <button
+                            key={opt.key}
+                            type="button"
+                            onClick={() => setFormData((p) => ({ ...p, commerceType: opt.key }))}
+                            data-select-card="true"
+                            style={{
+                              width: '100%',
+                              borderRadius: '8px',
+                              border: selected ? `2px solid ${COLORS.primary}` : '2px solid #94A3B8',
+                              background: selected ? COLORS.light : COLORS.white,
+                              boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+                              padding: '16px 20px',
+                              cursor: 'pointer',
+                              userSelect: 'none',
+                              outline: 'none',
+                              textAlign: 'left',
+                            }}
+                          >
+                            <div style={{ fontSize: '16px', fontWeight: 800, color: COLORS.text }}>{opt.label}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {formData.commerceType === 'autre' ? (
+                      <div style={{ marginTop: '14px' }}>
+                        <FieldLabel>Précisez le type *</FieldLabel>
+                        <TextInput
+                          value={formData.commerceTypeOther}
+                          onChange={(e) => setFormData((p) => ({ ...p, commerceTypeOther: e.target.value }))}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
+
                 {/* SECTION A */}
                 <div
                   style={{
@@ -709,11 +782,19 @@ export default function FicheMission() {
                       <TextInput value={siteAddress} onChange={(e) => setSiteAddress(e.target.value)} />
                     </div>
                     <div>
-                      <FieldLabel>{missionType === 'agro' ? 'Quartier / Village' : 'Quartier *'}</FieldLabel>
+                      <FieldLabel>
+                        {missionType === 'agro' ? 'Quartier / Village' : missionType === 'commerce' ? 'Quartier' : 'Quartier *'}
+                      </FieldLabel>
                       <TextInput value={siteDistrict} onChange={(e) => setSiteDistrict(e.target.value)} />
                     </div>
                     <div>
-                      <FieldLabel>{missionType === 'agro' ? 'Repères / description' : 'Deux repères visibles proches *'}</FieldLabel>
+                      <FieldLabel>
+                        {missionType === 'agro'
+                          ? 'Repères / description'
+                          : missionType === 'commerce'
+                            ? 'Repères / description'
+                            : 'Deux repères visibles proches *'}
+                      </FieldLabel>
                       <TextInput value={siteLandmarks} onChange={(e) => setSiteLandmarks(e.target.value)} />
                     </div>
                     <div style={{ gridColumn: '1 / -1' }}>
@@ -737,17 +818,17 @@ export default function FicheMission() {
                 >
                   <h2 style={{ fontSize: '22px', fontWeight: 800, color: COLORS.navy }}>Contact sur place</h2>
                   <div style={{ marginTop: '10px', fontSize: '16px', fontWeight: 500, color: COLORS.text, lineHeight: 1.7 }}>
-                    {missionType === 'agro'
+                    {missionType === 'agro' || missionType === 'commerce'
                       ? 'Il ne sera jamais contacté sauf urgence terrain.'
                       : 'La personne qui donnera accès au site le jour de la visite.'}
                   </div>
                   <div style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '14px' }}>
                     <div>
-                      <FieldLabel>{missionType === 'agro' ? 'Nom complet *' : 'Nom du contact *'}</FieldLabel>
+                      <FieldLabel>{missionType === 'agro' || missionType === 'commerce' ? 'Nom complet *' : 'Nom du contact *'}</FieldLabel>
                       <TextInput value={onSiteContactName} onChange={(e) => setOnSiteContactName(e.target.value)} />
                     </div>
                     <div>
-                      <FieldLabel>{missionType === 'agro' ? 'Téléphone *' : 'Téléphone du contact *'}</FieldLabel>
+                      <FieldLabel>{missionType === 'agro' || missionType === 'commerce' ? 'Téléphone *' : 'Téléphone du contact *'}</FieldLabel>
                       <TextInput value={onSiteContactPhone} onChange={(e) => setOnSiteContactPhone(e.target.value)} />
                     </div>
                   </div>
@@ -936,12 +1017,40 @@ export default function FicheMission() {
                   {missionType === 'commerce' ? (
                     <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                       <div>
-                        <FieldLabel>Type d'activité *</FieldLabel>
-                        <TextInput value={commerceActivity} onChange={(e) => setCommerceActivity(e.target.value)} />
+                        <FieldLabel>Détails commerce</FieldLabel>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                          <div>
+                            <FieldLabel>Stock déclaré par le prestataire</FieldLabel>
+                            <TextInput
+                              value={formData.commerceStockDeclared}
+                              onChange={(e) => setFormData((p) => ({ ...p, commerceStockDeclared: e.target.value }))}
+                            />
+                          </div>
+                          <div>
+                            <FieldLabel>Chiffre d'affaires déclaré</FieldLabel>
+                            <TextInput
+                              value={formData.commerceRevenueDeclared}
+                              onChange={(e) => setFormData((p) => ({ ...p, commerceRevenueDeclared: e.target.value }))}
+                            />
+                          </div>
+                          <div>
+                            <FieldLabel>Nombre d'employés déclaré</FieldLabel>
+                            <TextInput
+                              type="number"
+                              inputMode="numeric"
+                              value={formData.commerceEmployeesDeclared}
+                              onChange={(e) => setFormData((p) => ({ ...p, commerceEmployeesDeclared: e.target.value }))}
+                            />
+                          </div>
+                        </div>
                       </div>
                       <div>
                         <FieldLabel>Ce que vous souhaitez vérifier *</FieldLabel>
-                        <TextArea value={commerceToVerify} onChange={(e) => setCommerceToVerify(e.target.value)} />
+                        <TextArea
+                          placeholder="Décrivez précisément ce que vous souhaitez que l'agent observe et documente."
+                          value={formData.commerceToVerify}
+                          onChange={(e) => setFormData((p) => ({ ...p, commerceToVerify: e.target.value }))}
+                        />
                       </div>
                     </div>
                   ) : null}
