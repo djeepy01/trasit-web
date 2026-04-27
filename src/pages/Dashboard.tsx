@@ -117,7 +117,10 @@ export default function Dashboard() {
           marginBottom: '12px'
         }}>
           <div>
-            <Link to="/" style={{ fontSize: '13px', fontWeight: 500, color: '#0D2F4A' }}>
+            <div style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A' }}>
+              tras<span style={{ color: '#8B1A1A' }}>·</span>it
+            </div>
+            <Link to="/" style={{ fontSize: '13px', color: '#555555' }}>
               ← Retour au site
             </Link>
           </div>
@@ -126,13 +129,13 @@ export default function Dashboard() {
               type="button"
               onClick={() => navigate('/fiche-mission')}
               style={{
-                background: '#1E5FA6',
-                color: '#FFFFFF',
+                background: 'transparent',
+                color: '#1E5FA6',
                 fontSize: '16px',
                 fontWeight: 700,
                 borderRadius: '8px',
                 padding: '10px 20px',
-                border: 'none',
+                border: '1px solid #1E5FA6',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
               }}
@@ -143,13 +146,13 @@ export default function Dashboard() {
               type="button"
               onClick={handleSignOut}
               style={{
-                background: '#8B1A1A',
-                color: '#FFFFFF',
+                background: 'transparent',
+                color: '#8B1A1A',
                 fontSize: '16px',
                 fontWeight: 700,
                 borderRadius: '8px',
                 padding: '10px 20px',
-                border: 'none',
+                border: '1px solid #8B1A1A',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
               }}
@@ -159,7 +162,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div style={{ padding: '0 24px', fontSize: '22px', fontWeight: 800, color: '#0D2F4A', marginBottom: '20px' }}>
+        <div style={{ padding: '0 24px', fontSize: '18px', fontWeight: 700, color: '#0D2F4A', marginBottom: '20px' }}>
           Vos missions
         </div>
 
@@ -187,24 +190,13 @@ export default function Dashboard() {
                       width: '100%',
                       border: '1px solid #DDDDDD',
                       borderRadius: '12px',
-                      padding: '18px',
+                      padding: '16px',
                       background: '#FFFFFF',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
                       <div style={{ minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                          <div
-                            aria-hidden
-                            style={{
-                              width: '10px',
-                              height: '10px',
-                              borderRadius: '999px',
-                              background: accent,
-                              flex: '0 0 auto',
-                              marginTop: '2px',
-                            }}
-                          />
                           <div style={{ fontSize: '18px', fontWeight: 800, color: '#1A1A1A' }}>{missionTypeLabel(m.missionType)}</div>
                           <div
                             style={{
@@ -235,13 +227,13 @@ export default function Dashboard() {
                         type="button"
                         onClick={() => navigate(`/rapport/${m.id}`)}
                         style={{
-                          background: '#1E5FA6',
-                          color: '#FFFFFF',
+                          background: 'transparent',
+                          color: '#1E5FA6',
                           fontSize: '16px',
                           fontWeight: 700,
                           borderRadius: '8px',
                           padding: '10px 14px',
-                          border: 'none',
+                          border: '1px solid #1E5FA6',
                           cursor: 'pointer',
                         }}
                       >
