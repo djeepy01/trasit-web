@@ -353,24 +353,55 @@ export default function FicheMission() {
       });
       console.log('FICHE SAUVEGARDÉE:', docRef.id);
 
+      const formData = {
+        providerName,
+        providerRegistration,
+        providerOther: providerOtherInfo,
+        siteAddress,
+        siteDistrict,
+        siteLandmarks,
+        siteExtra: siteExtraInfo,
+        contactName: onSiteContactName,
+        contactPhone: onSiteContactPhone,
+        missionType,
+        missionDescription:
+          missionType === 'btp'
+            ? `Type: ${btpConstructionType || ''}\nNiveaux: ${btpLevels || ''}\nSuperficie: ${btpSurface || ''}\nÉtat déclaré: ${btpCurrentState || ''}\nÀ vérifier: ${btpToVerify || ''}`
+            : missionType === 'agro'
+              ? `Type: ${agroSubtype || ''}\nDéclaré: ${agroDeclared || ''}\nÀ vérifier: ${agroToVerify || ''}`
+              : missionType === 'commerce'
+                ? `Activité: ${commerceActivity || ''}\nÀ vérifier: ${commerceToVerify || ''}`
+                : '',
+        frequency,
+        serviceLevel,
+      };
+
       await emailjs.send(
         'service_lv4j5fj',
         'template_0p8uw7j',
         {
+          fiche_id: docRef.id,
+          submitted_at: new Date().toLocaleString('fr-FR'),
+          client_email: auth.currentUser?.email || '',
+          provider_name: formData.providerName || '',
+          provider_registration: formData.providerRegistration || '',
+          provider_other: formData.providerOther || '',
+          site_address: formData.siteAddress || '',
+          site_district: formData.siteDistrict || '',
+          site_landmarks: formData.siteLandmarks || '',
+          site_extra: formData.siteExtra || '',
+          contact_name: formData.contactName || '',
+          contact_phone: formData.contactPhone || '',
           mission_type:
-            missionType === 'btp' ? 'Construction & BTP' : missionType === 'agro' ? 'Agrobusiness' : 'Commerce & Gestion',
-          provider_name: providerName,
-          site_address: siteAddress + ', ' + siteDistrict,
-          contact_name: onSiteContactName,
-          contact_phone: onSiteContactPhone,
-          service_level: serviceLevel === 'standard' ? 'Rapport Standard — 15 000 FCFA' : 'Suivi Renforcé — Sur devis',
-          submitted_at: new Date().toLocaleDateString('fr-FR', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-          }),
+            formData.missionType === 'btp'
+              ? 'Construction & BTP'
+              : formData.missionType === 'agro'
+                ? 'Agrobusiness'
+                : 'Commerce & Gestion',
+          mission_description: formData.missionDescription || '',
+          mission_frequency: formData.frequency === 'unique' ? 'Rapport unique' : 'Suivi plusieurs étapes',
+          service_level: formData.serviceLevel || '',
+          photos_count: providerPhotos?.length || 0,
         },
         '-sXb-qvOyZDE-qVe9'
       );
