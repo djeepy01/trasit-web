@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Inbox } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import type { User } from 'firebase/auth';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -117,7 +117,7 @@ export default function Dashboard() {
           marginBottom: '32px'
         }}>
           <h1 style={{ fontSize: '22px', fontWeight: 800, color: '#0D2F4A', margin: 0 }}>
-            Vos missions
+            <Link to="/">← Retour au site</Link> Vos missions
           </h1>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <button
