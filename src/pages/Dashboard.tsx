@@ -114,26 +114,28 @@ export default function Dashboard() {
           justifyContent: 'space-between',
           padding: '24px 32px',
           borderBottom: '1px solid #DDDDDD',
-          marginBottom: '32px'
+          marginBottom: '12px'
         }}>
           <div>
-            <Link to="/">← Retour au site</Link>
-            <h1 style={{ fontSize: '22px', fontWeight: 800, color: '#0D2F4A', margin: 0 }}>
-              Vos missions
-            </h1>
+            <div style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A' }}>
+              tras<span style={{ color: '#8B1A1A' }}>·</span>it
+            </div>
+            <Link to="/" style={{ fontSize: '13px', color: '#555555' }}>
+              ← Retour au site
+            </Link>
           </div>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <button
               type="button"
               onClick={() => navigate('/fiche-mission')}
               style={{
-                background: '#1E5FA6',
-                color: '#FFFFFF',
+                background: 'transparent',
+                color: '#1E5FA6',
                 fontSize: '16px',
                 fontWeight: 700,
                 borderRadius: '8px',
                 padding: '10px 20px',
-                border: 'none',
+                border: '1px solid #1E5FA6',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
               }}
@@ -144,13 +146,13 @@ export default function Dashboard() {
               type="button"
               onClick={handleSignOut}
               style={{
-                background: '#8B1A1A',
-                color: '#FFFFFF',
+                background: 'transparent',
+                color: '#8B1A1A',
                 fontSize: '16px',
                 fontWeight: 700,
                 borderRadius: '8px',
                 padding: '10px 20px',
-                border: 'none',
+                border: '1px solid #8B1A1A',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
               }}
@@ -158,6 +160,10 @@ export default function Dashboard() {
               Se déconnecter
             </button>
           </div>
+        </div>
+
+        <div style={{ padding: '0 24px', fontSize: '18px', fontWeight: 500, color: '#0D2F4A', marginBottom: '32px' }}>
+          Vos missions
         </div>
 
         {hasMissions && Array.isArray(missions) ? (
@@ -168,6 +174,14 @@ export default function Dashboard() {
                 const dateText = d ? formatFrenchDate(d) : '';
                 const address = [m.siteAddress, m.siteDistrict].filter(Boolean).join(' — ');
                 const isExpanded = expandedId === m.id;
+                const accent =
+                  m.missionType === 'btp'
+                    ? '#1E5FA6'
+                    : m.missionType === 'agro'
+                      ? '#2E8B57'
+                      : m.missionType === 'commerce'
+                        ? '#F26522'
+                        : '#DDDDDD';
 
                 return (
                   <div
@@ -175,6 +189,7 @@ export default function Dashboard() {
                     style={{
                       width: '100%',
                       border: '1px solid #DDDDDD',
+                      borderLeft: `4px solid ${accent}`,
                       borderRadius: '12px',
                       padding: '16px',
                       background: '#FFFFFF',
@@ -182,7 +197,23 @@ export default function Dashboard() {
                   >
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
                       <div style={{ minWidth: 0 }}>
-                        <div style={{ fontSize: '18px', fontWeight: 800, color: '#1A1A1A' }}>{missionTypeLabel(m.missionType)}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                          <div style={{ fontSize: '18px', fontWeight: 800, color: '#1A1A1A' }}>{missionTypeLabel(m.missionType)}</div>
+                          <div
+                            style={{
+                              background: '#FEF3C7',
+                              color: '#92400E',
+                              border: '1px solid #F59E0B',
+                              borderRadius: '999px',
+                              padding: '6px 10px',
+                              fontSize: '16px',
+                              fontWeight: 700,
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            En attente
+                          </div>
+                        </div>
                         <div style={{ marginTop: '6px', fontSize: '16px', fontWeight: 500, color: '#1A1A1A', lineHeight: 1.7 }}>
                           {address}
                         </div>
@@ -193,38 +224,22 @@ export default function Dashboard() {
                         ) : null}
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                        <div
-                          style={{
-                            background: '#FEF3C7',
-                            color: '#92400E',
-                            border: '1px solid #F59E0B',
-                            borderRadius: '999px',
-                            padding: '6px 10px',
-                            fontSize: '16px',
-                            fontWeight: 700,
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          En attente
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => navigate(`/rapport/${m.id}`)}
-                          style={{
-                            background: '#1E5FA6',
-                            color: '#FFFFFF',
-                            fontSize: '16px',
-                            fontWeight: 700,
-                            borderRadius: '8px',
-                            padding: '10px 14px',
-                            border: 'none',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          Voir le détail
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => navigate(`/rapport/${m.id}`)}
+                        style={{
+                          background: 'transparent',
+                          color: '#1E5FA6',
+                          fontSize: '16px',
+                          fontWeight: 700,
+                          borderRadius: '8px',
+                          padding: '10px 14px',
+                          border: '1px solid #1E5FA6',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        Voir le détail
+                      </button>
                     </div>
 
                     {isExpanded ? (
