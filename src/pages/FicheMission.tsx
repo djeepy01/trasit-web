@@ -18,6 +18,10 @@ type AgroCultureStage = 'semis' | 'croissance' | 'floraison' | 'recolte' | '';
 type CommerceType = 'boutique' | 'entrepot' | 'point-de-vente' | 'autre' | '';
 
 type FormData = {
+  missionType: MissionType;
+  siteAddress: string;
+  serviceLevel: ServiceLevel;
+
   agroExploitationType: AgroExploitationType;
 
   agroSpeciesMain: AgroSpeciesMain;
@@ -221,6 +225,10 @@ export default function FicheMission() {
   const [btpToVerify, setBtpToVerify] = useState('Vérifier l avancement réel des travaux et la qualité des matériaux utilisés');
 
   const [formData, setFormData] = useState<FormData>({
+    missionType: 'btp',
+    siteAddress: 'Rue des Jardins, Cocody',
+    serviceLevel: 'standard',
+
     agroExploitationType: '',
     agroSpeciesMain: '',
     agroSpeciesOther: '',
@@ -249,6 +257,15 @@ export default function FicheMission() {
 
   // SECTION G
   const [serviceLevel, setServiceLevel] = useState<ServiceLevel>('standard');
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      missionType,
+      siteAddress,
+      serviceLevel,
+    }));
+  }, [missionType, siteAddress, serviceLevel]);
 
   // ÉTAPE 3
   const [confirmed, setConfirmed] = useState(false);
@@ -464,6 +481,19 @@ export default function FicheMission() {
           mission_frequency: emailFormData.frequency === 'unique' ? 'Rapport unique' : 'Suivi plusieurs étapes',
           service_level: emailFormData.serviceLevel || '',
           photos_count: providerPhotos?.length || 0,
+        },
+        '-sXb-qvOyZDE-qVe9'
+      );
+
+      await emailjs.send(
+        'service_lv4j5fj',
+        'template_hvdaoja',
+        {
+          client_email: auth.currentUser?.email || '',
+          mission_type: formData.missionType === 'btp' ? 'Construction & BTP' : formData.missionType === 'agro' ? 'Agrobusiness' : 'Commerce & Gestion',
+          site_address: formData.siteAddress || '',
+          service_level: formData.serviceLevel || '',
+          submitted_at: new Date().toLocaleString('fr-FR'),
         },
         '-sXb-qvOyZDE-qVe9'
       );
