@@ -109,22 +109,23 @@ export default function Dashboard() {
     <div className="bg-white px-6 py-12" style={{ paddingTop: '80px' }}>
       <div className="max-w-7xl mx-auto">
         <div style={{
-          display: 'flex',
+          display: 'grid',
+          gridTemplateColumns: '1fr auto 1fr',
           alignItems: 'center',
-          justifyContent: 'space-between',
           padding: '24px 32px',
           borderBottom: '1px solid #DDDDDD',
           marginBottom: '12px'
         }}>
-          <div>
-            <div style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A' }}>
+          <div />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ fontSize: '40px', fontWeight: 800, color: '#1A1A1A', lineHeight: 1.05 }}>
               tras<span style={{ color: '#8B1A1A' }}>·</span>it
             </div>
-            <Link to="/" style={{ fontSize: '13px', color: '#555555' }}>
+            <Link to="/" style={{ marginTop: '8px', fontSize: '18px', fontWeight: 700, color: '#0D2F4A', textAlign: 'center' }}>
               ← Retour au site
             </Link>
           </div>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'flex-end' }}>
             <button
               type="button"
               onClick={() => navigate('/fiche-mission')}
