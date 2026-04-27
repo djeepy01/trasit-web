@@ -231,14 +231,6 @@ export default function FicheMission() {
     };
   }, [providerPhotos]);
 
-  if (authLoading) return null;
-  if (!currentUser) {
-    navigate('/connexion');
-    return null;
-  }
-
-  const canGoStep2 = missionType !== '';
-
   const requiredErrorsStep2 = useMemo(() => {
     const errs: string[] = [];
     if (!providerName.trim()) errs.push('Prestataire: Nom complet ou raison sociale (obligatoire).');
@@ -288,6 +280,14 @@ export default function FicheMission() {
     followupSteps,
     serviceLevel,
   ]);
+
+  if (authLoading) return null;
+  if (!currentUser) {
+    navigate('/connexion');
+    return null;
+  }
+
+  const canGoStep2 = missionType !== '';
 
   const canGoStep3 = requiredErrorsStep2.length === 0;
 
