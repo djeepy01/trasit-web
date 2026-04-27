@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Inbox } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
+import type { User } from 'firebase/auth';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 
@@ -40,6 +41,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [missions, setMissions] = useState<MissionDoc[]>([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
   const [expandedId, setExpandedId] = useState<string>('');
 
   const handleSignOut = useCallback(async () => {
@@ -56,6 +58,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
+      setLoading(true);
+      setUser(user ?? null);
       try {
         if (!user?.uid) {
           setMissions([]);
@@ -86,7 +90,20 @@ export default function Dashboard() {
     return () => unsub();
   }, []);
 
-  const hasMissions = useMemo(() => missions.length > 0, [missions.length]);
+  const hasMissions = useMemo(() => (Array.isArray(missions) ? missions.length > 0 : false), [missions]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center px-6">
+        <div style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A', textAlign: 'center' }}>Chargement...</div>
+      </div>
+    );
+  }
+
+  // Si l'utilisateur est déconnecté ou indisponible, on ne rend rien (évite un rendu cassé au 1er montage).
+  if (!user?.uid) {
+    return null;
+  }
 
   return (
     <div className="bg-white px-6 py-12" style={{ paddingTop: '80px' }}>
@@ -140,10 +157,10 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {hasMissions ? (
+        {hasMissions && Array.isArray(missions) ? (
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px' }}>
-              {missions.map((m) => {
+              {missions?.map((m) => {
                 const d = m.timestamp?.toDate ? m.timestamp.toDate() : null;
                 const dateText = d ? formatFrenchDate(d) : '';
                 const address = [m.siteAddress, m.siteDistrict].filter(Boolean).join(' — ');
@@ -280,10 +297,6 @@ export default function Dashboard() {
             </div>
           </div>
         )}
-
-        {loading ? (
-          <div style={{ marginTop: '12px', fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>Chargement…</div>
-        ) : null}
       </div>
     </div>
   );
