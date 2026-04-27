@@ -1,0 +1,9 @@
+[build]
+  base = "project-bolt-sb1-j9tpt9vk"
+  command = "npm run build"
+  publish = "project-bolt-sb1-j9tpt9vk/dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
