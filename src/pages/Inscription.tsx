@@ -13,6 +13,15 @@ export default function Inscription() {
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const navigate = useNavigate();
 
+  const getFirebaseAuthErrorMessage = (code?: string, message?: string) => {
+    if (code === 'auth/email-already-in-use') return 'Cette adresse email est déjà utilisée.';
+    if (code === 'auth/invalid-email') return 'Adresse email invalide.';
+    if (code === 'auth/weak-password') return 'Mot de passe trop faible. Minimum 6 caractères.';
+    if (code === 'auth/too-many-requests') return 'Trop de tentatives. Réessayez dans quelques minutes.';
+    if (code === 'auth/network-request-failed') return 'Erreur réseau. Vérifiez votre connexion.';
+    return `Erreur lors de la création du compte.${message ? ` (${message})` : ''}`;
+  };
+
   const handleSubmit = async () => {
     if (password !== passwordConfirm) {
       setError('Les mots de passe ne correspondent pas.');
@@ -22,7 +31,8 @@ export default function Inscription() {
       await createUserWithEmailAndPassword(auth, email, password);
       navigate('/dashboard');
     } catch (err: any) {
-      setError('Erreur lors de la création du compte.');
+      console.error(err?.code, err?.message);
+      setError(getFirebaseAuthErrorMessage(err?.code, err?.message));
     }
   };
 
@@ -182,7 +192,7 @@ export default function Inscription() {
             Créer mon compte
           </button>
           {error ? (
-            <div style={{ marginTop: '12px', fontSize: '16px', fontWeight: 400, color: '#8B1A1A' }}>
+            <div style={{ marginTop: '12px', fontSize: '14px', fontWeight: 400, color: '#8B1A1A' }}>
               {error}
             </div>
           ) : null}

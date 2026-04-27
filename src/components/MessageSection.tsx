@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { useEffect, useMemo, useState } from 'react';
 
 type DonutLegendItem = {
   label: string;
@@ -22,7 +21,11 @@ function clamp01(v: number) {
 
 /** Section message : texte + donut animé au scroll. */
 export default function MessageSection() {
-  const { ref, isVisible } = useScrollAnimation(0.18);
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    setAnimate(true);
+  }, []);
 
   const donut = useMemo(() => {
     const stroke = 14;
@@ -38,20 +41,29 @@ export default function MessageSection() {
       const rotation = i * 90;
       const dasharray = `${segmentLength} ${circumference - segmentLength}`;
 
-      // Animation : on passe progressivement de 0 à la longueur du segment.
-      const draw = clamp01(isVisible ? 1 : 0);
-      const dashoffset = (circumference - segmentLength) + (1 - draw) * segmentLength;
+      // Animation au montage (stroke-dashoffset).
+      const dashoffsetHidden = circumference;
+      const dashoffsetShown = circumference - segmentLength;
+      const dashoffset = animate ? dashoffsetShown : dashoffsetHidden;
 
-      return { ...item, rotation, dasharray, dashoffset };
+      return {
+        ...item,
+        rotation,
+        dasharray,
+        dashoffset,
+        dashoffsetHidden,
+        dashoffsetShown,
+        delayMs: i * 200,
+      };
     });
 
-    return { size, stroke, radius, segments };
-  }, [isVisible]);
+    return { size, stroke, radius, circumference, segments };
+  }, [animate]);
 
   return (
     <section className="bg-white py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-6">
-        <div ref={ref} className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div className="min-w-0">
             <h2 className="text-3xl md:text-4xl font-black tracking-tight" style={{ color: navy }}>
               Chaque investissement mérite une réponse claire.
@@ -76,13 +88,26 @@ export default function MessageSection() {
 
           <div className="flex flex-col items-center">
             <div className="relative">
+              <style>{`
+                @keyframes trasit-donut-draw {
+                  from { stroke-dashoffset: var(--dash-from); }
+                  to { stroke-dashoffset: var(--dash-to); }
+                }
+                @keyframes trasit-donut-spin {
+                  from { transform: rotate(-90deg); }
+                  to { transform: rotate(270deg); }
+                }
+              `}</style>
               <svg
                 width={donut.size}
                 height={donut.size}
                 viewBox={`0 0 ${donut.size} ${donut.size}`}
-                className="-rotate-90"
                 role="img"
                 aria-label="Indicateurs clés TRASIT"
+                style={{
+                  transformOrigin: '50% 50%',
+                  animation: 'trasit-donut-spin 18s linear infinite',
+                }}
               >
                 <circle
                   cx={donut.size / 2}
@@ -107,7 +132,10 @@ export default function MessageSection() {
                     strokeDashoffset={seg.dashoffset}
                     transform={`rotate(${seg.rotation} ${donut.size / 2} ${donut.size / 2})`}
                     style={{
-                      transition: 'stroke-dashoffset 1.2s ease',
+                      ['--dash-from' as any]: seg.dashoffsetHidden,
+                      ['--dash-to' as any]: seg.dashoffsetShown,
+                      animation: animate ? 'trasit-donut-draw 1.2s ease-out infinite alternate' : undefined,
+                      animationDelay: animate ? `${seg.delayMs}ms` : undefined,
                     }}
                   />
                 ))}
