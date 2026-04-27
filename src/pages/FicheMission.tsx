@@ -7,9 +7,28 @@ import emailjs from '@emailjs/browser';
 import { onAuthStateChanged, type User } from 'firebase/auth';
 
 type MissionType = 'btp' | 'agro' | 'commerce' | '';
-type AgroSubtype = 'animaux' | 'cultures' | 'les-deux' | '';
 type Frequency = 'unique' | 'suivi' | '';
 type ServiceLevel = 'standard' | 'renforce' | '';
+
+type AgroExploitationType = 'elevage' | 'culture' | 'mixte' | '';
+type AgroSpeciesMain = 'poulet' | 'lapin' | 'porc' | 'autre' | '';
+type AgroElevageStage = 'demarrage' | 'croissance' | 'pret-a-vendre' | '';
+type AgroCultureStage = 'semis' | 'croissance' | 'floraison' | 'recolte' | '';
+
+type AgroFormData = {
+  agroExploitationType: AgroExploitationType;
+
+  agroSpeciesMain: AgroSpeciesMain;
+  agroSpeciesOther: string;
+  agroHeadsDeclared: string;
+  agroElevageStage: AgroElevageStage;
+
+  agroCropType: string;
+  agroAreaHa: string;
+  agroCultureStage: AgroCultureStage;
+
+  agroToVerify: string;
+};
 
 const COLORS = {
   navy: '#0D2F4A',
@@ -192,9 +211,17 @@ export default function FicheMission() {
   const [btpCurrentState, setBtpCurrentState] = useState('Fondations et dalle du rez-de-chaussée posées selon l entrepreneur');
   const [btpToVerify, setBtpToVerify] = useState('Vérifier l avancement réel des travaux et la qualité des matériaux utilisés');
 
-  const [agroSubtype, setAgroSubtype] = useState<AgroSubtype>('');
-  const [agroDeclared, setAgroDeclared] = useState('');
-  const [agroToVerify, setAgroToVerify] = useState('');
+  const [formData, setFormData] = useState<AgroFormData>({
+    agroExploitationType: '',
+    agroSpeciesMain: '',
+    agroSpeciesOther: '',
+    agroHeadsDeclared: '',
+    agroElevageStage: '',
+    agroCropType: '',
+    agroAreaHa: '',
+    agroCultureStage: '',
+    agroToVerify: '',
+  });
 
   const [commerceActivity, setCommerceActivity] = useState('');
   const [commerceToVerify, setCommerceToVerify] = useState('');
@@ -235,8 +262,8 @@ export default function FicheMission() {
     const errs: string[] = [];
     if (!providerName.trim()) errs.push('Prestataire: Nom complet ou raison sociale (obligatoire).');
     if (!siteAddress.trim()) errs.push('Localisation: Adresse complète (obligatoire).');
-    if (!siteDistrict.trim()) errs.push('Localisation: Quartier (obligatoire).');
-    if (!siteLandmarks.trim()) errs.push('Localisation: Deux repères visibles proches (obligatoire).');
+    if (missionType !== 'agro' && !siteDistrict.trim()) errs.push('Localisation: Quartier (obligatoire).');
+    if (missionType !== 'agro' && !siteLandmarks.trim()) errs.push('Localisation: Deux repères visibles proches (obligatoire).');
     if (!onSiteContactName.trim()) errs.push('Contact sur place: Nom du contact (obligatoire).');
     if (!onSiteContactPhone.trim()) errs.push('Contact sur place: Téléphone du contact (obligatoire).');
     if (!frequency) errs.push('Fréquence: sélection obligatoire.');
@@ -250,9 +277,24 @@ export default function FicheMission() {
       if (!btpToVerify.trim()) errs.push('Mission BTP: Ce que vous souhaitez vérifier (obligatoire).');
     }
     if (missionType === 'agro') {
-      if (!agroSubtype) errs.push('Mission Agrobusiness: Type (obligatoire).');
-      if (!agroDeclared.trim()) errs.push('Mission Agrobusiness: Effectif ou surface déclarés (obligatoire).');
-      if (!agroToVerify.trim()) errs.push('Mission Agrobusiness: Ce que vous souhaitez vérifier (obligatoire).');
+      if (!formData.agroExploitationType) errs.push('Mission Agrobusiness: Type d’exploitation (obligatoire).');
+
+      if (formData.agroExploitationType === 'elevage' || formData.agroExploitationType === 'mixte') {
+        if (!formData.agroSpeciesMain) errs.push('Mission Agrobusiness (Élevage): Espèce principale (obligatoire).');
+        if (formData.agroSpeciesMain === 'autre' && !formData.agroSpeciesOther.trim()) {
+          errs.push('Mission Agrobusiness (Élevage): Précisez l’espèce (obligatoire).');
+        }
+        if (!formData.agroHeadsDeclared.trim()) errs.push('Mission Agrobusiness (Élevage): Nombre de têtes déclaré (obligatoire).');
+        if (!formData.agroElevageStage) errs.push('Mission Agrobusiness (Élevage): Stade déclaré (obligatoire).');
+      }
+
+      if (formData.agroExploitationType === 'culture' || formData.agroExploitationType === 'mixte') {
+        if (!formData.agroCropType.trim()) errs.push('Mission Agrobusiness (Culture): Type de culture (obligatoire).');
+        if (!formData.agroAreaHa.trim()) errs.push('Mission Agrobusiness (Culture): Superficie déclarée (obligatoire).');
+        if (!formData.agroCultureStage) errs.push('Mission Agrobusiness (Culture): Stade végétatif (obligatoire).');
+      }
+
+      if (!formData.agroToVerify.trim()) errs.push('Mission Agrobusiness: Ce que vous souhaitez vérifier (obligatoire).');
     }
     if (missionType === 'commerce') {
       if (!commerceActivity.trim()) errs.push('Mission Commerce: Type d’activité (obligatoire).');
@@ -271,9 +313,7 @@ export default function FicheMission() {
     btpLevels,
     btpCurrentState,
     btpToVerify,
-    agroSubtype,
-    agroDeclared,
-    agroToVerify,
+    formData,
     commerceActivity,
     commerceToVerify,
     frequency,
@@ -353,7 +393,7 @@ export default function FicheMission() {
       });
       console.log('FICHE SAUVEGARDÉE:', docRef.id);
 
-      const formData = {
+      const emailFormData = {
         providerName,
         providerRegistration,
         providerOther: providerOtherInfo,
@@ -368,7 +408,11 @@ export default function FicheMission() {
           missionType === 'btp'
             ? `Type: ${btpConstructionType || ''}\nNiveaux: ${btpLevels || ''}\nSuperficie: ${btpSurface || ''}\nÉtat déclaré: ${btpCurrentState || ''}\nÀ vérifier: ${btpToVerify || ''}`
             : missionType === 'agro'
-              ? `Type: ${agroSubtype || ''}\nDéclaré: ${agroDeclared || ''}\nÀ vérifier: ${agroToVerify || ''}`
+              ? `Type d'exploitation: ${formData.agroExploitationType || ''}\nEspèce: ${
+                  formData.agroSpeciesMain === 'autre' ? formData.agroSpeciesOther || '' : formData.agroSpeciesMain || ''
+                }\nTêtes déclarées: ${formData.agroHeadsDeclared || ''}\nStade élevage: ${formData.agroElevageStage || ''}\nCulture: ${
+                  formData.agroCropType || ''
+                }\nSuperficie (ha): ${formData.agroAreaHa || ''}\nStade culture: ${formData.agroCultureStage || ''}\nÀ vérifier: ${formData.agroToVerify || ''}`
               : missionType === 'commerce'
                 ? `Activité: ${commerceActivity || ''}\nÀ vérifier: ${commerceToVerify || ''}`
                 : '',
@@ -383,24 +427,24 @@ export default function FicheMission() {
           fiche_id: docRef.id,
           submitted_at: new Date().toLocaleString('fr-FR'),
           client_email: auth.currentUser?.email || '',
-          provider_name: formData.providerName || '',
-          provider_registration: formData.providerRegistration || '',
-          provider_other: formData.providerOther || '',
-          site_address: formData.siteAddress || '',
-          site_district: formData.siteDistrict || '',
-          site_landmarks: formData.siteLandmarks || '',
-          site_extra: formData.siteExtra || '',
-          contact_name: formData.contactName || '',
-          contact_phone: formData.contactPhone || '',
+          provider_name: emailFormData.providerName || '',
+          provider_registration: emailFormData.providerRegistration || '',
+          provider_other: emailFormData.providerOther || '',
+          site_address: emailFormData.siteAddress || '',
+          site_district: emailFormData.siteDistrict || '',
+          site_landmarks: emailFormData.siteLandmarks || '',
+          site_extra: emailFormData.siteExtra || '',
+          contact_name: emailFormData.contactName || '',
+          contact_phone: emailFormData.contactPhone || '',
           mission_type:
-            formData.missionType === 'btp'
+            emailFormData.missionType === 'btp'
               ? 'Construction & BTP'
-              : formData.missionType === 'agro'
+              : emailFormData.missionType === 'agro'
                 ? 'Agrobusiness'
                 : 'Commerce & Gestion',
-          mission_description: formData.missionDescription || '',
-          mission_frequency: formData.frequency === 'unique' ? 'Rapport unique' : 'Suivi plusieurs étapes',
-          service_level: formData.serviceLevel || '',
+          mission_description: emailFormData.missionDescription || '',
+          mission_frequency: emailFormData.frequency === 'unique' ? 'Rapport unique' : 'Suivi plusieurs étapes',
+          service_level: emailFormData.serviceLevel || '',
           photos_count: providerPhotos?.length || 0,
         },
         '-sXb-qvOyZDE-qVe9'
@@ -567,6 +611,50 @@ export default function FicheMission() {
 
             {step === 2 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                {missionType === 'agro' ? (
+                  <div
+                    style={{
+                      background: COLORS.white,
+                      border: `1px solid ${COLORS.border}`,
+                      borderRadius: '16px',
+                      padding: '22px',
+                    }}
+                  >
+                    <h2 style={{ fontSize: '22px', fontWeight: 800, color: COLORS.navy }}>Type d'exploitation *</h2>
+                    <div style={{ marginTop: '14px', display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '12px' }}>
+                      {[
+                        { key: 'elevage' as const, label: 'Élevage' },
+                        { key: 'culture' as const, label: 'Culture' },
+                        { key: 'mixte' as const, label: 'Mixte' },
+                      ].map((opt) => {
+                        const selected = formData.agroExploitationType === opt.key;
+                        return (
+                          <button
+                            key={opt.key}
+                            type="button"
+                            onClick={() => setFormData((p) => ({ ...p, agroExploitationType: opt.key }))}
+                            data-select-card="true"
+                            style={{
+                              width: '100%',
+                              borderRadius: '8px',
+                              border: selected ? `2px solid ${COLORS.primary}` : '2px solid #94A3B8',
+                              background: selected ? COLORS.light : COLORS.white,
+                              boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+                              padding: '16px 20px',
+                              cursor: 'pointer',
+                              userSelect: 'none',
+                              outline: 'none',
+                              textAlign: 'left',
+                            }}
+                          >
+                            <div style={{ fontSize: '16px', fontWeight: 800, color: COLORS.text }}>{opt.label}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : null}
+
                 {/* SECTION A */}
                 <div
                   style={{
@@ -611,7 +699,7 @@ export default function FicheMission() {
                   <h2 style={{ fontSize: '22px', fontWeight: 800, color: COLORS.navy }}>Localisation du site</h2>
                   <div style={{ marginTop: '12px' }}>
                     <HelperNote variant="warning">
-                      Une localisation imprécise ou introuvable entraîne l'annulation de la mission.
+                      Une localisation imprécise entraîne l'annulation de la mission.
                     </HelperNote>
                   </div>
 
@@ -621,11 +709,11 @@ export default function FicheMission() {
                       <TextInput value={siteAddress} onChange={(e) => setSiteAddress(e.target.value)} />
                     </div>
                     <div>
-                      <FieldLabel>Quartier *</FieldLabel>
+                      <FieldLabel>{missionType === 'agro' ? 'Quartier / Village' : 'Quartier *'}</FieldLabel>
                       <TextInput value={siteDistrict} onChange={(e) => setSiteDistrict(e.target.value)} />
                     </div>
                     <div>
-                      <FieldLabel>Deux repères visibles proches *</FieldLabel>
+                      <FieldLabel>{missionType === 'agro' ? 'Repères / description' : 'Deux repères visibles proches *'}</FieldLabel>
                       <TextInput value={siteLandmarks} onChange={(e) => setSiteLandmarks(e.target.value)} />
                     </div>
                     <div style={{ gridColumn: '1 / -1' }}>
@@ -649,15 +737,17 @@ export default function FicheMission() {
                 >
                   <h2 style={{ fontSize: '22px', fontWeight: 800, color: COLORS.navy }}>Contact sur place</h2>
                   <div style={{ marginTop: '10px', fontSize: '16px', fontWeight: 500, color: COLORS.text, lineHeight: 1.7 }}>
-                    La personne qui donnera accès au site le jour de la visite.
+                    {missionType === 'agro'
+                      ? 'Il ne sera jamais contacté sauf urgence terrain.'
+                      : 'La personne qui donnera accès au site le jour de la visite.'}
                   </div>
                   <div style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '14px' }}>
                     <div>
-                      <FieldLabel>Nom du contact *</FieldLabel>
+                      <FieldLabel>{missionType === 'agro' ? 'Nom complet *' : 'Nom du contact *'}</FieldLabel>
                       <TextInput value={onSiteContactName} onChange={(e) => setOnSiteContactName(e.target.value)} />
                     </div>
                     <div>
-                      <FieldLabel>Téléphone du contact *</FieldLabel>
+                      <FieldLabel>{missionType === 'agro' ? 'Téléphone *' : 'Téléphone du contact *'}</FieldLabel>
                       <TextInput value={onSiteContactPhone} onChange={(e) => setOnSiteContactPhone(e.target.value)} />
                     </div>
                   </div>
@@ -703,26 +793,142 @@ export default function FicheMission() {
                   {missionType === 'agro' ? (
                     <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                       <div>
-                        <FieldLabel>Type *</FieldLabel>
-                        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                          <SelectButton active={agroSubtype === 'animaux'} onClick={() => setAgroSubtype('animaux')}>
-                            Animaux
-                          </SelectButton>
-                          <SelectButton active={agroSubtype === 'cultures'} onClick={() => setAgroSubtype('cultures')}>
-                            Cultures
-                          </SelectButton>
-                          <SelectButton active={agroSubtype === 'les-deux'} onClick={() => setAgroSubtype('les-deux')}>
-                            Les deux
-                          </SelectButton>
-                        </div>
-                      </div>
-                      <div>
-                        <FieldLabel>Effectif ou surface déclarés *</FieldLabel>
-                        <TextInput value={agroDeclared} onChange={(e) => setAgroDeclared(e.target.value)} />
+                        <FieldLabel>Détails exploitation</FieldLabel>
+                        {formData.agroExploitationType === 'elevage' || formData.agroExploitationType === 'mixte' ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                            <div>
+                              <FieldLabel>Espèce principale *</FieldLabel>
+                              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                <SelectButton
+                                  active={formData.agroSpeciesMain === 'poulet'}
+                                  onClick={() => setFormData((p) => ({ ...p, agroSpeciesMain: 'poulet' }))}
+                                >
+                                  Poulet
+                                </SelectButton>
+                                <SelectButton
+                                  active={formData.agroSpeciesMain === 'lapin'}
+                                  onClick={() => setFormData((p) => ({ ...p, agroSpeciesMain: 'lapin' }))}
+                                >
+                                  Lapin
+                                </SelectButton>
+                                <SelectButton
+                                  active={formData.agroSpeciesMain === 'porc'}
+                                  onClick={() => setFormData((p) => ({ ...p, agroSpeciesMain: 'porc' }))}
+                                >
+                                  Porc
+                                </SelectButton>
+                                <SelectButton
+                                  active={formData.agroSpeciesMain === 'autre'}
+                                  onClick={() => setFormData((p) => ({ ...p, agroSpeciesMain: 'autre' }))}
+                                >
+                                  Autre
+                                </SelectButton>
+                              </div>
+                            </div>
+
+                            {formData.agroSpeciesMain === 'autre' ? (
+                              <div>
+                                <FieldLabel>Précisez l'espèce *</FieldLabel>
+                                <TextInput
+                                  value={formData.agroSpeciesOther}
+                                  onChange={(e) => setFormData((p) => ({ ...p, agroSpeciesOther: e.target.value }))}
+                                />
+                              </div>
+                            ) : null}
+
+                            <div>
+                              <FieldLabel>Nombre de têtes déclaré *</FieldLabel>
+                              <TextInput
+                                type="number"
+                                inputMode="numeric"
+                                value={formData.agroHeadsDeclared}
+                                onChange={(e) => setFormData((p) => ({ ...p, agroHeadsDeclared: e.target.value }))}
+                              />
+                            </div>
+
+                            <div>
+                              <FieldLabel>Stade déclaré *</FieldLabel>
+                              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                <SelectButton
+                                  active={formData.agroElevageStage === 'demarrage'}
+                                  onClick={() => setFormData((p) => ({ ...p, agroElevageStage: 'demarrage' }))}
+                                >
+                                  Démarrage
+                                </SelectButton>
+                                <SelectButton
+                                  active={formData.agroElevageStage === 'croissance'}
+                                  onClick={() => setFormData((p) => ({ ...p, agroElevageStage: 'croissance' }))}
+                                >
+                                  Croissance
+                                </SelectButton>
+                                <SelectButton
+                                  active={formData.agroElevageStage === 'pret-a-vendre'}
+                                  onClick={() => setFormData((p) => ({ ...p, agroElevageStage: 'pret-a-vendre' }))}
+                                >
+                                  Prêt à vendre
+                                </SelectButton>
+                              </div>
+                            </div>
+                          </div>
+                        ) : null}
+
+                        {formData.agroExploitationType === 'culture' || formData.agroExploitationType === 'mixte' ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                            <div>
+                              <FieldLabel>Type de culture *</FieldLabel>
+                              <TextInput
+                                value={formData.agroCropType}
+                                onChange={(e) => setFormData((p) => ({ ...p, agroCropType: e.target.value }))}
+                              />
+                            </div>
+                            <div>
+                              <FieldLabel>Superficie déclarée en hectares *</FieldLabel>
+                              <TextInput
+                                type="number"
+                                inputMode="decimal"
+                                value={formData.agroAreaHa}
+                                onChange={(e) => setFormData((p) => ({ ...p, agroAreaHa: e.target.value }))}
+                              />
+                            </div>
+                            <div>
+                              <FieldLabel>Stade végétatif *</FieldLabel>
+                              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                <SelectButton
+                                  active={formData.agroCultureStage === 'semis'}
+                                  onClick={() => setFormData((p) => ({ ...p, agroCultureStage: 'semis' }))}
+                                >
+                                  Semis
+                                </SelectButton>
+                                <SelectButton
+                                  active={formData.agroCultureStage === 'croissance'}
+                                  onClick={() => setFormData((p) => ({ ...p, agroCultureStage: 'croissance' }))}
+                                >
+                                  Croissance
+                                </SelectButton>
+                                <SelectButton
+                                  active={formData.agroCultureStage === 'floraison'}
+                                  onClick={() => setFormData((p) => ({ ...p, agroCultureStage: 'floraison' }))}
+                                >
+                                  Floraison
+                                </SelectButton>
+                                <SelectButton
+                                  active={formData.agroCultureStage === 'recolte'}
+                                  onClick={() => setFormData((p) => ({ ...p, agroCultureStage: 'recolte' }))}
+                                >
+                                  Récolte
+                                </SelectButton>
+                              </div>
+                            </div>
+                          </div>
+                        ) : null}
                       </div>
                       <div>
                         <FieldLabel>Ce que vous souhaitez vérifier *</FieldLabel>
-                        <TextArea value={agroToVerify} onChange={(e) => setAgroToVerify(e.target.value)} />
+                        <TextArea
+                          placeholder="Décrivez précisément ce que vous souhaitez que l'agent observe et documente."
+                          value={formData.agroToVerify}
+                          onChange={(e) => setFormData((p) => ({ ...p, agroToVerify: e.target.value }))}
+                        />
                       </div>
                     </div>
                   ) : null}
