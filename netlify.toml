@@ -1,7 +1,7 @@
 [build]
-  base = "project-bolt-sb1-j9tpt9vk"
+  base = "."
   command = "npm run build"
-  publish = "project-bolt-sb1-j9tpt9vk/dist"
+  publish = "dist"
 
 [[redirects]]
   from = "/*"
