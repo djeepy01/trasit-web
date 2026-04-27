@@ -485,18 +485,23 @@ export default function FicheMission() {
         '-sXb-qvOyZDE-qVe9'
       );
 
-      await emailjs.send(
-        'service_lv4j5fj',
-        'template_hvdaoja',
-        {
-          client_email: auth.currentUser?.email || '',
-          mission_type: formData.missionType === 'btp' ? 'Construction & BTP' : formData.missionType === 'agro' ? 'Agrobusiness' : 'Commerce & Gestion',
-          site_address: formData.siteAddress || '',
-          service_level: formData.serviceLevel || '',
-          submitted_at: new Date().toLocaleString('fr-FR'),
-        },
-        '-sXb-qvOyZDE-qVe9'
-      );
+      try {
+        await emailjs.send(
+          'service_lv4j5fj',
+          'template_hvdaoja',
+          {
+            client_email: auth.currentUser?.email || '',
+            mission_type: formData.missionType === 'btp' ? 'Construction & BTP' : formData.missionType === 'agro' ? 'Agrobusiness' : 'Commerce & Gestion',
+            site_address: formData.siteAddress || '',
+            service_level: formData.serviceLevel || '',
+            submitted_at: new Date().toLocaleString('fr-FR'),
+          },
+          '-sXb-qvOyZDE-qVe9'
+        );
+        console.log('Email confirmation client envoyé');
+      } catch (emailErr) {
+        console.error('Erreur email confirmation client:', emailErr);
+      }
 
       navigate('/dashboard');
     } catch (err: unknown) {
