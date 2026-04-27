@@ -223,12 +223,6 @@ export default function FicheMission() {
     return () => unsub();
   }, []);
 
-  if (authLoading) return null;
-  if (!currentUser) {
-    navigate('/connexion');
-    return null;
-  }
-
   useEffect(() => {
     const urls = providerPhotos.map((f) => URL.createObjectURL(f));
     setPhotoUrls(urls);
@@ -236,6 +230,12 @@ export default function FicheMission() {
       urls.forEach((u) => URL.revokeObjectURL(u));
     };
   }, [providerPhotos]);
+
+  if (authLoading) return null;
+  if (!currentUser) {
+    navigate('/connexion');
+    return null;
+  }
 
   const canGoStep2 = missionType !== '';
 
