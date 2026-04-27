@@ -377,8 +377,9 @@ export default function FicheMission() {
 
       navigate('/dashboard');
     } catch (err: unknown) {
-      console.error('ERREUR FIRESTORE:', JSON.stringify(err));
-      setError('Erreur: ' + String(err));
+      console.error(err);
+      const message = err instanceof Error ? err.message : JSON.stringify(err);
+      setError('Erreur: ' + message);
     }
   };
 
