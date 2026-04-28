@@ -868,7 +868,7 @@ export default function FicheMission() {
                       <TextInput value={onSiteContactPhone} onChange={(e) => setOnSiteContactPhone(e.target.value)} />
                     </div>
                   </div>
-                  <p style={{ fontSize: '14px', color: '#1A1A1A', backgroundColor: '#EBF2FA', padding: '12px 16px', borderRadius: '8px', marginTop: '12px', lineHeight: '1.6' }}>
+                  <p style={{ fontSize: '15px', fontWeight: '700', color: '#FFFFFF', backgroundColor: '#C0392B', padding: '14px 18px', borderRadius: '8px', marginTop: '12px', lineHeight: '1.7', border: '1px solid #96281B' }}>
                     Vous serez informé de l'heure d'arrivée de l'agent. Il vous appartient de prévenir cette personne 30 minutes à 1 heure avant. Ce contact sera joint uniquement pour faciliter l'accès au site.
                   </p>
                 </div>
