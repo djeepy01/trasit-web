@@ -488,9 +488,9 @@ export default function FicheMission() {
       try {
         await emailjs.send(
           'service_lv4j5fj',
-          'template_hvdaoja',
+          'template_8ai5mor',
           {
-            client_email: auth.currentUser?.email || '',
+            client_email: user.email || '',
             mission_type: formData.missionType === 'btp' ? 'Construction & BTP' : formData.missionType === 'agro' ? 'Agrobusiness' : 'Commerce & Gestion',
             site_address: formData.siteAddress || '',
             service_level: formData.serviceLevel || '',
