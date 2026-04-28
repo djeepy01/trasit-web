@@ -486,6 +486,7 @@ export default function FicheMission() {
       );
 
       try {
+        console.log('DEBUG email client:', user.email, missionType, siteAddress, serviceLevel);
         await emailjs.send(
           'service_lv4j5fj',
           'template_8ai5mor',
@@ -867,6 +868,9 @@ export default function FicheMission() {
                       <TextInput value={onSiteContactPhone} onChange={(e) => setOnSiteContactPhone(e.target.value)} />
                     </div>
                   </div>
+                  <p style={{ fontSize: '14px', color: '#1A1A1A', backgroundColor: '#EBF2FA', padding: '12px 16px', borderRadius: '8px', marginTop: '12px', lineHeight: '1.6' }}>
+                    Vous serez informé de l'heure d'arrivée de l'agent. Il vous appartient de prévenir cette personne 30 minutes à 1 heure avant. Ce contact sera joint uniquement pour faciliter l'accès au site.
+                  </p>
                 </div>
 
                 {/* SECTION D */}
