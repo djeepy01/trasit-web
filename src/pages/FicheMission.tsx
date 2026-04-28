@@ -491,9 +491,9 @@ export default function FicheMission() {
           'template_8ai5mor',
           {
             client_email: user.email || '',
-            mission_type: formData.missionType === 'btp' ? 'Construction & BTP' : formData.missionType === 'agro' ? 'Agrobusiness' : 'Commerce & Gestion',
-            site_address: formData.siteAddress || '',
-            service_level: formData.serviceLevel || '',
+            mission_type: missionType === 'btp' ? 'Construction & BTP' : missionType === 'agro' ? 'Agrobusiness' : 'Commerce & Gestion',
+            site_address: siteAddress || '',
+            service_level: serviceLevel || '',
             submitted_at: new Date().toLocaleString('fr-FR'),
           },
           '-sXb-qvOyZDE-qVe9'
