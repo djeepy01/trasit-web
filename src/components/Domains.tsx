@@ -22,12 +22,12 @@ export default function Domains() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-14">
           <p
-            className="text-gray-600 text-xs font-semibold uppercase tracking-[0.2em] mb-3"
+            className="text-[#1A1A1A] text-xs font-semibold uppercase tracking-[0.2em] mb-3"
             style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
           >
             Expertise
           </p>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-black text-[#1A1A1A] tracking-tight">
             Nos domaines d'intervention
           </h2>
         </div>

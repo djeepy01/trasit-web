@@ -43,10 +43,15 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [expandedId, setExpandedId] = useState<string>('');
+  const [missionsLoadError, setMissionsLoadError] = useState<string | null>(null);
 
   const handleSignOut = useCallback(async () => {
-    await signOut(auth);
-    navigate('/connexion');
+    try {
+      await signOut(auth);
+      navigate('/connexion');
+    } catch (err) {
+      console.error('Erreur lors de la déconnexion Firebase:', err);
+    }
   }, [navigate]);
 
   const openWhatsApp = useCallback(() => {
@@ -59,14 +64,16 @@ export default function Dashboard() {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       setLoading(true);
+      setMissionsLoadError(null);
       setUser(user ?? null);
-      try {
-        if (!user?.uid) {
-          setMissions([]);
-          setLoading(false);
-          return;
-        }
 
+      if (!user?.uid) {
+        setMissions([]);
+        setLoading(false);
+        return;
+      }
+
+      try {
         const q = query(
           collection(db, 'fiches_mission'),
           where('uid', '==', user.uid),
@@ -80,9 +87,11 @@ export default function Dashboard() {
         });
 
         setMissions(docs);
-        setLoading(false);
-      } catch {
+      } catch (err) {
+        console.error('Erreur chargement des missions (Firebase):', err);
         setMissions([]);
+        setMissionsLoadError('Erreur de chargement des missions');
+      } finally {
         setLoading(false);
       }
     });
@@ -167,7 +176,25 @@ export default function Dashboard() {
           Vos missions
         </div>
 
-        {hasMissions && Array.isArray(missions) ? (
+        {missionsLoadError ? (
+          <div
+            style={{
+              margin: '0 24px 24px',
+              padding: '16px 20px',
+              background: '#FEF3C7',
+              border: '1px solid #F59E0B',
+              borderRadius: '12px',
+              fontSize: '16px',
+              fontWeight: 600,
+              color: '#1A1A1A',
+            }}
+            role="alert"
+          >
+            {missionsLoadError}
+          </div>
+        ) : null}
+
+        {!missionsLoadError && hasMissions && Array.isArray(missions) ? (
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px' }}>
               {missions?.map((m) => {
@@ -254,7 +281,7 @@ export default function Dashboard() {
               })}
             </div>
           </div>
-        ) : (
+        ) : !missionsLoadError ? (
           <div className="flex items-center justify-center mt-12">
             <div
               style={{
@@ -314,7 +341,7 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

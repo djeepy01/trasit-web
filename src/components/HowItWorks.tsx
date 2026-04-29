@@ -42,16 +42,16 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto px-[40px]">
         <div className="text-center mb-16">
           <p
-            className="text-gray-600 text-xs font-semibold uppercase tracking-[0.2em] mb-3"
+            className="text-[#1A1A1A] text-xs font-semibold uppercase tracking-[0.2em] mb-3"
             style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
           >
             Le processus
           </p>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-black text-[#1A1A1A] tracking-tight">
             Simple. Rapide. Fiable.
           </h2>
           <p
-            className="text-gray-700 mt-4 text-lg font-light max-w-xl mx-auto"
+            className="text-[#1A1A1A] mt-4 text-lg font-light max-w-xl mx-auto"
             style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}
           >
             Votre terrain en 5 étapes, de la fiche de mission au rapport final.

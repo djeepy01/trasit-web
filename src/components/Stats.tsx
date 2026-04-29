@@ -11,7 +11,7 @@ export default function Stats() {
   const { ref, isVisible } = useScrollAnimation(0.15);
 
   return (
-    <section className="bg-[#F7F7F6] py-20 md:py-28 border-y border-gray-200/60">
+    <section className="bg-[#F7F7F6] py-20 md:py-28 border-y border-[#1A1A1A]/25">
       <div className="max-w-7xl mx-auto px-6">
         <div
           ref={ref}
@@ -28,18 +28,18 @@ export default function Stats() {
               className="text-center"
               style={{ transitionDelay: `${i * 0.1}s` }}
             >
-              <div className="text-5xl md:text-6xl font-black text-gray-900 tracking-tight leading-none">
+              <div className="text-5xl md:text-6xl font-black text-[#1A1A1A] tracking-tight leading-none" style={{ color: '#1A1A1A' }}>
                 {number}
               </div>
               <div
-                className="mt-3 text-gray-800 font-semibold text-sm md:text-base"
+                className="mt-3 text-[#1A1A1A] font-semibold text-sm md:text-base"
                 style={{ fontSize: '18px', fontWeight: '600', color: '#1A1A1A' }}
               >
                 {label}
               </div>
               <div
-                className="mt-1 text-gray-600 text-xs md:text-sm"
-                style={{ fontSize: '16px', fontWeight: '500', color: '#0D2F4A' }}
+                className="mt-1 text-[#1A1A1A] text-xs md:text-sm"
+                style={{ fontSize: '16px', fontWeight: '500', color: '#1A1A1A' }}
               >
                 {sub}
               </div>

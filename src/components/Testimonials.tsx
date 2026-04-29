@@ -50,12 +50,12 @@ export default function Testimonials() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-14">
           <p
-            className="text-gray-600 text-xs font-semibold uppercase tracking-[0.2em] mb-3"
+            className="text-[#1A1A1A] text-xs font-semibold uppercase tracking-[0.2em] mb-3"
             style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
           >
             Témoignages
           </p>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-black text-[#1A1A1A] tracking-tight">
             Ils ont investi en confiance.
           </h2>
         </div>
@@ -74,7 +74,7 @@ export default function Testimonials() {
         {testimonials.map(({ name, role, location, avatar, quote, rating }, i) => (
             <div
               key={name}
-              className="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col"
+              className="bg-white rounded-2xl p-7 shadow-sm border border-[#1A1A1A]/15 hover:shadow-md transition-shadow flex flex-col"
               style={{
                 transitionDelay: `${i * 0.1}s`,
                 opacity: isVisible ? 1 : 0,
@@ -89,13 +89,13 @@ export default function Testimonials() {
               </div>
 
               <blockquote
-                className="text-gray-700 text-[16px] leading-[1.8] flex-1 mb-6 font-light"
+                className="text-[#1A1A1A] text-[16px] leading-[1.8] flex-1 mb-6 font-light"
                 style={{ fontSize: '18px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.85' }}
               >
                 "{quote}"
               </blockquote>
 
-              <div className="flex items-center gap-3 pt-5 border-t border-gray-100">
+              <div className="flex items-center gap-3 pt-5 border-t border-[#1A1A1A]/15">
                 <img
                   src={avatar}
                   alt={name}
@@ -103,19 +103,19 @@ export default function Testimonials() {
                 />
                 <div>
                   <div
-                    className="font-bold text-gray-900 text-sm"
+                    className="font-bold text-[#1A1A1A] text-sm"
                     style={{ fontSize: '19px', fontWeight: '800', color: '#1A1A1A' }}
                   >
                     {name}
                   </div>
                   <div
-                    className="text-gray-500 text-xs"
+                    className="text-[#1A1A1A] text-xs"
                     style={{ fontSize: '17px', fontWeight: 500, color: '#1A1A1A' }}
                   >
                     {role}
                   </div>
                   <div
-                    className="text-gray-600 text-xs"
+                    className="text-[#1A1A1A] text-xs"
                     style={{ fontSize: '17px', fontWeight: 500, color: '#1A1A1A' }}
                   >
                     {location}

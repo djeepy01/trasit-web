@@ -47,7 +47,9 @@ const ScoreGauge = ({ value }: { value: number }) => (
       ))}
     </svg>
     <div className="flex flex-col items-center">
-      <span className="text-xl font-black text-gray-900 leading-none">{value}%</span>
+      <span className="text-xl font-black text-[#1A1A1A] leading-none" style={{ color: '#1A1A1A' }}>
+        {value}%
+      </span>
     </div>
   </div>
 );
@@ -149,8 +151,12 @@ export default function Hero() {
                       <span className="text-white text-sm font-bold">TR</span>
                     </div>
                     <div>
-                      <p className="font-bold text-[16px] text-gray-900">Rapport TRASIT</p>
-                      <p className="text-[14px] text-gray-500">Construction</p>
+                      <p className="font-bold text-[16px] text-[#1A1A1A]" style={{ color: '#1A1A1A' }}>
+                        Rapport TRASIT
+                      </p>
+                      <p className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A' }}>
+                        Construction
+                      </p>
                     </div>
                   </div>
                   <span className="text-[14px] font-semibold text-green-600">● Validé</span>
@@ -160,7 +166,9 @@ export default function Hero() {
                   <ScoreGauge value={94} />
                 </div>
               
-                <p className="text-center text-[14px] text-gray-600 mb-3">Score de conformité</p>
+                <p className="text-center text-[14px] text-[#1A1A1A] mb-3" style={{ color: '#1A1A1A' }}>
+                  Score de conformité
+                </p>
               
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-5 px-2">
                   <span className="text-[13px]"><span style={{color:'#1E5FA6'}}>●</span> Structure <strong>94%</strong></span>
@@ -171,20 +179,28 @@ export default function Hero() {
               
                 <div className="space-y-3 border-t pt-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[14px] text-gray-700">Intervention vérifiée</span>
+                    <span className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A' }}>
+                      Intervention vérifiée
+                    </span>
                     <span className="text-green-500">✓</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[14px] text-gray-700">Délai rapport</span>
+                    <span className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A' }}>
+                      Délai rapport
+                    </span>
                     <span className="text-[14px] font-bold">2h</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[14px] text-gray-700">Agent indépendant</span>
+                    <span className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A' }}>
+                      Agent indépendant
+                    </span>
                     <span className="text-green-500">✓</span>
                   </div>
                 </div>
               
-                <p className="text-right text-[13px] font-bold text-gray-900 mt-4">TRASIT</p>
+                <p className="text-right text-[13px] font-bold text-[#1A1A1A] mt-4" style={{ color: '#1A1A1A' }}>
+                  TRASIT
+                </p>
               </div>
 
             </div>

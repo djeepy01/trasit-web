@@ -13,8 +13,15 @@ const partners = [
 
 const PartnerLogo = ({ name, tagline }: { name: string; tagline: string }) => (
   <div className="flex flex-col items-center justify-center px-10 min-w-[160px]">
-    <div className="text-gray-700 font-bold text-sm tracking-tight leading-tight">{name}</div>
-    <div className="text-gray-500 text-[10px] font-medium uppercase tracking-wider mt-0.5">{tagline}</div>
+    <div className="text-[#1A1A1A] font-bold text-sm tracking-tight leading-tight" style={{ color: '#1A1A1A' }}>
+      {name}
+    </div>
+    <div
+      className="text-[#1A1A1A] text-[10px] font-medium uppercase tracking-wider mt-0.5"
+      style={{ color: '#1A1A1A' }}
+    >
+      {tagline}
+    </div>
   </div>
 );
 
@@ -22,10 +29,10 @@ export default function PartnersStrip() {
   const doubled = [...partners, ...partners];
 
   return (
-    <section className="bg-white py-12 border-b border-gray-100">
+    <section className="bg-white py-12 border-b border-[#1A1A1A]/12">
       <div className="max-w-7xl mx-auto px-6 mb-7">
         <p
-          className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-600 text-center"
+          className="text-xs font-semibold uppercase tracking-[0.15em] text-[#1A1A1A] text-center"
           style={{ fontSize: '22px', fontWeight: '700', color: '#1A1A1A' }}
         >
           Ils nous font confiance
