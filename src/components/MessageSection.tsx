@@ -70,7 +70,7 @@ export default function MessageSection() {
             </h2>
             <p
               className="mt-8 leading-[1.65] max-w-xl whitespace-pre-line"
-              style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.8' }}
+              style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.8' }}
             >
               Chantiers à l'arrêt. Stocks inexistants. Gérants introuvables.
               {'\n'}
@@ -78,7 +78,7 @@ export default function MessageSection() {
             </p>
             <p
               className="mt-7 leading-[1.65] max-w-xl whitespace-pre-line"
-              style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.8' }}
+              style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.8' }}
             >
               TRASIT analyse, compte et évalue chaque actif sur place.
               {'\n'}

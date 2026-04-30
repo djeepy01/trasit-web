@@ -1,4 +1,5 @@
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { useNavigate } from 'react-router-dom';
 
 const cards = [
   {
@@ -44,6 +45,9 @@ function RiskCard({
   index: number;
 }) {
   const { ref, isVisible } = useScrollAnimation(0.15);
+  const navigate = useNavigate();
+  const detailsRoute =
+    index === 0 ? '/btp' : index === 1 ? '/agrobusiness' : index === 2 ? '/commerce' : '/';
 
   return (
     <div
@@ -87,6 +91,20 @@ function RiskCard({
           >
             {card.text}
           </p>
+          <button
+            type="button"
+            onClick={() => navigate(detailsRoute)}
+            className="mt-5 inline-flex items-center justify-center rounded-xl px-5 py-3 transition-opacity duration-200 hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/30"
+            style={{
+              background: '#8B1A1A',
+              color: '#FFFFFF',
+              fontSize: '16px',
+              fontWeight: 700,
+              width: 'fit-content',
+            }}
+          >
+            En savoir plus
+          </button>
           <span className="inline-block text-white text-xs font-medium rounded-full px-3 py-1" style={{ backgroundColor: '#1E5FA6' }}>
             Source : {card.source}
           </span>

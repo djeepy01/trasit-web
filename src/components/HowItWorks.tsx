@@ -54,7 +54,7 @@ export default function HowItWorks() {
             className="text-[#1A1A1A] mt-4 text-lg font-light max-w-xl mx-auto"
             style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}
           >
-            Votre terrain en 5 étapes, de la fiche de mission au rapport final.
+            Votre vérification en 5 étapes, de la fiche de mission au rapport final.
           </p>
         </div>
 

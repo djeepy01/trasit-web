@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import ServicesPage from './pages/ServicesPage';
@@ -12,6 +13,17 @@ import RapportMission from './pages/RapportMission';
 import CguPage from './pages/CguPage';
 import ConfidentialitePage from './pages/ConfidentialitePage';
 import MentionsLegalesPage from './pages/MentionsLegalesPage';
+import BTP from './pages/BTP';
+import Agrobusiness from './pages/Agrobusiness';
+import Commerce from './pages/Commerce';
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 function PublicLayout() {
   return (
@@ -25,6 +37,7 @@ function PublicLayout() {
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="font-inter overflow-x-hidden min-h-screen">
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -33,6 +46,9 @@ function App() {
 
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/btp" element={<BTP />} />
+            <Route path="/agrobusiness" element={<Agrobusiness />} />
+            <Route path="/commerce" element={<Commerce />} />
             <Route path="/nos-services" element={<ServicesPage />} />
             <Route path="/comment-ca-marche" element={<HowItWorksPage />} />
             <Route path="/contact" element={<ContactPage />} />

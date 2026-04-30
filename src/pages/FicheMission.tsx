@@ -486,12 +486,13 @@ export default function FicheMission() {
       );
 
       try {
-        console.log('DEBUG email client:', user.email, missionType, siteAddress, serviceLevel);
-        await emailjs.send(
+        console.log('EmailJS confirmation client — envoi');
+        const response = await emailjs.send(
           'service_lv4j5fj',
-          'template_8ai5mor',
+          'template_hvdaoja',
           {
             client_email: user.email || '',
+            client_name: user.displayName || '',
             mission_type: missionType === 'btp' ? 'Construction & BTP' : missionType === 'agro' ? 'Agrobusiness' : 'Commerce & Gestion',
             site_address: siteAddress || '',
             service_level: serviceLevel || '',
@@ -499,9 +500,9 @@ export default function FicheMission() {
           },
           '-sXb-qvOyZDE-qVe9'
         );
-        console.log('Email confirmation client envoyé');
-      } catch (emailErr) {
-        console.error('Erreur email confirmation client:', emailErr);
+        console.log('EmailJS confirmation client — succès', response);
+      } catch (error) {
+        console.error('EmailJS confirmation client — erreur', error);
       }
 
       navigate('/dashboard');
@@ -853,6 +854,22 @@ export default function FicheMission() {
                   }}
                 >
                   <h2 style={{ fontSize: '22px', fontWeight: 800, color: COLORS.navy }}>Contact sur place</h2>
+                  <div
+                    style={{
+                      background: '#8B1A1A',
+                      border: '1px solid #8B1A1A',
+                      padding: '12px 16px',
+                      borderRadius: '6px',
+                      color: '#FFFFFF',
+                      fontSize: '15px',
+                      fontStyle: 'normal',
+                      fontWeight: 700,
+                      marginBottom: '16px',
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    Vous serez informé de l'heure d'arrivée de l'agent. Il vous appartient de prévenir cette personne 30 minutes à 1 heure avant. Ce contact sera joint uniquement pour faciliter l'accès au site.
+                  </div>
                   <div style={{ marginTop: '10px', fontSize: '16px', fontWeight: 500, color: COLORS.text, lineHeight: 1.7 }}>
                     {missionType === 'agro' || missionType === 'commerce'
                       ? 'Il ne sera jamais contacté sauf urgence terrain.'
@@ -868,9 +885,6 @@ export default function FicheMission() {
                       <TextInput value={onSiteContactPhone} onChange={(e) => setOnSiteContactPhone(e.target.value)} />
                     </div>
                   </div>
-                  <p style={{ fontSize: '15px', fontWeight: '700', color: '#FFFFFF', backgroundColor: '#C0392B', padding: '14px 18px', borderRadius: '8px', marginTop: '12px', lineHeight: '1.7', border: '1px solid #96281B' }}>
-                    Vous serez informé de l'heure d'arrivée de l'agent. Il vous appartient de prévenir cette personne 30 minutes à 1 heure avant. Ce contact sera joint uniquement pour faciliter l'accès au site.
-                  </p>
                 </div>
 
                 {/* SECTION D */}
@@ -1426,6 +1440,24 @@ export default function FicheMission() {
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div style={{
+                  background: '#FFF5F5',
+                  border: '1px solid #8B1A1A',
+                  borderRadius: '8px',
+                  padding: '16px 20px',
+                  marginBottom: '20px'
+                }}>
+                  <p style={{ fontSize: '17px', fontWeight: 700, color: '#8B1A1A', marginBottom: '12px' }}>
+                    Vos responsabilités
+                  </p>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                    <li style={{ fontSize: '16px', color: '#8B1A1A', fontWeight: 600, marginBottom: '8px' }}>• L'exactitude de l'adresse et des repères fournis</li>
+                    <li style={{ fontSize: '16px', color: '#8B1A1A', fontWeight: 600, marginBottom: '8px' }}>• La disponibilité du contact sur place à l'heure convenue</li>
+                    <li style={{ fontSize: '16px', color: '#8B1A1A', fontWeight: 600, marginBottom: '8px' }}>• La prévenance du contact 30 min à 1h avant l'arrivée de l'agent</li>
+                    <li style={{ fontSize: '16px', color: '#8B1A1A', fontWeight: 600 }}>• Toute mission annulée pour localisation imprécise ou accès refusé ne sera pas remboursée</li>
+                  </ul>
                 </div>
 
                 <label style={{ marginTop: '16px', display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer' }}>

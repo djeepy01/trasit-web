@@ -194,7 +194,7 @@ export default function Dashboard() {
           </div>
         ) : null}
 
-        {!missionsLoadError && hasMissions && Array.isArray(missions) ? (
+        {(!missionsLoadError && hasMissions && Array.isArray(missions)) ? (
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px' }}>
               {missions?.map((m) => {
@@ -281,7 +281,7 @@ export default function Dashboard() {
               })}
             </div>
           </div>
-        ) : !missionsLoadError ? (
+        ) : (!missionsLoadError ? (
           <div className="flex items-center justify-center mt-12">
             <div
               style={{
@@ -341,7 +341,7 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        ) : null}
+        ) : null)}
       </div>
     </div>
   );

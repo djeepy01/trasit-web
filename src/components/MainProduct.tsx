@@ -1,4 +1,5 @@
 import { CheckCircle, ScanSearch } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 const ColoredBars = () => (
@@ -22,6 +23,7 @@ const features = [
 ];
 
 export default function MainProduct() {
+  const navigate = useNavigate();
   const { ref, isVisible } = useScrollAnimation(0.1);
   const { ref: ref2, isVisible: isVisible2 } = useScrollAnimation(0.1);
 
@@ -70,7 +72,11 @@ export default function MainProduct() {
               ))}
             </ul>
 
-            <button className="bg-[#8B1A1A] text-white px-7 py-3.5 text-sm font-semibold rounded-sm hover:bg-[#6d1515] transition-all duration-200">
+            <button
+              type="button"
+              onClick={() => navigate('/nos-services')}
+              className="bg-[#8B1A1A] text-white px-7 py-3.5 text-sm font-semibold rounded-sm hover:bg-[#6d1515] transition-all duration-200"
+            >
               Découvrir nos services
             </button>
           </div>
