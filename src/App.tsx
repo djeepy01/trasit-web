@@ -10,7 +10,7 @@ import Connexion from './pages/Connexion';
 import Dashboard from './pages/Dashboard';
 import FicheMission from './pages/FicheMission';
 import RapportMission from './pages/RapportMission';
-import CguPage from './pages/CguPage';
+import CGU from './pages/CGU';
 import ConfidentialitePage from './pages/ConfidentialitePage';
 import MentionsLegalesPage from './pages/MentionsLegalesPage';
 import BTP from './pages/BTP';
@@ -54,7 +54,7 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/inscription" element={<Inscription />} />
             <Route path="/connexion" element={<Connexion />} />
-            <Route path="/cgu" element={<CguPage />} />
+            <Route path="/cgu" element={<CGU />} />
             <Route path="/confidentialite" element={<ConfidentialitePage />} />
             <Route path="/mentions-legales" element={<MentionsLegalesPage />} />
           </Route>

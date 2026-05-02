@@ -1,254 +1,348 @@
-import { signOut } from 'firebase/auth';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Inbox } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
-
-type MissionStatus = 'en_attente' | 'assignée' | 'livrée' | string;
+import type { User } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 
 type MissionDoc = {
   id: string;
+  uid: string;
+  timestamp?: { toDate: () => Date } | null;
+  statut?: string;
   missionType?: string;
-  providerName?: string;
   siteAddress?: string;
-  statut?: MissionStatus;
-  timestamp?: unknown;
+  siteDistrict?: string;
 };
 
-function formatSubmittedAt(ts: unknown): string {
-  let d: Date | null = null;
-  const anyTs = ts as any;
-
-  if (anyTs?.toDate && typeof anyTs.toDate === 'function') {
-    d = anyTs.toDate();
-  } else if (typeof anyTs === 'string' || typeof anyTs === 'number') {
-    const dd = new Date(anyTs);
-    if (!Number.isNaN(dd.getTime())) d = dd;
-  }
-
-  if (!d) return '';
-
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+function missionTypeLabel(v?: string) {
+  if (v === 'btp') return 'Construction & BTP';
+  if (v === 'agro') return 'Agrobusiness';
+  if (v === 'commerce') return 'Commerce & Gestion';
+  return 'Mission';
 }
 
-function missionTypeLabel(t?: string): string {
-  if (t === 'btp') return 'BTP';
-  if (t === 'agro') return 'Agro';
-  if (t === 'commerce') return 'Commerce';
-  return t ? String(t) : '';
-}
-
-function statusLabel(s?: MissionStatus): string {
-  if (s === 'en_attente') return 'En attente';
-  if (s === 'assignée') return 'Assignée';
-  if (s === 'livrée') return 'Livrée';
-  return s ? String(s) : '';
-}
-
-function statusBadgeStyle(s?: MissionStatus): { background: string; color: string } {
-  if (s === 'en_attente') return { background: '#FEF3C7', color: '#92400E' };
-  if (s === 'assignée') return { background: '#DBEAFE', color: '#1E40AF' };
-  if (s === 'livrée') return { background: '#D1FAE5', color: '#065F46' };
-  return { background: 'rgba(26,26,26,0.08)', color: '#1A1A1A' };
+function formatFrenchDate(d: Date) {
+  const datePart = new Intl.DateTimeFormat('fr-FR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  }).format(d);
+  const timePart = new Intl.DateTimeFormat('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(d).replace(':', 'h');
+  return `${datePart} à ${timePart}`;
 }
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
   const [missions, setMissions] = useState<MissionDoc[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [expandedId, setExpandedId] = useState<string>('');
+  const [missionsLoadError, setMissionsLoadError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let mounted = true;
-
-    async function load() {
-      setLoading(true);
-      try {
-        const q = query(collection(db, 'fiches_mission'), orderBy('timestamp', 'desc'));
-        const snap = await getDocs(q);
-        const rows: MissionDoc[] = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
-        if (mounted) setMissions(rows);
-      } finally {
-        if (mounted) setLoading(false);
-      }
+  const handleSignOut = useCallback(async () => {
+    try {
+      await signOut(auth);
+      navigate('/connexion');
+    } catch (err) {
+      console.error('Erreur lors de la déconnexion Firebase:', err);
     }
+  }, [navigate]);
 
-    load();
-    return () => {
-      mounted = false;
-    };
+  const openWhatsApp = useCallback(() => {
+    // NOTE: Remplacer par le numéro WhatsApp officiel TRASIT (format international sans +)
+    const trasitWhatsAppNumber = '0000000000';
+    const url = `https://wa.me/${trasitWhatsAppNumber}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
   }, []);
 
-  const counters = useMemo(
-    () => [
-      { label: 'Total', value: missions.length },
-      { label: 'En attente', value: missions.filter((m) => m.statut === 'en_attente').length },
-      { label: 'Assignées', value: missions.filter((m) => m.statut === 'assignée').length },
-      { label: 'Livrées', value: missions.filter((m) => m.statut === 'livrée').length },
-    ],
-    [missions]
-  );
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      setLoading(true);
+      setMissionsLoadError(null);
+      setUser(user ?? null);
 
-  async function onLogout() {
-    await signOut(auth);
-    navigate('/login', { replace: true });
+      if (!user?.uid) {
+        setMissions([]);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const q = query(
+          collection(db, 'fiches_mission'),
+          where('uid', '==', user.uid),
+          orderBy('timestamp', 'desc')
+        );
+
+        const snap = await getDocs(q);
+        const docs: MissionDoc[] = snap.docs.map((doc) => {
+          const data = doc.data() as Omit<MissionDoc, 'id'>;
+          return { id: doc.id, ...data };
+        });
+
+        setMissions(docs);
+      } catch (err) {
+        console.error('Erreur chargement des missions (Firebase):', err);
+        setMissions([]);
+        setMissionsLoadError('Erreur de chargement des missions');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    return () => unsub();
+  }, []);
+
+  const hasMissions = useMemo(() => (Array.isArray(missions) ? missions.length > 0 : false), [missions]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center px-6">
+        <div style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A', textAlign: 'center' }}>Chargement...</div>
+      </div>
+    );
+  }
+
+  // Si l'utilisateur est déconnecté ou indisponible, on ne rend rien (évite un rendu cassé au 1er montage).
+  if (!user?.uid) {
+    return null;
   }
 
   return (
-    <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingTop: '68px' }}>
-      <header
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '68px',
-          background: '#1E5FA6',
-          color: '#FFFFFF',
-          display: 'flex',
+    <div className="bg-white px-6 py-12" style={{ paddingTop: '80px' }}>
+      <div className="max-w-7xl mx-auto">
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr auto 1fr',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 24px',
-          zIndex: 50,
-        }}
-      >
-        <div style={{ fontSize: '18px', fontWeight: 800 }}>TRASIT Admin</div>
-        <button
-          type="button"
-          onClick={onLogout}
-          style={{
-            background: '#8B1A1A',
-            color: '#FFFFFF',
-            fontSize: '16px',
-            fontWeight: 700,
-            borderRadius: '8px',
-            padding: '10px 14px',
-            border: 'none',
-            cursor: 'pointer',
-          }}
-        >
-          Se déconnecter
-        </button>
-      </header>
-
-      <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '28px 20px 60px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#1A1A1A', marginBottom: '18px' }}>Tableau de bord</h1>
-
-        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '14px' }}>
-          {counters.map((c) => (
-            <div
-              key={c.label}
+          padding: '24px 32px',
+          borderBottom: '1px solid #DDDDDD',
+          marginBottom: '12px'
+        }}>
+          <div />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ fontSize: '40px', fontWeight: 800, color: '#1A1A1A', lineHeight: 1.05 }}>
+              tras<span style={{ color: '#8B1A1A' }}>·</span>it
+            </div>
+            <Link to="/" style={{ marginTop: '8px', fontSize: '18px', fontWeight: 700, color: '#0D2F4A', textAlign: 'center' }}>
+              ← Retour au site
+            </Link>
+          </div>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'flex-end' }}>
+            <button
+              type="button"
+              onClick={() => navigate('/fiche-mission')}
               style={{
-                background: '#FFFFFF',
-                borderRadius: '12px',
-                border: '1px solid rgba(26,26,26,0.10)',
-                padding: '16px 16px',
+                background: 'transparent',
+                color: '#1E5FA6',
+                fontSize: '16px',
+                fontWeight: 700,
+                borderRadius: '8px',
+                padding: '10px 20px',
+                border: '1px solid #1E5FA6',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
               }}
             >
-              <div style={{ fontSize: '32px', fontWeight: 800, color: '#1E5FA6', lineHeight: 1 }}>{c.value}</div>
-              <div style={{ marginTop: '10px', fontSize: '14px', fontWeight: 700, color: '#1A1A1A' }}>{c.label}</div>
-            </div>
-          ))}
-        </section>
+              Nouvelle fiche
+            </button>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              style={{
+                background: 'transparent',
+                color: '#8B1A1A',
+                fontSize: '16px',
+                fontWeight: 700,
+                borderRadius: '8px',
+                padding: '10px 20px',
+                border: '1px solid #8B1A1A',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Se déconnecter
+            </button>
+          </div>
+        </div>
 
-        {loading ? (
-          <section
+        <div style={{ padding: '0 24px', fontSize: '18px', fontWeight: 700, color: '#0D2F4A', marginBottom: '20px' }}>
+          Vos missions
+        </div>
+
+        {missionsLoadError ? (
+          <div
             style={{
-              marginTop: '22px',
-              background: '#FFFFFF',
+              margin: '0 24px 24px',
+              padding: '16px 20px',
+              background: '#FEF3C7',
+              border: '1px solid #F59E0B',
               borderRadius: '12px',
-              border: '1px solid rgba(26,26,26,0.10)',
+              fontSize: '16px',
+              fontWeight: 600,
+              color: '#1A1A1A',
             }}
+            role="alert"
           >
-            <div style={{ padding: '18px 16px' }}>
-              <div style={{ fontSize: '16px', fontWeight: 700, color: '#1A1A1A' }}>Chargement des missions...</div>
-            </div>
-          </section>
-        ) : missions.length === 0 ? (
-          <section
-            style={{
-              marginTop: '22px',
-              background: '#FFFFFF',
-              borderRadius: '12px',
-              border: '1px solid rgba(26,26,26,0.10)',
-            }}
-          >
-            <div style={{ padding: '18px 16px' }}>
-              <div style={{ fontSize: '16px', fontWeight: 700, color: '#1A1A1A' }}>Aucune mission pour le moment</div>
-            </div>
-          </section>
-        ) : (
-          <section style={{ marginTop: '22px' }}>
+            {missionsLoadError}
+          </div>
+        ) : null}
+
+        {(!missionsLoadError && hasMissions && Array.isArray(missions)) ? (
+          <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px' }}>
-              {missions.map((m) => {
-                const badge = statusBadgeStyle(m.statut);
+              {missions?.map((m) => {
+                const d = m.timestamp?.toDate ? m.timestamp.toDate() : null;
+                const dateText = d ? formatFrenchDate(d) : '';
+                const address = [m.siteAddress, m.siteDistrict].filter(Boolean).join(' — ');
+                const isExpanded = expandedId === m.id;
+                const accent =
+                  m.missionType === 'btp'
+                    ? '#1E5FA6'
+                    : m.missionType === 'agro'
+                      ? '#2E8B57'
+                      : m.missionType === 'commerce'
+                        ? '#F26522'
+                        : '#DDDDDD';
+
                 return (
                   <div
                     key={m.id}
                     style={{
-                      background: '#FFFFFF',
+                      width: '100%',
+                      border: '1px solid #DDDDDD',
                       borderRadius: '12px',
-                      border: '1px solid rgba(26,26,26,0.10)',
-                      padding: '16px 16px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: '12px',
+                      padding: '16px',
+                      background: '#FFFFFF',
                     }}
                   >
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: '16px', fontWeight: 700, color: '#1A1A1A' }}>
-                        {missionTypeLabel(m.missionType)}
+                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                          <div style={{ fontSize: '18px', fontWeight: 800, color: '#1A1A1A' }}>{missionTypeLabel(m.missionType)}</div>
+                          <div
+                            style={{
+                              background: '#FEF3C7',
+                              color: '#92400E',
+                              border: '1px solid #F59E0B',
+                              borderRadius: '999px',
+                              padding: '6px 10px',
+                              fontSize: '16px',
+                              fontWeight: 700,
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            En attente
+                          </div>
+                        </div>
+                        <div style={{ marginTop: '6px', fontSize: '16px', fontWeight: 500, color: '#1A1A1A', lineHeight: 1.7 }}>
+                          {address}
+                        </div>
+                        {dateText ? (
+                          <div style={{ marginTop: '6px', fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>
+                            {dateText}
+                          </div>
+                        ) : null}
                       </div>
-                      <div style={{ marginTop: '6px', fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>
-                        {m.providerName || ''}
-                      </div>
-                      <div style={{ marginTop: '6px', fontSize: '14px', fontWeight: 500, color: '#1A1A1A' }}>
-                        {m.siteAddress || ''}
-                      </div>
-                      <div style={{ marginTop: '6px', fontSize: '14px', fontWeight: 500, color: '#1A1A1A' }}>
-                        {formatSubmittedAt(m.timestamp)}
-                      </div>
-                    </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
-                      <span
-                        style={{
-                          background: badge.background,
-                          color: badge.color,
-                          fontSize: '14px',
-                          fontWeight: 700,
-                          padding: '8px 10px',
-                          borderRadius: '999px',
-                          lineHeight: 1,
-                        }}
-                      >
-                        {statusLabel(m.statut)}
-                      </span>
                       <button
                         type="button"
-                        onClick={() => navigate(`/fiche/${m.id}`)}
+                        onClick={() => navigate(`/rapport/${m.id}`)}
                         style={{
-                          background: '#1E5FA6',
-                          color: '#FFFFFF',
-                          fontSize: '14px',
+                          background: 'transparent',
+                          color: '#1E5FA6',
+                          fontSize: '16px',
                           fontWeight: 700,
-                          borderRadius: '6px',
-                          padding: '10px 12px',
-                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '10px 14px',
+                          border: '1px solid #1E5FA6',
                           cursor: 'pointer',
                         }}
                       >
                         Voir le détail
                       </button>
                     </div>
+
+                    {isExpanded ? (
+                      <div style={{ marginTop: '12px', borderTop: '1px solid #EEEEEE', paddingTop: '12px' }}>
+                        <div style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A', lineHeight: 1.7 }}>
+                          Statut : En attente
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
                 );
               })}
             </div>
-          </section>
-        )}
-      </main>
+          </div>
+        ) : (!missionsLoadError ? (
+          <div className="flex items-center justify-center mt-12">
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '720px',
+                background: '#F5F5F5',
+                border: '1px solid #DDDDDD',
+                borderRadius: '12px',
+                padding: '32px',
+                textAlign: 'center',
+              }}
+            >
+              <div className="flex justify-center">
+                <Inbox size={40} style={{ color: '#1A1A1A' }} aria-hidden />
+              </div>
+
+              <div className="mt-5" style={{ fontSize: '22px', fontWeight: 700, color: '#1A1A1A' }}>
+                Aucune mission en cours
+              </div>
+              <div className="mt-3" style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>
+                Soumettez votre première demande via WhatsApp.
+              </div>
+
+              <div style={{ marginTop: '22px', display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => navigate('/fiche-mission')}
+                  style={{
+                    background: '#1E5FA6',
+                    color: 'white',
+                    fontSize: '18px',
+                    fontWeight: 700,
+                    borderRadius: '8px',
+                    padding: '14px 26px',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Créer une fiche de mission
+                </button>
+                <button
+                  type="button"
+                  onClick={openWhatsApp}
+                  style={{
+                    background: '#8B1A1A',
+                    color: 'white',
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    borderRadius: '8px',
+                    padding: '14px 26px',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Soumettre via WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null)}
+      </div>
     </div>
   );
 }

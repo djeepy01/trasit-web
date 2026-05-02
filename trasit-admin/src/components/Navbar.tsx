@@ -1,0 +1,255 @@
+import { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, ChevronDown } from 'lucide-react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase';
+
+type NavItem = {
+  label: string;
+  to: string;
+  /** Style pill bleu pour « Comment ça marche » */
+  variant?: 'primary';
+};
+
+const navItems: NavItem[] = [
+  { label: 'Comment ça marche', to: '/comment-ca-marche' },
+  { label: 'Nos services', to: '/nos-services' },
+  { label: 'Contact', to: '/contact' },
+];
+
+export default function Navbar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [lang, setLang] = useState<'FR' | 'EN'>('FR');
+  const [langOpen, setLangOpen] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 16);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setIsAuthed(!!user);
+    });
+    return () => unsub();
+  }, []);
+
+  const closeMobile = () => setMobileOpen(false);
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 bg-white border-b transition-all duration-300 ${
+        scrolled ? 'border-[#1A1A1A]/25 shadow-sm' : 'border-[#1A1A1A]/12'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 h-[90px] flex items-center justify-between">
+        <Link
+          to="/"
+          onClick={handleLogoClick}
+          className="flex items-center shrink-0"
+        >
+          <span
+            className="text-3xl font-bold text-[#1A1A1A] tracking-tight leading-none select-none"
+            style={{ fontSize: '44px', fontWeight: '800', color: '#1A1A1A' }}
+          >
+            tras<span className="text-[#8B1A1A]">·</span>it
+          </span>
+        </Link>
+
+        <div className="hidden md:flex items-center gap-8">
+          {navItems.map(({ label, to }) => (
+            <Link
+              key={label}
+              to={to}
+              className="text-[#1A1A1A] hover:text-[#1A1A1A] text-base font-medium transition-colors whitespace-nowrap"
+              style={{ fontSize: '18px', fontWeight: '500', color: '#1A1A1A' }}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+
+        <div className="hidden md:flex items-center gap-2.5">
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setLangOpen(!langOpen)}
+              className="flex items-center gap-1 text-[#1A1A1A] hover:text-[#1A1A1A] text-base font-semibold px-2.5 py-1.5 rounded transition-colors"
+              style={{ fontSize: '17px', fontWeight: '600', color: '#1A1A1A' }}
+            >
+              {lang}
+              <ChevronDown size={13} className={`transition-transform ${langOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {langOpen && (
+              <div className="absolute top-full right-0 mt-1 bg-white border border-[#1A1A1A]/25 rounded-lg shadow-lg overflow-hidden min-w-[64px]">
+                {(['FR', 'EN'] as const).map((l) => (
+                  <button
+                    key={l}
+                    type="button"
+                    onClick={() => {
+                      setLang(l);
+                      setLangOpen(false);
+                    }}
+                    className={`block w-full text-left px-4 py-2 text-base font-semibold transition-colors ${
+                      lang === l ? 'text-[#1A1A1A] bg-[#1A1A1A]/5' : 'text-[#1A1A1A] hover:bg-[#1A1A1A]/5 hover:text-[#1A1A1A]'
+                    }`}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="w-px h-5 bg-[#1A1A1A]/20 mx-1" />
+
+          {isAuthed ? (
+            <button
+              type="button"
+              onClick={() => navigate('/dashboard')}
+              className="text-base font-semibold bg-[#8B1A1A] text-white px-4 py-2 rounded-lg hover:opacity-95 transition-all duration-200 whitespace-nowrap"
+              style={{
+                fontSize: '17px',
+                fontWeight: '700',
+                background: '#8B1A1A',
+                color: '#FFFFFF',
+                borderRadius: '24px',
+                padding: '10px 28px',
+                border: 'none',
+              }}
+            >
+              Mon espace
+            </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() => navigate('/inscription')}
+                className="text-base font-medium border border-[#1A1A1A] px-4 py-2 rounded-lg text-[#1A1A1A] hover:border-[#1A1A1A] hover:text-[#1A1A1A] transition-all duration-200"
+                style={{
+                  fontSize: '17px',
+                  fontWeight: '500',
+                  border: '1px solid #1A1A1A',
+                  borderRadius: '24px',
+                  padding: '10px 28px',
+                  background: 'white',
+                  color: '#1A1A1A',
+                }}
+              >
+                S'inscrire
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/connexion')}
+                className="text-base font-semibold bg-[#8B1A1A] text-white px-4 py-2 rounded-lg hover:bg-[#6d1515] transition-all duration-200 whitespace-nowrap"
+                style={{
+                  fontSize: '17px',
+                  fontWeight: '600',
+                  background: '#8B1A1A',
+                  color: 'white',
+                  borderRadius: '24px',
+                  padding: '10px 28px',
+                }}
+              >
+                Se connecter
+              </button>
+            </>
+          )}
+        </div>
+
+        <button
+          type="button"
+          className="md:hidden p-2 text-[#1A1A1A]"
+          style={{ color: '#1A1A1A' }}
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Menu"
+        >
+          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </div>
+
+      {mobileOpen && (
+        <div className="md:hidden bg-white border-t border-[#1A1A1A]/12 px-6 py-5 space-y-4">
+          {navItems.map(({ label, to }) => (
+            <Link
+              key={label}
+              to={to}
+              onClick={closeMobile}
+              className="block w-full text-left text-[#1A1A1A] hover:text-[#1A1A1A] text-base font-medium py-1"
+              style={{ fontSize: '18px', fontWeight: '500', color: '#1A1A1A' }}
+            >
+              {label}
+            </Link>
+          ))}
+          <div className="flex items-center gap-3 pt-3 border-t border-[#1A1A1A]/12">
+            <span className="text-sm text-[#1A1A1A] font-medium" style={{ color: '#1A1A1A' }}>
+              Langue :
+            </span>
+            {(['FR', 'EN'] as const).map((l) => (
+              <button
+                key={l}
+                type="button"
+                onClick={() => setLang(l)}
+                className={`text-base font-bold px-2 py-0.5 rounded transition-colors ${
+                  lang === l ? 'text-[#1A1A1A]' : 'text-[#1A1A1A] hover:text-[#1A1A1A]'
+                }`}
+                style={{ color: '#1A1A1A' }}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-col gap-3 pt-2">
+            {isAuthed ? (
+              <button
+                type="button"
+                onClick={() => {
+                  navigate('/dashboard');
+                  closeMobile();
+                }}
+                className="bg-[#8B1A1A] text-white px-5 py-2.5 text-base font-semibold rounded-sm"
+                style={{ fontSize: '17px', fontWeight: '700' }}
+              >
+                Mon espace
+              </button>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => navigate('/inscription')}
+                  className="border border-[#1A1A1A] text-[#1A1A1A] px-5 py-2.5 text-base font-semibold rounded-sm"
+                  style={{ fontSize: '17px', fontWeight: '600', color: '#1A1A1A', borderColor: '#1A1A1A' }}
+                >
+                  S'inscrire
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate('/connexion');
+                    closeMobile();
+                  }}
+                  className="bg-[#8B1A1A] text-white px-5 py-2.5 text-base font-semibold rounded-sm"
+                  style={{ fontSize: '17px', fontWeight: '600' }}
+                >
+                  Se connecter
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+}

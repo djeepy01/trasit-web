@@ -269,6 +269,7 @@ export default function FicheMission() {
 
   // ÉTAPE 3
   const [confirmed, setConfirmed] = useState(false);
+  const [cguAccepted, setCguAccepted] = useState(false);
 
   const [error, setError] = useState('');
 
@@ -1472,10 +1473,31 @@ export default function FicheMission() {
                   </span>
                 </label>
 
+                <label style={{ marginTop: '12px', display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={cguAccepted}
+                    onChange={(e) => setCguAccepted(e.target.checked)}
+                    style={{ width: '18px', height: '18px', marginTop: '3px' }}
+                  />
+                  <span style={{ fontSize: '20px', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.7 }}>
+                    J&apos;ai lu et j&apos;accepte les{' '}
+                    <a
+                      href="/cgu"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#1E5FA6', textDecoration: 'underline', fontSize: '20px' }}
+                    >
+                      Conditions Générales d&apos;Utilisation
+                    </a>{' '}
+                    de TRASIT.
+                  </span>
+                </label>
+
                 <button
                   type="button"
                   onClick={onSubmit}
-                  disabled={!confirmed}
+                  disabled={!confirmed || !cguAccepted}
                   style={{
                     marginTop: '18px',
                     width: '100%',
@@ -1486,8 +1508,8 @@ export default function FicheMission() {
                     fontWeight: 800,
                     borderRadius: '10px',
                     border: 'none',
-                    cursor: confirmed ? 'pointer' : 'not-allowed',
-                    opacity: confirmed ? 1 : 0.5,
+                    cursor: confirmed && cguAccepted ? 'pointer' : 'not-allowed',
+                    opacity: confirmed && cguAccepted ? 1 : 0.5,
                   }}
                 >
                   Confirmer la fiche de mission
