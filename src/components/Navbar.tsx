@@ -194,7 +194,7 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="flex items-center gap-3 pt-3 border-t border-[#1A1A1A]/12">
-            <span className="text-sm text-[#1A1A1A] font-medium" style={{ color: '#1A1A1A' }}>
+            <span className="text-sm text-[#1A1A1A] font-medium" style={{ color: '#1A1A1A', fontSize: '20px' }}>
               Langue :
             </span>
             {(['FR', 'EN'] as const).map((l) => (

@@ -74,8 +74,8 @@ export default function Login() {
             </button>
           </div>
 
-          {error && <p style={{ fontSize: '16px', color: '#8B1A1A', marginBottom: '16px' }}>{error}</p>}
-          {resetMessage && <p style={{ fontSize: '16px', color: '#065F46', marginBottom: '16px' }}>{resetMessage}</p>}
+          {error && <p style={{ fontSize: '20px', color: '#8B1A1A', marginBottom: '16px' }}>{error}</p>}
+          {resetMessage && <p style={{ fontSize: '20px', color: '#065F46', marginBottom: '16px' }}>{resetMessage}</p>}
 
           <button type="submit" style={{ width: '100%', padding: '16px', fontSize: '20px', fontWeight: '700', color: '#FFFFFF', backgroundColor: '#8B1A1A', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
             Se connecter

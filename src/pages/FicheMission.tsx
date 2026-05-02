@@ -1219,7 +1219,7 @@ export default function FicheMission() {
                         border: `2px solid ${COLORS.primary}`,
                         background: COLORS.white,
                         color: COLORS.navy,
-                        fontSize: '16px',
+                        fontSize: '20px',
                         fontWeight: 800,
                         cursor: 'pointer',
                       }}
@@ -1450,30 +1450,30 @@ export default function FicheMission() {
                   padding: '16px 20px',
                   marginBottom: '20px'
                 }}>
-                  <p style={{ fontSize: '17px', fontWeight: 700, color: '#8B1A1A', marginBottom: '12px' }}>
+                  <p style={{ fontSize: '20px', fontWeight: 700, color: '#8B1A1A', marginBottom: '12px' }}>
                     Vos responsabilités
                   </p>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                    <li style={{ fontSize: '16px', color: '#8B1A1A', fontWeight: 600, marginBottom: '8px' }}>• L'exactitude de l'adresse et des repères fournis</li>
-                    <li style={{ fontSize: '16px', color: '#8B1A1A', fontWeight: 600, marginBottom: '8px' }}>• La disponibilité du contact sur place à l'heure convenue</li>
-                    <li style={{ fontSize: '16px', color: '#8B1A1A', fontWeight: 600, marginBottom: '8px' }}>• La prévenance du contact 30 min à 1h avant l'arrivée de l'agent</li>
-                    <li style={{ fontSize: '16px', color: '#8B1A1A', fontWeight: 600 }}>• Toute mission annulée pour localisation imprécise ou accès refusé ne sera pas remboursée</li>
+                    <li style={{ fontSize: '20px', color: '#8B1A1A', fontWeight: 600, marginBottom: '8px' }}>• L'exactitude de l'adresse et des repères fournis</li>
+                    <li style={{ fontSize: '20px', color: '#8B1A1A', fontWeight: 600, marginBottom: '8px' }}>• La disponibilité du contact sur place à l'heure convenue</li>
+                    <li style={{ fontSize: '20px', color: '#8B1A1A', fontWeight: 600, marginBottom: '8px' }}>• La prévenance du contact 30 min à 1h avant l'arrivée de l'agent</li>
+                    <li style={{ fontSize: '20px', color: '#8B1A1A', fontWeight: 600 }}>• Toute mission annulée pour localisation imprécise ou accès refusé ne sera pas remboursée</li>
                   </ul>
                 </div>
 
-                <label style={{ marginTop: '16px', display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer' }}>
+                <label style={{ marginTop: '16px', display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer', fontSize: '20px' }}>
                   <input
                     type="checkbox"
                     checked={confirmed}
                     onChange={(e) => setConfirmed(e.target.checked)}
                     style={{ width: '18px', height: '18px', marginTop: '3px' }}
                   />
-                  <span style={{ fontSize: '16px', fontWeight: 700, color: COLORS.text, lineHeight: 1.7 }}>
+                  <span style={{ fontSize: '20px', fontWeight: 700, color: COLORS.text, lineHeight: 1.7 }}>
                     Je confirme l&apos;exactitude des informations saisies et valide ma demande.
                   </span>
                 </label>
 
-                <label style={{ marginTop: '12px', display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer' }}>
+                <label style={{ marginTop: '12px', display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer', fontSize: '20px' }}>
                   <input
                     type="checkbox"
                     checked={cguAccepted}
@@ -1591,7 +1591,7 @@ export default function FicheMission() {
               <div style={{ fontSize: '16px', fontWeight: 900, color: '#0D2F4A' }}>Champs obligatoires manquants</div>
               <ul style={{ marginTop: '10px', paddingLeft: '18px' }}>
                 {requiredErrorsStep2.slice(0, 6).map((e) => (
-                  <li key={e} style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A', lineHeight: 1.7 }}>
+                  <li key={e} style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A', lineHeight: 1.7 }}>
                     {e}
                   </li>
                 ))}

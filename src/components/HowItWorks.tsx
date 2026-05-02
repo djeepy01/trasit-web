@@ -43,7 +43,7 @@ export default function HowItWorks() {
         <div className="text-center mb-16">
           <p
             className="text-[#1A1A1A] text-xs font-semibold uppercase tracking-[0.2em] mb-3"
-            style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
+            style={{ fontSize: '20px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
           >
             Le processus
           </p>
@@ -52,7 +52,7 @@ export default function HowItWorks() {
           </h2>
           <p
             className="text-[#1A1A1A] mt-4 text-lg font-light max-w-xl mx-auto"
-            style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}
+            style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A' }}
           >
             Votre vérification en 5 étapes, de la fiche de mission au rapport final.
           </p>
@@ -82,7 +82,7 @@ export default function HowItWorks() {
                 <div className="w-12 h-12 rounded-full bg-white border border-[#1A1A1A] flex items-center justify-center">
                   <span
                     className="text-[#1A1A1A] text-[14px] font-bold"
-                    style={{ fontSize: '14px', fontWeight: '700', color: '#1A1A1A' }}
+                    style={{ fontSize: '20px', fontWeight: '700', color: '#1A1A1A' }}
                   >
                     {number}
                   </span>
@@ -98,7 +98,7 @@ export default function HowItWorks() {
                 </h3>
                 <p
                   className="mt-3 text-[16px] text-[#444444] text-left leading-[1.7]"
-                  style={{ fontSize: '18px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.7' }}
+                  style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.7' }}
                 >
                   {desc}
                 </p>

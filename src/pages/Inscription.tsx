@@ -48,7 +48,7 @@ export default function Inscription() {
       <div className="max-w-[480px] mx-auto">
         <div className="text-center">
           <div style={{ fontSize: '36px', fontWeight: 800, color: '#1A1A1A' }}>
-            tras<span style={{ color: '#8B1A1A' }}>·</span>it
+            tras<span style={{ color: '#8B1A1A', fontSize: '36px' }}>·</span>it
           </div>
           <h1 className="mt-8" style={{ fontSize: '28px', fontWeight: 700, color: '#1A1A1A' }}>
             Créer votre compte

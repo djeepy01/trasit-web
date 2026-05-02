@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Hero from '../components/Hero';
-import PartnersStrip from '../components/PartnersStrip';
+// import PartnersStrip from '../components/PartnersStrip';
 import MainProduct from '../components/MainProduct';
 import RiskCards from '../components/RiskCards';
 import Stats from '../components/Stats';
@@ -31,9 +31,9 @@ export default function Home() {
   }, [location.pathname, location.hash]);
 
   return (
-    <>
+    <div style={{ fontSize: '20px' }}>
       <Hero />
-      <PartnersStrip />
+      {/* <PartnersStrip /> */}
       <MainProduct />
       <RiskCards />
       <Stats />
@@ -44,6 +44,6 @@ export default function Home() {
       <Testimonials />
       <FinalCTA />
       <Footer />
-    </>
+    </div>
   );
 }

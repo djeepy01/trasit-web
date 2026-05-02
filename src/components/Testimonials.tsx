@@ -51,7 +51,7 @@ export default function Testimonials() {
         <div className="text-center mb-14">
           <p
             className="text-[#1A1A1A] text-xs font-semibold uppercase tracking-[0.2em] mb-3"
-            style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
+            style={{ fontSize: '20px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
           >
             Témoignages
           </p>
@@ -90,7 +90,7 @@ export default function Testimonials() {
 
               <blockquote
                 className="text-[#1A1A1A] text-[16px] leading-[1.8] flex-1 mb-6 font-light"
-                style={{ fontSize: '18px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.85' }}
+                style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A', lineHeight: '1.85' }}
               >
                 "{quote}"
               </blockquote>
@@ -104,19 +104,19 @@ export default function Testimonials() {
                 <div>
                   <div
                     className="font-bold text-[#1A1A1A] text-sm"
-                    style={{ fontSize: '19px', fontWeight: '800', color: '#1A1A1A' }}
+                    style={{ fontSize: '20px', fontWeight: '800', color: '#1A1A1A' }}
                   >
                     {name}
                   </div>
                   <div
                     className="text-[#1A1A1A] text-xs"
-                    style={{ fontSize: '17px', fontWeight: 500, color: '#1A1A1A' }}
+                    style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A' }}
                   >
                     {role}
                   </div>
                   <div
                     className="text-[#1A1A1A] text-xs"
-                    style={{ fontSize: '17px', fontWeight: 500, color: '#1A1A1A' }}
+                    style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A' }}
                   >
                     {location}
                   </div>

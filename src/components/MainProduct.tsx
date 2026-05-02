@@ -43,7 +43,7 @@ export default function MainProduct() {
               <span
                 className="text-[#0D2F4A] text-xs font-semibold tracking-wider uppercase"
                 style={{
-                  fontSize: '13px',
+                  fontSize: '20px',
                   fontWeight: '600',
                   color: '#0D2F4A',
                   letterSpacing: '1px',
@@ -59,15 +59,15 @@ export default function MainProduct() {
               Ce que vous voyez,<br />
               c'est ce qui existe.
             </h2>
-            <p className="text-[#0D2F4A] text-lg leading-relaxed mb-8 font-light">
+            <p className="text-[#0D2F4A] text-lg leading-relaxed mb-8 font-light" style={{ fontSize: '20px' }}>
               TRASIT déploie des agents directement sur vos actifs et chantiers en Afrique. Nous vérifions la réalité de votre investissement — entrepreneur, avancement des travaux, état des équipements — et vous livrons un rapport complet, documenté et exploitable.
             </p>
 
             <ul className="space-y-3.5 mb-10">
               {features.map((f) => (
-                <li key={f} className="flex items-start gap-3">
-                  <span className="text-green-600 text-[18px] font-normal mt-0.5 shrink-0">&#10003;</span>
-                  <span className="text-[#1A1A1A] text-[18px] font-normal leading-[1.6]">{f}</span>
+                <li key={f} className="flex items-start gap-3" style={{ fontSize: '20px' }}>
+                  <span className="text-green-600 text-[18px] font-normal mt-0.5 shrink-0" style={{ fontSize: '20px' }}>&#10003;</span>
+                  <span className="text-[#1A1A1A] text-[18px] font-normal leading-[1.6]" style={{ fontSize: '20px' }}>{f}</span>
                 </li>
               ))}
             </ul>

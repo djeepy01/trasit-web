@@ -59,7 +59,7 @@ export default function HowItWorksPage() {
           <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
             Comment ça marche
           </h1>
-          <p className="mt-6 md:mt-8 leading-[1.65] max-w-3xl mx-auto" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
+          <p className="mt-6 md:mt-8 leading-[1.65] max-w-3xl mx-auto" style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }}>
             De votre fiche de mission à votre rapport, voici comment TRASIT fonctionne.
           </p>
         </div>
@@ -76,7 +76,7 @@ export default function HowItWorksPage() {
               <div className="flex flex-col items-center shrink-0 w-14 sm:w-16">
                 <span
                   className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-[#1E5FA6]/35 bg-white text-lg font-black tabular-nums shadow-sm"
-                  style={{ color: navy }}
+                  style={{ color: navy, fontSize: '20px' }}
                 >
                   {step.displayNumber}
                 </span>
@@ -91,7 +91,7 @@ export default function HowItWorksPage() {
                 <h3 className="text-xl md:text-2xl font-bold tracking-tight" style={{ color: navy }}>
                   {step.title}
                 </h3>
-                <p className="mt-4 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
+                <p className="mt-4 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }}>
                   {step.description}
                 </p>
               </div>
@@ -113,7 +113,7 @@ export default function HowItWorksPage() {
           >
             Votre rapport en moins de 2 heures.
           </h2>
-          <p className="mt-5 leading-[1.65] max-w-2xl mx-auto" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
+          <p className="mt-5 leading-[1.65] max-w-2xl mx-auto" style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }}>
             Dès la fin de l&apos;intervention de notre agent sur place.
           </p>
         </div>

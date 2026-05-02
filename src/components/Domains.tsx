@@ -23,7 +23,7 @@ export default function Domains() {
         <div className="text-center mb-14">
           <p
             className="text-[#1A1A1A] text-xs font-semibold uppercase tracking-[0.2em] mb-3"
-            style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
+            style={{ fontSize: '20px', fontWeight: '700', color: '#1A1A1A', letterSpacing: '2px' }}
           >
             Expertise
           </p>
@@ -48,7 +48,7 @@ export default function Domains() {
               <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0D2F4A', marginBottom: '8px' }}>
                 {title}
               </h3>
-              <p style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>
+              <p style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A' }}>
                 {subtitle}
               </p>
             </div>

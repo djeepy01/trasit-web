@@ -54,7 +54,7 @@ const SegmentedScore = ({ score }: { score: number }) => {
           />
         ))}
       </div>
-      <span className="text-white font-bold text-xs tabular-nums w-8">{score}%</span>
+      <span className="text-white font-bold text-xs tabular-nums w-8" style={{ fontSize: '20px' }}>{score}%</span>
     </div>
   );
 };
@@ -77,13 +77,13 @@ export default function Dashboard() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
-          <p className="text-white/65 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
+          <p className="text-white/65 text-xs font-semibold uppercase tracking-[0.2em] mb-3" style={{ fontSize: '20px' }}>
             Tableau de bord
           </p>
           <h2 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
             La réalité de votre investissement.
           </h2>
-          <p className="text-white/75 mt-4 text-lg font-light">
+          <p className="text-white/75 mt-4 text-lg font-light" style={{ fontSize: '20px' }}>
             Suivez chaque audit en temps réel depuis votre espace client.
           </p>
         </div>
@@ -104,11 +104,11 @@ export default function Dashboard() {
                   <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
                   <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
                 </div>
-                <span className="text-white/65 text-sm font-medium">trasit — espace client</span>
+                <span className="text-white/65 text-sm font-medium" style={{ fontSize: '20px' }}>trasit — espace client</span>
               </div>
               <div className="flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/20 rounded-lg px-3 py-1.5">
                 <TrendingUp size={13} className="text-emerald-400" />
-                <span className="text-emerald-300 text-xs font-semibold">+12% ce mois</span>
+                <span className="text-emerald-300 text-xs font-semibold" style={{ fontSize: '20px' }}>+12% ce mois</span>
               </div>
             </div>
 
@@ -161,7 +161,7 @@ export default function Dashboard() {
                         </div>
                       </td>
                       <td className="px-6 py-3.5">
-                        <span className="bg-white/8 border border-white/10 text-white/80 text-xs font-semibold px-2.5 py-0.5 rounded-md">
+                        <span className="bg-white/8 border border-white/10 text-white/80 text-xs font-semibold px-2.5 py-0.5 rounded-md" style={{ fontSize: '20px' }}>
                           {row.type}
                         </span>
                       </td>
@@ -175,6 +175,7 @@ export default function Dashboard() {
                               ? 'bg-emerald-500/12 text-emerald-400 border border-emerald-500/20'
                               : 'bg-amber-500/12 text-amber-400 border border-amber-500/20'
                           }`}
+                          style={{ fontSize: '20px' }}
                         >
                           {row.status}
                         </span>
@@ -187,7 +188,7 @@ export default function Dashboard() {
             </div>
 
             <div className="px-6 py-3.5 flex items-center justify-between border-t border-white/8">
-              <span className="text-white/60 text-xs">Affichage 4 sur 48 rapports</span>
+              <span className="text-white/60 text-xs" style={{ fontSize: '20px' }}>Affichage 4 sur 48 rapports</span>
               <button className="text-white/75 hover:text-white text-xs font-semibold transition-colors">
                 Voir tous les rapports →
               </button>

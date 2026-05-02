@@ -33,7 +33,7 @@ type LegalSectionProps = {
   children: ReactNode;
 };
 
-/** Bloc titre de section + contenu (texte corps 16px, #1A1A1A). */
+/** Bloc titre de section + contenu (texte corps 20px, #1A1A1A). */
 export function LegalSection({ title, children }: LegalSectionProps) {
   return (
     <section aria-labelledby={slugifyId(title)}>
@@ -44,7 +44,7 @@ export function LegalSection({ title, children }: LegalSectionProps) {
       >
         {title}
       </h2>
-      <div className="text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal space-y-3">
+      <div className="text-[16px] md:text-[17px] leading-[1.65] text-[#1A1A1A] font-normal space-y-3" style={{ fontSize: '20px' }}>
         {children}
       </div>
     </section>

@@ -142,8 +142,8 @@ export default function MessageSection() {
               </svg>
 
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-                <p style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>TRASIT</p>
-                <p style={{ marginTop: '4px', fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>Indicateurs</p>
+                <p style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A' }}>TRASIT</p>
+                <p style={{ marginTop: '4px', fontSize: '20px', fontWeight: 500, color: '#1A1A1A' }}>Indicateurs</p>
               </div>
             </div>
 
@@ -156,9 +156,9 @@ export default function MessageSection() {
                     aria-hidden
                   />
                   <div className="min-w-0">
-                    <p className="text-[16px] leading-snug font-semibold text-[#1A1A1A]">
+                    <p className="text-[16px] leading-snug font-semibold text-[#1A1A1A]" style={{ fontSize: '20px' }}>
                       {item.value}{' '}
-                      <span style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>{item.label}</span>
+                      <span style={{ fontSize: '20px', fontWeight: 500, color: '#1A1A1A' }}>{item.label}</span>
                     </p>
                   </div>
                 </div>

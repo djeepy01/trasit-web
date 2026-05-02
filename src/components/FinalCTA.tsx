@@ -17,7 +17,7 @@ export default function FinalCTA() {
           }}
         >
           <div className="text-center lg:text-left">
-            <p className="text-white/60 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
+            <p className="text-white/60 text-xs font-semibold uppercase tracking-[0.2em] mb-3" style={{ fontSize: '20px' }}>
               Commencer maintenant
             </p>
             <h2 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight max-w-xl">

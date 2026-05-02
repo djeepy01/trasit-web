@@ -67,7 +67,7 @@ export default function ServicesPage() {
           </h1>
           <p
             className="mt-6 md:mt-8 leading-[1.65] max-w-3xl mx-auto"
-            style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}
+            style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }}
           >
             Une vérification terrain indépendante pour chaque type d&apos;investissement.
           </p>
@@ -87,22 +87,22 @@ export default function ServicesPage() {
               style={{ color: navy }}
             >
               <h3 className="text-xl md:text-2xl font-bold tracking-tight">{card.title}</h3>
-              <p className="mt-5 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
+              <p className="mt-5 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }}>
                 {card.description}
               </p>
-              <p className="mt-8 text-[16px] font-semibold uppercase tracking-wide text-[#1A1A1A]">
+              <p className="mt-8 text-[16px] font-semibold uppercase tracking-wide text-[#1A1A1A]" style={{ fontSize: '20px' }}>
                 Ce qu&apos;on vérifie
               </p>
               <ul className="mt-4 space-y-4 flex-1">
                 {card.checks.map((item) => (
-                  <li key={item} className="flex gap-3 text-[16px] leading-[1.55] text-[#1A1A1A]">
+                  <li key={item} className="flex gap-3 text-[16px] leading-[1.55] text-[#1A1A1A]" style={{ fontSize: '20px' }}>
                     <Check
                       className="shrink-0 mt-0.5 text-[#2E8B57]"
                       size={20}
                       strokeWidth={2.5}
                       aria-hidden
                     />
-                    <span>{item}</span>
+                    <span style={{ fontSize: '20px' }}>{item}</span>
                   </li>
                 ))}
               </ul>
@@ -130,7 +130,7 @@ export default function ServicesPage() {
               style={{ color: navy }}
             >
               <h3 className="text-xl md:text-2xl font-bold">Rapport Standard</h3>
-              <p className="mt-6 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
+              <p className="mt-6 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }}>
                 Un rapport unique, livré en moins de 2 heures après l&apos;intervention. Idéal pour une
                 vérification ponctuelle.
               </p>
@@ -140,7 +140,7 @@ export default function ServicesPage() {
               style={{ color: navy }}
             >
               <h3 className="text-xl md:text-2xl font-bold">Suivi Renforcé</h3>
-              <p className="mt-6 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
+              <p className="mt-6 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }}>
                 Plusieurs visites planifiées à chaque étape clé. Idéal pour un suivi continu de votre
                 investissement.
               </p>

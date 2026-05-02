@@ -73,7 +73,7 @@ export default function Commerce() {
                 <li key={item} style={{ fontSize: '22px', color: '#1A1A1A', marginBottom: '12px' }}>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{ color: '#2E8B57', fontSize: '22px' }}>✅</span>
-                    <span>{item}</span>
+                    <span style={{ fontSize: '22px' }}>{item}</span>
                   </span>
                 </li>
               ))}

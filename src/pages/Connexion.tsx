@@ -44,7 +44,7 @@ export default function Connexion() {
       <div style={{ minHeight: '100vh', background: '#FFFFFF', padding: '48px 24px' }}>
         <div style={{ maxWidth: '480px', margin: '0 auto', textAlign: 'center' }}>
           <div style={{ fontSize: '36px', fontWeight: 800, color: '#1A1A1A' }}>
-            tras<span style={{ color: '#8B1A1A' }}>·</span>it
+            tras<span style={{ color: '#8B1A1A', fontSize: '36px' }}>·</span>it
           </div>
           <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#1A1A1A', marginTop: '32px' }}>
             Se connecter

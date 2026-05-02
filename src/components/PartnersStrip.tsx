@@ -1,3 +1,4 @@
+/*
 const partners = [
   { name: 'Orange Money', tagline: 'Partenaire financier' },
   { name: 'Ecobank', tagline: 'Réseau panafricain' },
@@ -51,4 +52,9 @@ export default function PartnersStrip() {
       </div>
     </section>
   );
+}
+*/
+
+export default function PartnersStrip() {
+  return null;
 }

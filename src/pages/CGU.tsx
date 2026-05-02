@@ -43,6 +43,11 @@ const ul: CSSProperties = {
   marginBottom: 12,
 };
 
+const li: CSSProperties = {
+  fontSize: 20,
+  color: '#1A1A1A',
+};
+
 export default function CGU() {
   return (
     <main style={page}>
@@ -71,10 +76,10 @@ export default function CGU() {
       <h2 style={h2}>Article 4 — Responsabilités du client</h2>
       <p style={p}>Le client est seul responsable de :</p>
       <ul style={ul}>
-        <li>L&apos;exactitude de l&apos;adresse et des repères fournis</li>
-        <li>La disponibilité du contact sur place à l&apos;heure convenue</li>
-        <li>La prévenance du contact sur place 30 à 60 minutes avant l&apos;arrivée de l&apos;agent</li>
-        <li>Toute information fournie dans la Fiche de mission</li>
+        <li style={li}>L&apos;exactitude de l&apos;adresse et des repères fournis</li>
+        <li style={li}>La disponibilité du contact sur place à l&apos;heure convenue</li>
+        <li style={li}>La prévenance du contact sur place 30 à 60 minutes avant l&apos;arrivée de l&apos;agent</li>
+        <li style={li}>Toute information fournie dans la Fiche de mission</li>
       </ul>
 
       <h2 style={h2}>Article 5 — Niveaux de service</h2>
@@ -88,17 +93,17 @@ export default function CGU() {
       <p style={p}>Méthode : via le moyen de paiement utilisé lors de la commande.</p>
       <p style={p}>Remboursement intégral :</p>
       <ul style={ul}>
-        <li>Agent non disponible après confirmation de la mission</li>
-        <li>Délai de livraison non respecté et client refuse le rapport</li>
-        <li>Erreur prouvée de TRASIT</li>
+        <li style={li}>Agent non disponible après confirmation de la mission</li>
+        <li style={li}>Délai de livraison non respecté et client refuse le rapport</li>
+        <li style={li}>Erreur prouvée de TRASIT</li>
       </ul>
       <p style={p}>Aucun remboursement :</p>
       <ul style={ul}>
-        <li>Adresse incorrecte ou repères insuffisants fournis par le client</li>
-        <li>Contact sur place absent sans prévenance à l&apos;heure convenue</li>
-        <li>Accès au site refusé sur place, quelle qu&apos;en soit la raison</li>
-        <li>Fiche de mission mal formulée validée par le client</li>
-        <li>Mission exécutée et rapport livré</li>
+        <li style={li}>Adresse incorrecte ou repères insuffisants fournis par le client</li>
+        <li style={li}>Contact sur place absent sans prévenance à l&apos;heure convenue</li>
+        <li style={li}>Accès au site refusé sur place, quelle qu&apos;en soit la raison</li>
+        <li style={li}>Fiche de mission mal formulée validée par le client</li>
+        <li style={li}>Mission exécutée et rapport livré</li>
       </ul>
 
       <h2 style={h2}>Article 7 — Rapports</h2>

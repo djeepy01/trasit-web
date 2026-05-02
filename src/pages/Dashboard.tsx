@@ -128,7 +128,7 @@ export default function Dashboard() {
           <div />
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ fontSize: '40px', fontWeight: 800, color: '#1A1A1A', lineHeight: 1.05 }}>
-              tras<span style={{ color: '#8B1A1A' }}>·</span>it
+              tras<span style={{ color: '#8B1A1A', fontSize: '40px' }}>·</span>it
             </div>
             <Link to="/" style={{ marginTop: '8px', fontSize: '18px', fontWeight: 700, color: '#0D2F4A', textAlign: 'center' }}>
               ← Retour au site

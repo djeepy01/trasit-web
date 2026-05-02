@@ -34,7 +34,7 @@ export default function ContactPage() {
           </h1>
           <p
             className="mt-6 md:mt-8 leading-[1.65] max-w-3xl mx-auto"
-            style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}
+            style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }}
           >
             Une question ? Une demande particulière ? Nous vous répondons dans les plus brefs délais.
           </p>
@@ -54,7 +54,7 @@ export default function ContactPage() {
               noValidate
             >
               <div>
-                <label htmlFor="contact-full-name" className="block text-[16px] font-semibold text-[#1A1A1A] mb-2">
+                <label htmlFor="contact-full-name" className="block text-[16px] font-semibold text-[#1A1A1A] mb-2" style={{ fontSize: '20px' }}>
                   Nom complet
                 </label>
                 <input
@@ -69,7 +69,7 @@ export default function ContactPage() {
                 />
               </div>
               <div>
-                <label htmlFor="contact-email" className="block text-[16px] font-semibold text-[#1A1A1A] mb-2">
+                <label htmlFor="contact-email" className="block text-[16px] font-semibold text-[#1A1A1A] mb-2" style={{ fontSize: '20px' }}>
                   Email
                 </label>
                 <input
@@ -84,7 +84,7 @@ export default function ContactPage() {
                 />
               </div>
               <div>
-                <label htmlFor="contact-phone" className="block text-[16px] font-semibold text-[#1A1A1A] mb-2">
+                <label htmlFor="contact-phone" className="block text-[16px] font-semibold text-[#1A1A1A] mb-2" style={{ fontSize: '20px' }}>
                   Téléphone
                 </label>
                 <input
@@ -98,7 +98,7 @@ export default function ContactPage() {
                 />
               </div>
               <div>
-                <label htmlFor="contact-message" className="block text-[16px] font-semibold text-[#1A1A1A] mb-2">
+                <label htmlFor="contact-message" className="block text-[16px] font-semibold text-[#1A1A1A] mb-2" style={{ fontSize: '20px' }}>
                   Message
                 </label>
                 <textarea
@@ -119,7 +119,7 @@ export default function ContactPage() {
                 Envoyer le message
               </button>
               {submitted && (
-                <p className="leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }} role="status">
+                <p className="leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }} role="status">
                   Merci pour votre message. Nous vous recontacterons très bientôt.
                 </p>
               )}
@@ -137,16 +137,16 @@ export default function ContactPage() {
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <MessageCircle className="text-[#1E5FA6]" size={22} aria-hidden />
-                  <span className="text-[16px] font-bold" style={{ color: navy }}>
+                  <span className="text-[16px] font-bold" style={{ color: navy, fontSize: '20px' }}>
                     WhatsApp
                   </span>
                 </div>
-                <p className="leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
+                <p className="leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }}>
                   Contactez-nous directement sur WhatsApp pour soumettre une demande
                 </p>
               </div>
               <div>
-                <p className="text-[16px] font-bold mb-2" style={{ color: navy }}>
+                <p className="text-[16px] font-bold mb-2" style={{ color: navy, fontSize: '20px' }}>
                   Email
                 </p>
                 <a
@@ -157,10 +157,10 @@ export default function ContactPage() {
                 </a>
               </div>
               <div>
-                <p className="text-[16px] font-bold mb-2" style={{ color: navy }}>
+                <p className="text-[16px] font-bold mb-2" style={{ color: navy, fontSize: '20px' }}>
                   Délai de réponse
                 </p>
-                <p className="leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 500 }}>
+                <p className="leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }}>
                   Nous répondons sous 24 heures
                 </p>
               </div>

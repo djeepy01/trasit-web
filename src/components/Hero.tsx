@@ -47,7 +47,7 @@ const ScoreGauge = ({ value }: { value: number }) => (
       ))}
     </svg>
     <div className="flex flex-col items-center">
-      <span className="text-xl font-black text-[#1A1A1A] leading-none" style={{ color: '#1A1A1A' }}>
+      <span className="text-xl font-black text-[#1A1A1A] leading-none" style={{ color: '#1A1A1A', fontSize: '20px' }}>
         {value}%
       </span>
     </div>
@@ -83,7 +83,7 @@ export default function Hero() {
               <Shield size={12} className="text-white/70" />
               <span
                 className="text-white/90 text-xs font-semibold tracking-wide"
-                style={{ fontSize: '16px', fontWeight: '500', color: 'white' }}
+                style={{ fontSize: '20px', fontWeight: '500', color: 'white' }}
               >
                 Décisions fondées sur la réalité.
               </span>
@@ -104,7 +104,7 @@ export default function Hero() {
                 </div>
                 <div
                   className="text-white/75 text-xs font-medium mt-0.5"
-                  style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+                  style={{ fontSize: '20px', fontWeight: '400', color: 'white' }}
                 >
                   Interventions
                 </div>
@@ -119,7 +119,7 @@ export default function Hero() {
                 </div>
                 <div
                   className="text-white/75 text-xs font-medium mt-0.5"
-                  style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+                  style={{ fontSize: '20px', fontWeight: '400', color: 'white' }}
                 >
                   Pays couverts
                 </div>
@@ -134,7 +134,7 @@ export default function Hero() {
                 </div>
                 <div
                   className="text-white/75 text-xs font-medium mt-0.5"
-                  style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+                  style={{ fontSize: '20px', fontWeight: '400', color: 'white' }}
                 >
                   Délai rapport
                 </div>
@@ -148,57 +148,75 @@ export default function Hero() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">TR</span>
+                      <span className="text-white text-sm font-bold" style={{ fontSize: '20px', color: 'white' }}>
+                        TR
+                      </span>
                     </div>
                     <div>
-                      <p className="font-bold text-[16px] text-[#1A1A1A]" style={{ color: '#1A1A1A' }}>
+                      <p className="font-bold text-[16px] text-[#1A1A1A]" style={{ color: '#1A1A1A', fontSize: '20px' }}>
                         Rapport TRASIT
                       </p>
-                      <p className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A' }}>
+                      <p className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A', fontSize: '20px' }}>
                         Construction
                       </p>
                     </div>
                   </div>
-                  <span className="text-[14px] font-semibold text-green-600">● Validé</span>
+                  <span className="text-[14px] font-semibold text-green-600" style={{ fontSize: '20px' }}>
+                    ● Validé
+                  </span>
                 </div>
               
                 <div className="flex justify-center mb-2">
                   <ScoreGauge value={94} />
                 </div>
               
-                <p className="text-center text-[14px] text-[#1A1A1A] mb-3" style={{ color: '#1A1A1A' }}>
+                <p className="text-center text-[14px] text-[#1A1A1A] mb-3" style={{ color: '#1A1A1A', fontSize: '20px' }}>
                   Score de conformité
                 </p>
               
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-5 px-2">
-                  <span className="text-[13px]"><span style={{color:'#1E5FA6'}}>●</span> Structure <strong>94%</strong></span>
-                  <span className="text-[13px]"><span style={{color:'#2E8B57'}}>●</span> Avancement <strong>91%</strong></span>
-                  <span className="text-[13px]"><span style={{color:'#F9A825'}}>●</span> Documents <strong>88%</strong></span>
-                  <span className="text-[13px]"><span style={{color:'#F26522'}}>●</span> Conformité <strong>96%</strong></span>
+                  <span className="text-[13px]" style={{ fontSize: '20px' }}>
+                    <span style={{ color: '#1E5FA6' }}>●</span> Structure <strong>94%</strong>
+                  </span>
+                  <span className="text-[13px]" style={{ fontSize: '20px' }}>
+                    <span style={{ color: '#2E8B57' }}>●</span> Avancement <strong>91%</strong>
+                  </span>
+                  <span className="text-[13px]" style={{ fontSize: '20px' }}>
+                    <span style={{ color: '#F9A825' }}>●</span> Documents <strong>88%</strong>
+                  </span>
+                  <span className="text-[13px]" style={{ fontSize: '20px' }}>
+                    <span style={{ color: '#F26522' }}>●</span> Conformité <strong>96%</strong>
+                  </span>
                 </div>
               
                 <div className="space-y-3 border-t pt-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A' }}>
+                    <span className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A', fontSize: '20px' }}>
                       Intervention vérifiée
                     </span>
-                    <span className="text-green-500">✓</span>
+                    <span className="text-green-500" style={{ fontSize: '20px' }}>
+                      ✓
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A' }}>
+                    <span className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A', fontSize: '20px' }}>
                       Délai rapport
                     </span>
-                    <span className="text-[14px] font-bold">2h</span>
+                    <span className="text-[14px] font-bold" style={{ fontSize: '20px' }}>
+                      2h
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A' }}>
+                    <span className="text-[14px] text-[#1A1A1A]" style={{ color: '#1A1A1A', fontSize: '20px' }}>
                       Agent indépendant
                     </span>
-                    <span className="text-green-500">✓</span>
+                    <span className="text-green-500" style={{ fontSize: '20px' }}>
+                      ✓
+                    </span>
                   </div>
                 </div>
               
-                <p className="text-right text-[13px] font-bold text-[#1A1A1A] mt-4" style={{ color: '#1A1A1A' }}>
+                <p className="text-right text-[13px] font-bold text-[#1A1A1A] mt-4" style={{ color: '#1A1A1A', fontSize: '20px' }}>
                   TRASIT
                 </p>
               </div>

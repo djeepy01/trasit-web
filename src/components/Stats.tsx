@@ -33,13 +33,13 @@ export default function Stats() {
               </div>
               <div
                 className="mt-3 text-[#1A1A1A] font-semibold text-sm md:text-base"
-                style={{ fontSize: '18px', fontWeight: '600', color: '#1A1A1A' }}
+                style={{ fontSize: '20px', fontWeight: '600', color: '#1A1A1A' }}
               >
                 {label}
               </div>
               <div
                 className="mt-1 text-[#1A1A1A] text-xs md:text-sm"
-                style={{ fontSize: '16px', fontWeight: '500', color: '#1A1A1A' }}
+                style={{ fontSize: '20px', fontWeight: '500', color: '#1A1A1A' }}
               >
                 {sub}
               </div>

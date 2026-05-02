@@ -75,7 +75,7 @@ function RiskCard({
         <div className="flex-1 max-w-xl">
           <span
             className="inline-block text-[10px] font-bold tracking-[0.2em] text-white/60 uppercase mb-4"
-            style={{ fontSize: '14px', fontWeight: '700', letterSpacing: '2px', color: 'white' }}
+            style={{ fontSize: '20px', fontWeight: '700', letterSpacing: '2px', color: 'white' }}
           >
             {card.label}
           </span>
@@ -87,7 +87,7 @@ function RiskCard({
           </div>
           <p
             className="text-white/80 text-sm md:text-base leading-relaxed font-light mb-3 max-w-md"
-            style={{ fontSize: '18px', fontWeight: '400', color: 'white', lineHeight: '1.7' }}
+            style={{ fontSize: '20px', fontWeight: '400', color: 'white', lineHeight: '1.7' }}
           >
             {card.text}
           </p>
@@ -105,7 +105,7 @@ function RiskCard({
           >
             En savoir plus
           </button>
-          <span className="inline-block text-white text-xs font-medium rounded-full px-3 py-1" style={{ backgroundColor: '#1E5FA6' }}>
+          <span className="inline-block text-white text-xs font-medium rounded-full px-3 py-1" style={{ backgroundColor: '#1E5FA6', fontSize: '20px' }}>
             Source : {card.source}
           </span>
         </div>
@@ -153,7 +153,7 @@ export default function RiskCards() {
         >
           <span
             className="inline-block text-xs font-bold tracking-[0.2em] uppercase mb-4 text-[#8B1A1A]"
-            style={{ fontSize: '16px', fontWeight: '700', color: '#8B1A1A', letterSpacing: '2px' }}
+            style={{ fontSize: '20px', fontWeight: '700', color: '#8B1A1A', letterSpacing: '2px' }}
           >
             Le constat
           </span>

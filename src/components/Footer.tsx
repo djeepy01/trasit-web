@@ -40,17 +40,17 @@ export default function Footer() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-10">
-        <p className="text-white mb-10" style={{ fontWeight: 700, fontSize: '16px' }}>
+        <p className="text-white mb-10" style={{ fontWeight: 700, fontSize: '20px' }}>
           Fondé sur la réalité, rien d'autre.
         </p>
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-10 mb-14">
           <div className="col-span-2 lg:col-span-1">
             <div className="text-[1.55rem] font-black text-white tracking-tight leading-none mb-4">
-              tras<span>·</span>it
+              tras<span style={{ fontSize: '1.55rem' }}>·</span>it
             </div>
             <p
               className="text-white/70 text-sm leading-relaxed font-light mb-6 max-w-[220px]"
-              style={{ fontSize: '18px', fontWeight: '400', color: 'white' }}
+              style={{ fontSize: '20px', fontWeight: '400', color: 'white' }}
             >
               La confiance pour chaque investissement en Afrique.
             </p>
@@ -81,7 +81,7 @@ export default function Footer() {
                   <Link
                     to={to}
                     className="text-white/70 hover:text-white text-sm transition-colors font-light"
-                    style={{ fontSize: '19px', fontWeight: '400', color: 'white' }}
+                    style={{ fontSize: '20px', fontWeight: '400', color: 'white' }}
                   >
                     {label}
                   </Link>
@@ -103,7 +103,7 @@ export default function Footer() {
                   <Link
                     to={to}
                     className="text-white/70 hover:text-white text-sm transition-colors font-light"
-                    style={{ fontSize: '19px', fontWeight: '400', color: 'white' }}
+                    style={{ fontSize: '20px', fontWeight: '400', color: 'white' }}
                   >
                     {label}
                   </Link>
@@ -116,7 +116,7 @@ export default function Footer() {
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p
             className="text-white/60 text-xs text-center md:text-left"
-            style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+            style={{ fontSize: '20px', fontWeight: '400', color: 'white' }}
           >
             © 2026 TRASIT
           </p>
@@ -124,21 +124,21 @@ export default function Footer() {
             <Link
               to="/cgu"
               className="text-white/60 hover:text-white/90 text-xs transition-colors"
-              style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+              style={{ fontSize: '20px', fontWeight: '400', color: 'white' }}
             >
               CGU
             </Link>
             <Link
               to="/confidentialite"
               className="text-white/60 hover:text-white/90 text-xs transition-colors"
-              style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+              style={{ fontSize: '20px', fontWeight: '400', color: 'white' }}
             >
               Confidentialité
             </Link>
             <Link
               to="/mentions-legales"
               className="text-white/60 hover:text-white/90 text-xs transition-colors"
-              style={{ fontSize: '16px', fontWeight: '400', color: 'white' }}
+              style={{ fontSize: '20px', fontWeight: '400', color: 'white' }}
             >
               Mentions légales
             </Link>
