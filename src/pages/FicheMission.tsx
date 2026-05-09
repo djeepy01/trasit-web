@@ -412,6 +412,8 @@ export default function FicheMission() {
     try {
       const docRef = await addDoc(collection(db, 'fiches_mission'), {
         uid: user.uid,
+        nomClient: auth.currentUser?.displayName || '',
+        emailClient: auth.currentUser?.email || '',
         timestamp: serverTimestamp(),
         statut: 'en_attente',
         missionType,
