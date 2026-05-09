@@ -1,8 +1,24 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { auth } from '../firebase';
 import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import { Eye, EyeOff } from 'lucide-react';
+
+/** Chemin interne uniquement (évite les redirections ouvertes vers un autre domaine). */
+function postLoginDestination(redirectParam: string | null): string {
+  if (redirectParam === null || redirectParam === undefined) return '/dashboard';
+  let path = redirectParam.trim();
+  if (!path) return '/dashboard';
+  try {
+    path = decodeURIComponent(path);
+  } catch {
+    return '/dashboard';
+  }
+  path = path.trim();
+  if (!path.startsWith('/') || path.startsWith('//') || path.startsWith('/\\')) return '/dashboard';
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(path)) return '/dashboard';
+  return path;
+}
 
 export default function Connexion() {
   const [email, setEmail] = useState('');
@@ -11,13 +27,14 @@ export default function Connexion() {
   const [error, setError] = useState('');
   const [resetMessage, setResetMessage] = useState('');
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const handleSubmit = async () => {
     setError('');
     setResetMessage('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/dashboard');
+      navigate(postLoginDestination(searchParams.get('redirect')));
     } catch {
       setError('Email ou mot de passe incorrect.');
     }

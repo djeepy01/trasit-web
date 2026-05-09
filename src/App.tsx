@@ -9,13 +9,13 @@ import Inscription from './pages/Inscription';
 import Connexion from './pages/Connexion';
 import Dashboard from './pages/Dashboard';
 import FicheMission from './pages/FicheMission';
-import RapportMission from './pages/RapportMission';
 import CGU from './pages/CGU';
 import ConfidentialitePage from './pages/ConfidentialitePage';
 import MentionsLegalesPage from './pages/MentionsLegalesPage';
 import BTP from './pages/BTP';
 import Agrobusiness from './pages/Agrobusiness';
 import Commerce from './pages/Commerce';
+import RapportPage from './pages/RapportPage';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -42,7 +42,7 @@ function App() {
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/fiche-mission" element={<FicheMission />} />
-          <Route path="/rapport/:id" element={<RapportMission />} />
+          <Route path="/rapport/:id" element={<RapportPage />} />
 
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
