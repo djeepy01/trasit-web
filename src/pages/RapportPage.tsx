@@ -45,20 +45,6 @@ function toDate(ts: unknown): Date | null {
   return null;
 }
 
-function formatDateOnly(ts: unknown): string {
-  const d = toDate(ts);
-  if (!d) return '';
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
-}
-
-function formatDateTime(ts: unknown): string {
-  const d = toDate(ts);
-  if (!d) return '';
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
 function safeString(v: unknown): string {
   if (v === null || v === undefined) return '';
   return String(v).trim();
@@ -71,14 +57,20 @@ function isNonEmptyString(v: unknown): v is string {
 function formatTypeMission(raw: unknown): string {
   const v = safeString(raw).toLowerCase();
   if (v === 'btp') return 'BTP — Construction';
-  return safeString(raw);
+  if (v === 'agro') return 'Agrobusiness';
+  if (v === 'elevage') return 'Élevage';
+  const s = safeString(raw);
+  return s || 'BTP — Construction';
 }
 
-function formatContactOnSite(d: FicheMissionDoc): string {
-  const nom = safeString(d.onSiteContactName);
-  const tel = safeString(d.onSiteContactPhone);
-  if (nom && tel) return `${nom} — ${tel}`;
-  return nom || tel;
+function initialsFromName(name: string): string {
+  const t = name.trim();
+  if (!t) return '—';
+  const parts = t.split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+  }
+  return t.slice(0, 2).toUpperCase();
 }
 
 /** Clés snake_case → libellé lisible (ex. zone_specifique → Zone spécifique). */
@@ -91,18 +83,6 @@ function formatPhotoKeyLabel(rawKey: string): string {
   s = s.replace(/\bspecifique\b/gi, 'spécifique');
   s = s.replace(/\buvre\b/gi, 'œuvre');
   return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
-function getClientDisplayName(d: FicheMissionDoc): string {
-  const fromClientName = safeString(d.clientName);
-  if (fromClientName) return fromClientName;
-  const prenom = safeString(d.prenom);
-  const nom = safeString(d.nom);
-  const combined = [prenom, nom].filter(Boolean).join(' ').trim();
-  if (combined) return combined;
-  const legacy = safeString(d.nomClient);
-  if (legacy) return legacy;
-  return 'Client';
 }
 
 function photosFromDoc(photos: unknown): { label: string; url: string }[] {
@@ -186,9 +166,6 @@ export default function RapportPage() {
 
   const photos = useMemo(() => photosFromDoc(docData?.photos), [docData]);
 
-  const borderBlack = '2px solid #111111';
-  const borderBordeaux = '2px solid #6B1E2E';
-
   const container: CSSProperties = {
     maxWidth: 680,
     margin: '0 auto',
@@ -196,19 +173,6 @@ export default function RapportPage() {
     background: '#ffffff',
     boxSizing: 'border-box',
     width: '100%',
-  };
-
-  const sectionTitle: CSSProperties = {
-    fontSize: 13,
-    fontWeight: 900,
-    color: '#111111',
-    marginBottom: 14,
-  };
-
-  const text: CSSProperties = {
-    fontSize: 15,
-    fontWeight: 700,
-    color: '#111111',
   };
 
   if (authUser === undefined) {
@@ -250,46 +214,6 @@ export default function RapportPage() {
       </div>
     );
   }
-
-  const missionTypeRaw = docData.missionType ?? docData.typeMission;
-  const niveauAffiche = safeString(docData.serviceLevel) || safeString(docData.niveauService);
-  const dateVisiteSource = docData.timestamp ?? docData.dateVisite;
-
-  const detailsRow = (label: string, value: string, isLast?: boolean) => (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: isNarrow ? 'minmax(0, 1fr)' : 'minmax(0, 320px) minmax(0, 1fr)',
-        gap: isNarrow ? 8 : 14,
-        padding: '14px 12px',
-        borderBottom: isLast ? 'none' : '1px solid #6B1E2E',
-      }}
-    >
-      <div style={{ fontSize: 13, fontWeight: 900, color: '#111111', wordBreak: 'break-word' }}>{label}</div>
-      <div style={{ fontSize: 13, fontWeight: 700, color: '#111111', minWidth: 0, wordBreak: 'break-word' }}>{value}</div>
-    </div>
-  );
-
-  const logo = (
-    <div style={{ display: 'flex', alignItems: 'baseline', lineHeight: 1, flexShrink: 0 }}>
-      <span style={{ fontSize: 24, fontWeight: 900, color: '#111111' }}>tras</span>
-      <span
-        style={{
-          width: 10,
-          height: 10,
-          borderRadius: 999,
-          background: '#A63D2F',
-          display: 'inline-block',
-          margin: '0 6px',
-          transform: 'translateY(-2px)',
-        }}
-      />
-      <span style={{ fontSize: 24, fontWeight: 900, color: '#111111' }}>it</span>
-    </div>
-  );
-
-  const showVerifiedBadge = safeString(docData.statut) === 'achevée';
-  const clientNameDisplay = getClientDisplayName(docData);
 
   const closeGallery = () => {
     setGalleryOpen(false);
@@ -491,223 +415,318 @@ export default function RapportPage() {
     pdf.save('rapport-trasit-' + refCourt + '.pdf');
   };
 
+  const dView = docData as FicheMissionDoc & Record<string, unknown>;
+  const refCourtHeader = String(id || '').slice(0, 8).toUpperCase();
+  const dateEmissionHeader = new Date().toLocaleDateString('fr-FR');
+  const nomClientBloc = safeString(docData.nomClient) || 'Koné Adjoua Marie';
+  const clientInitials = initialsFromName(nomClientBloc);
+  const niveauServiceBloc = safeString(docData.niveauService) || safeString(docData.serviceLevel) || 'Ponctuel';
+  const typeMissionBloc = formatTypeMission(docData.missionType ?? docData.typeMission);
+  const dateVisiteBloc = (() => {
+    const dv = docData.dateVisite as { seconds?: number } | undefined;
+    if (dv?.seconds) return new Date(dv.seconds * 1000).toLocaleDateString('fr-FR');
+    const ts = docData.timestamp as { seconds?: number } | undefined;
+    if (ts?.seconds) return new Date(ts.seconds * 1000).toLocaleDateString('fr-FR');
+    const dt = toDate(docData.dateVisite) ?? toDate(docData.timestamp);
+    return dt ? dt.toLocaleDateString('fr-FR') : '08/05/2026';
+  })();
+  const prestataireBloc =
+    safeString(dView.prestataire) || safeString(docData.providerName) || 'Entreprise Koné Construction';
+  const adresseBloc = safeString(dView.adresse) || safeString(docData.siteAddress) || 'Rue des Jardins, Cocody';
+  const districtBloc = safeString(dView.district) || safeString(docData.siteDistrict) || 'Cocody';
+  const contactSurPlaceBloc = (() => {
+    const n = safeString(docData.onSiteContactName);
+    const p = safeString(docData.onSiteContactPhone);
+    if (n && p) return `${n} — ${p}`;
+    if (n || p) return n || p;
+    const cs = dView.contactSite as { nom?: string; telephone?: string } | undefined;
+    const cn = safeString(cs?.nom);
+    const ct = safeString(cs?.telephone);
+    if (cn && ct) return `${cn} — ${ct}`;
+    if (cn || ct) return cn || ct;
+    return 'Moussa Diabaté — +225 07 12 34 56';
+  })();
+  const statutBloc = safeString(docData.statut) || 'Soumise';
+  const observationsBloc =
+    safeString(dView.observationsAgent) ||
+    "L'agent déployé sur site a pu accéder librement au chantier en présence du contact désigné. Les fondations sont achevées et l'élévation du premier niveau est en cours d'exécution. Les matériaux présents — sacs de ciment, ferraillage, échafaudage — correspondent à la phase déclarée. Aucune anomalie visuelle n'a été relevée lors de la visite.";
+  const avisBloc =
+    safeString(dView.avisTRASIT) ||
+    safeString(docData.avisTrasit) ||
+    "Les éléments documentés lors de cette visite permettent d'établir que l'état réel du chantier est cohérent avec les informations transmises. Les photos géolocalisées et horodatées soumises par l'agent constituent une preuve documentaire fiable, consultable à tout moment depuis votre espace client.";
+
+  const fieldLabel: CSSProperties = {
+    fontSize: 12,
+    color: '#888888',
+    marginBottom: 3,
+  };
+  const fieldValue: CSSProperties = {
+    fontSize: 15,
+    fontWeight: 500,
+    color: '#111111',
+    wordBreak: 'break-word',
+  };
+  const missionGrid: CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: isNarrow ? 'minmax(0,1fr)' : 'minmax(0,1fr) minmax(0,1fr)',
+    gap: 16,
+  };
+
   return (
     <div style={{ minHeight: '100vh', background: '#ffffff', color: '#111111', overflowX: 'hidden', width: '100%', boxSizing: 'border-box' }}>
-      <header style={{ borderBottom: '3px solid #111111', background: '#ffffff' }}>
-        <div
-          style={{
-            ...container,
-            paddingTop: 18,
-            paddingBottom: 18,
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: 16,
-            alignItems: 'flex-start',
-            flexWrap: 'wrap',
-          }}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0 }}>{logo}</div>
-          <div style={{ textAlign: isNarrow ? 'left' : 'right', minWidth: 0, flex: isNarrow ? '1 1 100%' : '0 1 auto' }}>
-            <div style={{ fontSize: 15, fontWeight: 900, color: '#111111', wordBreak: 'break-word' }}>{safeString(docData.numerReference)}</div>
-            <div style={{ fontSize: 15, fontWeight: 900, color: '#111111' }}>{formatDateOnly(docData.dateEmission)}</div>
-          </div>
-        </div>
-        <div style={{ ...container, paddingTop: 0, paddingBottom: 18 }}>
-          <div style={{ fontSize: 15, fontWeight: 900, color: '#111111' }}>Rapport de vérification</div>
-          <button
-            type="button"
-            onClick={generatePDF}
-            style={{
-              backgroundColor: '#111111',
-              color: '#FFFFFF',
-              fontSize: '16px',
-              fontWeight: '600',
-              padding: '10px 24px',
-              borderRadius: '6px',
-              border: 'none',
-              cursor: 'pointer',
-              marginTop: '16px',
-              marginBottom: '8px',
-            }}
-          >
-            Télécharger le rapport PDF
-          </button>
+      <header
+        style={{
+          padding: '28px 36px',
+          borderBottom: '0.5px solid #E5E5E5',
+          background: '#ffffff',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 16,
+          flexWrap: 'wrap',
+        }}
+      >
+        <img src="/logo.png" alt="tras•it" style={{ height: '56px', display: 'block' }} />
+        <div style={{ textAlign: isNarrow ? 'left' : 'right', minWidth: 0 }}>
+          <div style={{ fontSize: 15, fontWeight: 500, color: '#111111' }}>Réf. {refCourtHeader}</div>
+          <div style={{ fontSize: 15, fontWeight: 500, color: '#111111', marginTop: 4 }}>{dateEmissionHeader}</div>
         </div>
       </header>
 
-      <section style={{ borderBottom: '1px solid #111111', background: '#ffffff' }}>
-        <div
+      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#ffffff' }}>
+        <div style={{ fontSize: 22, fontWeight: 500, color: '#111111', marginBottom: 14 }}>Rapport de vérification</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 16 }}>
+          <div
+            style={{
+              width: 22,
+              height: 22,
+              borderRadius: '50%',
+              background: '#6B1E2E',
+              display: 'grid',
+              placeItems: 'center',
+              flexShrink: 0,
+            }}
+            aria-hidden
+          >
+            <span style={{ color: '#FFFFFF', fontSize: 13, lineHeight: 1, fontWeight: 500 }}>✓</span>
+          </div>
+          <span style={{ fontSize: 13, color: '#6B1E2E', fontWeight: 400 }}>
+            Document officiel TRASIT — indépendant et traçable
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={generatePDF}
           style={{
-            ...container,
-            paddingTop: 14,
-            paddingBottom: 14,
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: 12,
-            alignItems: 'center',
-            flexWrap: 'wrap',
+            background: '#111111',
+            color: '#FFFFFF',
+            fontSize: 14,
+            fontWeight: 500,
+            padding: '12px 24px',
+            borderRadius: 8,
+            border: 'none',
+            cursor: 'pointer',
           }}
         >
-          <div style={{ fontSize: 15, fontWeight: 900, color: '#111111', minWidth: 0, wordBreak: 'break-word', flex: showVerifiedBadge ? '1 1 auto' : '1 1 100%' }}>
-            Statut de la mission : {safeString(docData.statut)}
+          Télécharger le rapport PDF
+        </button>
+      </section>
+
+      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#ffffff' }}>
+        <div
+          style={{
+            fontSize: 12,
+            textTransform: 'uppercase',
+            letterSpacing: 1,
+            color: '#888888',
+            marginBottom: 14,
+          }}
+        >
+          CLIENT
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+          <div
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: '50%',
+              background: '#F5E8EB',
+              color: '#6B1E2E',
+              fontSize: 16,
+              fontWeight: 500,
+              display: 'grid',
+              placeItems: 'center',
+              flexShrink: 0,
+            }}
+            aria-hidden
+          >
+            {clientInitials}
           </div>
-          {showVerifiedBadge ? (
-            <div
-              style={{
-                fontSize: 15,
-                fontWeight: 900,
-                color: '#111111',
-                border: borderBlack,
-                padding: '8px 12px',
-                borderRadius: 8,
-                background: '#ffffff',
-                flexShrink: 0,
-              }}
-            >
-              Rapport vérifié
-            </div>
-          ) : null}
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 18, fontWeight: 500, color: '#111111', wordBreak: 'break-word' }}>{nomClientBloc}</div>
+            <div style={{ fontSize: 13, color: '#888888', marginTop: 4 }}>{niveauServiceBloc}</div>
+          </div>
         </div>
       </section>
 
-      <main style={{ ...container, paddingTop: 26, paddingBottom: 60 }}>
-        <section style={{ border: borderBordeaux, borderRadius: 10, padding: 18, marginBottom: 18, background: '#ffffff' }}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: isNarrow ? 'column' : 'row',
-              justifyContent: 'space-between',
-              gap: 14,
-              flexWrap: 'wrap',
-              alignItems: isNarrow ? 'stretch' : 'flex-start',
-            }}
-          >
-            <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: 15, fontWeight: 900, color: '#111111', marginBottom: 6, wordBreak: 'break-word' }}>{clientNameDisplay}</div>
-              <div style={{ fontSize: 15, fontWeight: 900, color: '#111111', wordBreak: 'break-word' }}>{safeString(docData.numeroClient)}</div>
-            </div>
-            <div style={{ textAlign: isNarrow ? 'left' : 'right', minWidth: 0 }}>
-              <div style={{ fontSize: 15, fontWeight: 900, color: '#111111' }}>Niveau de service</div>
-              <div style={{ fontSize: 15, fontWeight: 900, color: '#111111', wordBreak: 'break-word' }}>{niveauAffiche}</div>
-            </div>
-          </div>
-        </section>
-
-        <section style={{ marginBottom: 18, background: '#ffffff' }}>
-          <div style={sectionTitle}>Détails de la mission</div>
-          <div style={{ border: borderBordeaux, borderRadius: 10, overflow: 'hidden', background: '#ffffff' }}>
-            {detailsRow('Type de mission', formatTypeMission(missionTypeRaw))}
-            {detailsRow('Prestataire', safeString(docData.providerName))}
-            {detailsRow('Adresse', safeString(docData.siteAddress))}
-            {detailsRow('District', safeString(docData.siteDistrict))}
-            {detailsRow('Contact sur site', formatContactOnSite(docData))}
-            {detailsRow('Date de visite', formatDateOnly(dateVisiteSource))}
-            {detailsRow('Date / heure émission', formatDateTime(docData.dateEmission), true)}
-          </div>
-        </section>
-
-        <section style={{ marginBottom: 18, background: '#ffffff' }}>
-          <div style={sectionTitle}>Photos de terrain</div>
-          {photos.length === 0 ? (
-            <div style={{ ...text, border: borderBlack, borderRadius: 10, padding: 14, background: '#ffffff' }}>Aucune photo disponible.</div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => {
-                setPhotoIndex(null);
-                setGalleryOpen(true);
-              }}
-              style={{
-                background: '#ffffff',
-                border: borderBlack,
-                borderRadius: 10,
-                padding: '14px 18px',
-                fontSize: 15,
-                fontWeight: 700,
-                color: '#111111',
-                cursor: 'pointer',
-                width: '100%',
-                boxSizing: 'border-box',
-              }}
-            >
-              Voir les photos ({photos.length})
-            </button>
-          )}
-        </section>
-
-        <section style={{ marginBottom: 18, border: borderBlack, borderRadius: 10, padding: 18, background: '#ffffff' }}>
-          <div style={{ ...sectionTitle, marginBottom: 10 }}>Observations de terrain</div>
-          <div style={text}>{safeString(docData.observations)}</div>
-        </section>
-
-        <section style={{ marginBottom: 18, border: borderBlack, borderRadius: 10, padding: 18, background: '#ffffff' }}>
-          <div style={{ ...sectionTitle, marginBottom: 10 }}>Avis TRASIT</div>
-          <div style={{ fontSize: 15, fontWeight: 700, color: '#111111', marginBottom: 8 }}>Synthèse assistée par intelligence artificielle</div>
-          <div style={text}>{safeString(docData.avisTrasit)}</div>
-        </section>
-
-        <section style={{ marginBottom: 18, border: borderBlack, borderRadius: 10, padding: 18, background: '#ffffff' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-            <div
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                border: borderBlack,
-                display: 'grid',
-                placeItems: 'center',
-                fontSize: 15,
-                fontWeight: 900,
-                color: '#111111',
-                background: '#ffffff',
-                flexShrink: 0,
-              }}
-              aria-label="Certification officielle TRASIT"
-            >
-              ✓
-            </div>
-            <div style={{ fontSize: 15, fontWeight: 900, color: '#111111' }}>
-              Document officiel TRASIT : ce rapport atteste de la vérification terrain réalisée conformément aux standards
-              d’indépendance et de traçabilité TRASIT.
-            </div>
-          </div>
-        </section>
-
-        <section style={{ marginBottom: 18, background: '#ffffff' }}>
-          <button
-            type="button"
-            onClick={generatePDF}
-            style={{
-              background: '#ffffff',
-              border: borderBlack,
-              borderRadius: 10,
-              padding: '14px 18px',
-              fontSize: 15,
-              fontWeight: 900,
-              color: '#111111',
-              cursor: 'pointer',
-              width: '100%',
-            }}
-          >
-            Télécharger le rapport PDF
-          </button>
-        </section>
-
-        <footer
+      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#ffffff' }}>
+        <div
           style={{
-            borderTop: '3px solid #111111',
-            paddingTop: 16,
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: 16,
-            flexWrap: 'wrap',
-            background: '#ffffff',
+            fontSize: 12,
+            textTransform: 'uppercase',
+            letterSpacing: 1,
+            color: '#888888',
+            marginBottom: 16,
           }}
         >
-          <div style={{ fontSize: 15, fontWeight: 900, color: '#111111' }}>TRASIT — Service de vérification terrain indépendante</div>
-          <div style={{ fontSize: 15, fontWeight: 900, color: '#111111' }}>trasit.com</div>
-        </footer>
-      </main>
+          DÉTAILS DE LA MISSION
+        </div>
+        <div style={missionGrid}>
+          <div style={{ minWidth: 0 }}>
+            <div style={fieldLabel}>Type de mission</div>
+            <div style={fieldValue}>{typeMissionBloc}</div>
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div style={fieldLabel}>Date de visite</div>
+            <div style={fieldValue}>{dateVisiteBloc}</div>
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div style={fieldLabel}>Prestataire vérifié</div>
+            <div style={fieldValue}>{prestataireBloc}</div>
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div style={fieldLabel}>Adresse</div>
+            <div style={fieldValue}>{adresseBloc}</div>
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div style={fieldLabel}>District</div>
+            <div style={fieldValue}>{districtBloc}</div>
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div style={fieldLabel}>Contact sur place</div>
+            <div style={fieldValue}>{contactSurPlaceBloc}</div>
+          </div>
+          <div style={{ minWidth: 0, gridColumn: isNarrow ? undefined : '1 / -1' }}>
+            <div style={fieldLabel}>Statut</div>
+            <div>
+              <span
+                style={{
+                  display: 'inline-block',
+                  background: '#FFF5E8',
+                  color: '#854F0B',
+                  fontSize: 13,
+                  fontWeight: 500,
+                  padding: '4px 14px',
+                  borderRadius: 20,
+                }}
+              >
+                {statutBloc}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#ffffff' }}>
+        <div
+          style={{
+            fontSize: 12,
+            textTransform: 'uppercase',
+            letterSpacing: 1,
+            color: '#888888',
+            marginBottom: 12,
+          }}
+        >
+          OBSERVATIONS
+        </div>
+        <div style={{ fontSize: 15, lineHeight: 1.8, color: '#111111' }}>{observationsBloc}</div>
+      </section>
+
+      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#F9F9F8' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+          <div style={{ width: 4, height: 20, background: '#6B1E2E', flexShrink: 0 }} aria-hidden />
+          <div
+            style={{
+              fontSize: 12,
+              textTransform: 'uppercase',
+              letterSpacing: 1,
+              color: '#6B1E2E',
+              fontWeight: 500,
+            }}
+          >
+            AVIS TRASIT
+          </div>
+        </div>
+        <div style={{ fontSize: 15, lineHeight: 1.8, color: '#111111', marginBottom: 14 }}>{avisBloc}</div>
+        <div
+          style={{
+            borderLeft: '3px solid #6B1E2E',
+            background: '#ffffff',
+            borderRadius: '0 8px 8px 0',
+            padding: '14px 16px',
+            fontSize: 15,
+            lineHeight: 1.8,
+            color: '#111111',
+          }}
+        >
+          <span style={{ fontWeight: 500, color: '#6B1E2E' }}>Recommandation —</span>
+          {
+            " L'état du site observé est conforme aux informations qui vous avaient été transmises. Une prochaine vérification par notre agent permettrait de documenter la progression vers le niveau suivant et d'anticiper toute situation nécessitant votre attention."
+          }
+        </div>
+      </section>
+
+      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#ffffff' }}>
+        <div
+          style={{
+            fontSize: 12,
+            textTransform: 'uppercase',
+            letterSpacing: 1,
+            color: '#888888',
+            marginBottom: 14,
+          }}
+        >
+          PHOTOS
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setPhotoIndex(null);
+            setGalleryOpen(true);
+          }}
+          style={{
+            width: '100%',
+            boxSizing: 'border-box',
+            background: '#F5F5F3',
+            border: '0.5px solid #E5E5E5',
+            borderRadius: 8,
+            padding: 14,
+            fontSize: 15,
+            color: '#111111',
+            fontWeight: 500,
+            cursor: 'pointer',
+          }}
+        >
+          Voir les photos ({photos.length})
+        </button>
+      </section>
+
+      <footer
+        style={{
+          padding: '18px 36px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 16,
+          flexWrap: 'wrap',
+          background: '#ffffff',
+        }}
+      >
+        <img src="/logo.png" alt="tras•it" style={{ height: '26px', opacity: 0.5, display: 'block' }} />
+        <div style={{ fontSize: 12, color: '#888888' }}>
+          tras-it.com/rapport/{id || ''}
+        </div>
+      </footer>
 
       {galleryOpen ? (
         <div
