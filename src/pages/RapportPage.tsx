@@ -9,13 +9,14 @@ type MissionPhoto = { url: string; zone?: string };
 
 type FicheMissionDoc = {
   nomClient?: string;
-  niveauService?: string;
-  typeMission?: string;
-  dateVisite?: unknown;
+  nom?: string;
+  frequency?: string;
+  missionType?: string;
+  dateAssignation?: unknown;
   prestataire?: string;
   adresse?: string;
   district?: string;
-  contactSurSite?: string;
+  onSiteContactName?: string;
   observationsAgent?: string;
   avisTRASIT?: string;
   photos?: unknown;
@@ -49,7 +50,7 @@ function formatDateFr(d: Date): string {
 
 function displayNiveauService(raw: unknown): string {
   const s = safeString(raw).toLowerCase();
-  if (!s || s === 'standard') return 'Ponctuel';
+  if (!s || s === 'unique') return 'Ponctuel';
   return safeString(raw);
 }
 
@@ -218,18 +219,18 @@ export default function RapportPage() {
 
   const emissionDisplay = useMemo(() => formatDateFr(new Date()), []);
 
-  const nomClient = safeString(docData?.nomClient) || 'Client';
-  const niveauLabel = docData ? displayNiveauService(docData.niveauService) : 'Ponctuel';
-  const typeMission = safeString(docData?.typeMission) || '—';
+  const nomClient = safeString(docData?.nomClient) || safeString(docData?.nom) || 'Client';
+  const niveauLabel = docData ? displayNiveauService(docData.frequency) : 'Ponctuel';
+  const typeMission = safeString(docData?.missionType) || '—';
   const dateVisiteStr = (() => {
     if (!docData) return '—';
-    const d = toDate(docData.dateVisite);
+    const d = toDate(docData.dateAssignation);
     return d ? formatDateFr(d) : '—';
   })();
   const prestataire = safeString(docData?.prestataire) || '—';
   const adresse = safeString(docData?.adresse) || '—';
   const district = safeString(docData?.district) || '—';
-  const contactSurSite = safeString(docData?.contactSurSite) || '—';
+  const contactSurSite = safeString(docData?.onSiteContactName) || '—';
 
   const closeGallery = () => {
     setGalleryOpen(false);
@@ -282,18 +283,18 @@ export default function RapportPage() {
     y += 5;
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(26, 26, 26);
-    pdf.text(safeString(d.nomClient) || 'Client', m, y);
+    pdf.text(safeString(d.nomClient) || safeString(d.nom) || 'Client', m, y);
     y += 5;
-    pdf.text(`Niveau de service : ${displayNiveauService(d.niveauService)}`, m, y);
+    pdf.text(`Niveau de service : ${displayNiveauService(d.frequency)}`, m, y);
     y += 10;
 
-    const tm = safeString(d.typeMission) || '—';
-    const dv = toDate(d.dateVisite);
+    const tm = safeString(d.missionType) || '—';
+    const dv = toDate(d.dateAssignation);
     const dvs = dv ? formatDateFr(dv) : '—';
     const pr = safeString(d.prestataire) || '—';
     const ad = safeString(d.adresse) || '—';
     const di = safeString(d.district) || '—';
-    const cs = safeString(d.contactSurSite) || '—';
+    const cs = safeString(d.onSiteContactName) || '—';
 
     pdf.setFont('helvetica', 'bold');
     pdf.setTextColor(107, 30, 46);
