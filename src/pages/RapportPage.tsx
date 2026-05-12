@@ -119,18 +119,18 @@ function normalizePhotos(photos: unknown): MissionPhoto[] {
 }
 
 const OBS_FALLBACK_P1 =
-  "La visite de vérification a été réalisée à l'adresse déclarée par le prestataire. L'agent TRASIT, mandaté de manière indépendante, a accédé au site sans restriction en présence du contact désigné par le donneur d'ordre, conformément au protocole de vérification établi.";
+  "La visite de vérification a été effectuée à l'adresse déclarée, en présence du contact désigné par le donneur d'ordre. L'agent TRASIT a accédé au site sans restriction, conformément au protocole établi.";
 const OBS_FALLBACK_P2 =
-  "À la date d'intervention, les fondations du bâtiment sont entièrement achevées. L'élévation du premier niveau est en cours d'exécution. Les matériaux présents sur site — sacs de ciment, ferraillage structurel, échafaudage en place — sont cohérents avec la phase de travaux déclarée par l'entrepreneur.";
+  "À la date d'intervention, les fondations sont entièrement achevées et l'élévation du premier niveau est en cours. Les matériaux présents sur site — sacs de ciment, ferraillage structurel, échafaudage en place — sont cohérents avec la phase déclarée.";
 const OBS_FALLBACK_P3 =
-  "L'ensemble des éléments documentés a fait l'objet d'une capture photographique géolocalisée et horodatée, consultable dans la section Photos de ce rapport. Aucune anomalie majeure n'a été relevée lors de l'inspection visuelle du site.";
+  "L'ensemble des éléments a fait l'objet d'une capture photographique géolocalisée et horodatée. Aucune anomalie majeure n'a été relevée lors de l'inspection visuelle.";
 
 const AVIS_FALLBACK_P1 =
-  "Sur la base des éléments collectés lors de cette mission, TRASIT confirme que l'état réel du chantier est cohérent avec les informations qui vous avaient été transmises par le prestataire. Aucun écart significatif n'a été identifié entre la phase déclarée et l'avancement effectivement constaté sur site.";
+  "Sur la base des éléments collectés, TRASIT confirme que l'état réel du chantier est cohérent avec les informations transmises par le prestataire. Aucun écart significatif n'a été identifié entre la phase déclarée et l'avancement constaté sur site.";
 const AVIS_FALLBACK_P2 =
-  "Les preuves documentaires produites dans le cadre de cette mission — photographies horodatées, coordonnées GPS enregistrées, rapport d'agent signé — sont conservées de manière sécurisée dans vos archives TRASIT et restent accessibles à tout moment depuis votre espace client.";
+  "Les preuves documentaires — photographies horodatées, coordonnées GPS, rapport d'agent — sont conservées dans vos archives TRASIT et accessibles à tout moment depuis votre espace client.";
 const RECOMMANDATION =
-  "L'avancement du chantier est conforme au calendrier déclaré. TRASIT recommande de programmer une prochaine vérification lors du passage au second niveau afin de maintenir une traçabilité continue et de disposer d'une documentation actualisée à chaque étape clé.";
+  "L'avancement est conforme au calendrier déclaré. TRASIT recommande de programmer une prochaine vérification lors du passage au second niveau, afin de maintenir une traçabilité continue à chaque étape clé.";
 
 async function fetchLogoAsDataUrl(): Promise<string | null> {
   try {
@@ -150,7 +150,7 @@ async function fetchLogoAsDataUrl(): Promise<string | null> {
 
 const sectionTitleStyle = {
   fontSize: '14px',
-  fontWeight: 500,
+  fontWeight: 700,
   color: '#6B1E2E',
   textTransform: 'uppercase' as const,
   letterSpacing: '1px',
@@ -381,7 +381,14 @@ export default function RapportPage() {
     pdf.text(avisLines, m, y);
     y += avisLines.length * 4 + 8;
 
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(107, 30, 46);
+    pdf.text('RECOMMANDATION', m, y);
+    y += 6;
+
     const recLines = pdf.splitTextToSize(RECOMMANDATION, contentW - 8);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(26, 26, 26);
     pdf.setDrawColor(107, 30, 46);
     pdf.setLineWidth(0.5);
     pdf.line(m, y, m + 3, y);
@@ -452,21 +459,7 @@ export default function RapportPage() {
       </header>
 
       <section style={{ padding: '24px 28px', borderBottom: borderLight }}>
-        <h1 style={{ ...titleMainStyle, margin: '0 0 16px' }}>Rapport de vérification</h1>
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-          <span
-            style={{
-              background: '#6B1E2E',
-              color: '#FFFFFF',
-              fontSize: '14px',
-              fontWeight: 500,
-              borderRadius: '4px',
-              padding: '4px 10px',
-            }}
-          >
-            Document officiel TRASIT
-          </span>
-        </div>
+        <h1 style={{ ...titleMainStyle, margin: '0 0 20px' }}>Rapport de vérification</h1>
         <button
           type="button"
           onClick={() => void generatePDF()}
@@ -576,9 +569,9 @@ export default function RapportPage() {
                 </p>
               ))}
         </div>
+        <div style={{ ...sectionTitleStyle, marginTop: 16, marginBottom: 8 }}>Recommandation</div>
         <div
           style={{
-            marginTop: '16px',
             borderLeft: '3px solid #6B1E2E',
             padding: '12px 16px',
             background: '#FFFFFF',
