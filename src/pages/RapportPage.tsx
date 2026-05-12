@@ -69,17 +69,30 @@ function formatZoneLabel(zone: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-function photosFromDoc(photos: unknown): MissionPhoto[] {
-  if (!Array.isArray(photos)) return [];
-  const out: MissionPhoto[] = [];
-  for (const item of photos) {
-    if (!item || typeof item !== 'object') continue;
-    const o = item as Record<string, unknown>;
-    const url = typeof o.url === 'string' ? o.url.trim() : '';
-    if (!url) continue;
-    out.push({ url, zone: typeof o.zone === 'string' ? o.zone : '' });
+/** Format B : `[{ url, zone }, …]` — Format A : `{ zone: url, … }` */
+function normalizePhotos(photos: unknown): MissionPhoto[] {
+  if (photos == null) return [];
+  if (Array.isArray(photos)) {
+    const out: MissionPhoto[] = [];
+    for (const item of photos) {
+      if (!item || typeof item !== 'object') continue;
+      const o = item as Record<string, unknown>;
+      const url = typeof o.url === 'string' ? o.url.trim() : '';
+      if (!url) continue;
+      out.push({ url, zone: typeof o.zone === 'string' ? o.zone : '' });
+    }
+    return out;
   }
-  return out;
+  if (typeof photos === 'object') {
+    const out: MissionPhoto[] = [];
+    for (const [zone, val] of Object.entries(photos as Record<string, unknown>)) {
+      const url = typeof val === 'string' ? val.trim() : '';
+      if (!url) continue;
+      out.push({ url, zone });
+    }
+    return out;
+  }
+  return [];
 }
 
 const OBS_FALLBACK_P1 =
@@ -180,7 +193,12 @@ export default function RapportPage() {
       try {
         const snap = await getDoc(doc(db, 'fiches_mission', id));
         if (!mounted) return;
-        setDocData(snap.exists() ? (snap.data() as FicheMissionDoc) : null);
+        if (!snap.exists()) {
+          setDocData(null);
+        } else {
+          const raw = snap.data() as FicheMissionDoc;
+          setDocData({ ...raw, photos: normalizePhotos(raw.photos) });
+        }
       } finally {
         if (mounted) setDocLoading(false);
       }
@@ -191,7 +209,7 @@ export default function RapportPage() {
     };
   }, [authUser, id, navigate]);
 
-  const photos = useMemo(() => photosFromDoc(docData?.photos), [docData]);
+  const photos = useMemo(() => (docData?.photos as MissionPhoto[]) ?? [], [docData]);
 
   const refDisplay = useMemo(() => {
     const six = (id || '').slice(0, 6).toUpperCase();
