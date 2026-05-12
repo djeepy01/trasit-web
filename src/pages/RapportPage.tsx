@@ -490,7 +490,7 @@ export default function RapportPage() {
           </div>
           <div>
             <div style={valueDetailStyle}>{nomClient}</div>
-            <div style={{ fontSize: '16px', color: '#444444', marginTop: 6 }}>{niveauLabel}</div>
+            <div style={{ fontSize: '18px', color: '#1A1A1A' }}>{niveauLabel}</div>
           </div>
         </div>
       </section>
@@ -513,7 +513,7 @@ export default function RapportPage() {
             ['Contact sur site', contactSurSite],
           ].map(([lab, val]) => (
             <div key={lab} style={{ minWidth: 0 }}>
-              <div style={{ fontSize: '16px', color: '#444444', marginBottom: 4 }}>{lab}</div>
+              <div style={{ fontSize: '18px', color: '#1A1A1A', marginBottom: '6px' }}>{lab}</div>
               <div style={valueDetailStyle}>{val}</div>
             </div>
           ))}
