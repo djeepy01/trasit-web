@@ -173,8 +173,15 @@ const valueDetailStyle = {
   color: '#1A1A1A',
 };
 
-const metaStyle = {
+/** Réf., date d'émission, footer, messages de chargement — min. 14px, min. #444444 */
+const metaText14 = {
   fontSize: '14px',
+  color: '#444444',
+};
+
+/** Niveau de service sous le nom client — min. 16px, min. #444444 */
+const niveauSousNomStyle = {
+  fontSize: '16px',
   color: '#444444',
 };
 
@@ -409,7 +416,7 @@ export default function RapportPage() {
   if (authUser === undefined) {
     return (
       <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
-        <div style={{ padding: 24, ...metaStyle }}>Chargement…</div>
+        <div style={{ padding: 24, ...metaText14 }}>Chargement…</div>
       </div>
     );
   }
@@ -417,7 +424,7 @@ export default function RapportPage() {
   if (authUser === null) {
     return (
       <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
-        <div style={{ padding: 24, ...metaStyle }}>Redirection…</div>
+        <div style={{ padding: 24, ...metaText14 }}>Redirection…</div>
       </div>
     );
   }
@@ -425,7 +432,7 @@ export default function RapportPage() {
   if (docLoading) {
     return (
       <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
-        <div style={{ padding: 24, ...metaStyle }}>Chargement du rapport…</div>
+        <div style={{ padding: 24, ...metaText14 }}>Chargement du rapport…</div>
       </div>
     );
   }
@@ -433,7 +440,7 @@ export default function RapportPage() {
   if (!docData) {
     return (
       <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
-        <div style={{ padding: 24, ...metaStyle }}>Rapport introuvable.</div>
+        <div style={{ padding: 24, ...metaText14 }}>Rapport introuvable.</div>
       </div>
     );
   }
@@ -453,8 +460,8 @@ export default function RapportPage() {
       >
         <img src="/logo.png" alt="tras•it" style={{ height: '42px', display: 'block' }} />
         <div style={{ textAlign: 'right' }}>
-          <div style={metaStyle}>Réf. {refDisplay}</div>
-          <div style={{ ...metaStyle, marginTop: 6 }}>Émis le {emissionDisplay}</div>
+          <div style={metaText14}>Réf. {refDisplay}</div>
+          <div style={{ ...metaText14, marginTop: 6 }}>Émis le {emissionDisplay}</div>
         </div>
       </header>
 
@@ -500,7 +507,7 @@ export default function RapportPage() {
           </div>
           <div>
             <div style={valueDetailStyle}>{nomClient}</div>
-            <div style={{ ...metaStyle, marginTop: 6 }}>{niveauLabel}</div>
+            <div style={{ ...niveauSousNomStyle, marginTop: 6 }}>{niveauLabel}</div>
           </div>
         </div>
       </section>
@@ -619,7 +626,7 @@ export default function RapportPage() {
         }}
       >
         <img src="/logo.png" alt="tras•it" style={{ height: '28px', opacity: 0.5, display: 'block' }} />
-        <span style={metaStyle}>tras-it.com/rapport/{id}</span>
+        <span style={metaText14}>tras-it.com/rapport/{id}</span>
       </footer>
 
       {galleryOpen ? (
