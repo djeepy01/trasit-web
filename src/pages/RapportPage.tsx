@@ -1,42 +1,40 @@
 import { doc, getDoc } from 'firebase/firestore';
-import { jsPDF } from 'jspdf';
 import { onAuthStateChanged, type User } from 'firebase/auth';
-import { useEffect, useMemo, useState, type CSSProperties } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { jsPDF } from 'jspdf';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { auth, db } from '../firebase';
 
-/** Document Firestore `fiches_mission` — champs réels + alias éventuels */
+type MissionPhoto = { url: string; zone?: string };
+
 type FicheMissionDoc = {
-  numerReference?: string;
-  dateEmission?: unknown;
-  clientName?: string;
-  nom?: string;
-  prenom?: string;
   nomClient?: string;
-  numeroClient?: string;
   niveauService?: string;
-  serviceLevel?: string;
-  missionType?: string;
   typeMission?: string;
-  providerName?: string;
-  siteAddress?: string;
-  siteDistrict?: string;
-  onSiteContactName?: string;
-  onSiteContactPhone?: string;
-  timestamp?: unknown;
   dateVisite?: unknown;
-  statut?: string;
-  observations?: string;
-  avisTrasit?: string;
+  prestataire?: string;
+  adresse?: string;
+  district?: string;
+  contactSurSite?: string;
+  observationsAgent?: string;
+  avisTRASIT?: string;
   photos?: unknown;
-  [key: string]: unknown;
 };
 
+function safeString(v: unknown): string {
+  if (v === null || v === undefined) return '';
+  return String(v).trim();
+}
+
 function toDate(ts: unknown): Date | null {
-  const anyTs = ts as { toDate?: () => Date } | string | number | null | undefined;
+  const anyTs = ts as { toDate?: () => Date; seconds?: number } | string | number | null | undefined;
   if (anyTs && typeof anyTs === 'object' && 'toDate' in anyTs && typeof anyTs.toDate === 'function') {
     const d = anyTs.toDate();
     return d instanceof Date && !Number.isNaN(d.getTime()) ? d : null;
+  }
+  if (anyTs && typeof anyTs === 'object' && 'seconds' in anyTs && typeof (anyTs as { seconds: number }).seconds === 'number') {
+    const d = new Date((anyTs as { seconds: number }).seconds * 1000);
+    return !Number.isNaN(d.getTime()) ? d : null;
   }
   if (typeof anyTs === 'string' || typeof anyTs === 'number') {
     const d = new Date(anyTs);
@@ -45,27 +43,19 @@ function toDate(ts: unknown): Date | null {
   return null;
 }
 
-function safeString(v: unknown): string {
-  if (v === null || v === undefined) return '';
-  return String(v).trim();
+function formatDateFr(d: Date): string {
+  return d.toLocaleDateString('fr-FR');
 }
 
-function isNonEmptyString(v: unknown): v is string {
-  return typeof v === 'string' && v.trim().length > 0;
+function displayNiveauService(raw: unknown): string {
+  const s = safeString(raw).toLowerCase();
+  if (!s || s === 'standard') return 'Ponctuel';
+  return safeString(raw);
 }
 
-function formatTypeMission(raw: unknown): string {
-  const v = safeString(raw).toLowerCase();
-  if (v === 'btp') return 'BTP — Construction';
-  if (v === 'agro') return 'Agrobusiness';
-  if (v === 'elevage') return 'Élevage';
-  const s = safeString(raw);
-  return s || 'BTP — Construction';
-}
-
-function initialsFromName(name: string): string {
+function initialsFromNomClient(name: string): string {
   const t = name.trim();
-  if (!t) return '—';
+  if (!t) return 'TR';
   const parts = t.split(/\s+/).filter(Boolean);
   if (parts.length >= 2) {
     return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
@@ -73,78 +63,115 @@ function initialsFromName(name: string): string {
   return t.slice(0, 2).toUpperCase();
 }
 
-/** Clés snake_case → libellé lisible (ex. zone_specifique → Zone spécifique). */
-function formatPhotoKeyLabel(rawKey: string): string {
-  let s = safeString(rawKey).replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+function formatZoneLabel(zone: string): string {
+  const s = zone.replace(/_/g, ' ').trim();
   if (!s) return 'Photo';
-  s = s.toLowerCase();
-  s = s.replace(/\bfacade\b/gi, 'façade');
-  s = s.replace(/\bentree\b/gi, 'entrée');
-  s = s.replace(/\bspecifique\b/gi, 'spécifique');
-  s = s.replace(/\buvre\b/gi, 'œuvre');
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-function photosFromDoc(photos: unknown): { label: string; url: string }[] {
-  if (photos && typeof photos === 'object' && !Array.isArray(photos)) {
-    const out: { label: string; url: string }[] = [];
-    for (const [label, val] of Object.entries(photos as Record<string, unknown>)) {
-      const url = typeof val === 'string' ? val.trim() : '';
-      if (!url) continue;
-      out.push({ label: formatPhotoKeyLabel(label), url });
-    }
-    return out;
+function photosFromDoc(photos: unknown): MissionPhoto[] {
+  if (!Array.isArray(photos)) return [];
+  const out: MissionPhoto[] = [];
+  for (const item of photos) {
+    if (!item || typeof item !== 'object') continue;
+    const o = item as Record<string, unknown>;
+    const url = typeof o.url === 'string' ? o.url.trim() : '';
+    if (!url) continue;
+    out.push({ url, zone: typeof o.zone === 'string' ? o.zone : '' });
   }
-  if (Array.isArray(photos)) {
-    return photos
-      .filter((u) => isNonEmptyString(u))
-      .map((u, i) => ({ label: `Photo ${i + 1}`, url: (u as string).trim() }));
-  }
-  return [];
+  return out;
 }
+
+const OBS_FALLBACK_P1 =
+  "La visite de vérification a été réalisée à l'adresse déclarée par le prestataire. L'agent TRASIT, mandaté de manière indépendante, a accédé au site sans restriction en présence du contact désigné par le donneur d'ordre, conformément au protocole de vérification établi.";
+const OBS_FALLBACK_P2 =
+  "À la date d'intervention, les fondations du bâtiment sont entièrement achevées. L'élévation du premier niveau est en cours d'exécution. Les matériaux présents sur site — sacs de ciment, ferraillage structurel, échafaudage en place — sont cohérents avec la phase de travaux déclarée par l'entrepreneur.";
+const OBS_FALLBACK_P3 =
+  "L'ensemble des éléments documentés a fait l'objet d'une capture photographique géolocalisée et horodatée, consultable dans la section Photos de ce rapport. Aucune anomalie majeure n'a été relevée lors de l'inspection visuelle du site.";
+
+const AVIS_FALLBACK_P1 =
+  "Sur la base des éléments collectés lors de cette mission, TRASIT confirme que l'état réel du chantier est cohérent avec les informations qui vous avaient été transmises par le prestataire. Aucun écart significatif n'a été identifié entre la phase déclarée et l'avancement effectivement constaté sur site.";
+const AVIS_FALLBACK_P2 =
+  "Les preuves documentaires produites dans le cadre de cette mission — photographies horodatées, coordonnées GPS enregistrées, rapport d'agent signé — sont conservées de manière sécurisée dans vos archives TRASIT et restent accessibles à tout moment depuis votre espace client.";
+const RECOMMANDATION =
+  "L'avancement du chantier est conforme au calendrier déclaré. TRASIT recommande de programmer une prochaine vérification lors du passage au second niveau afin de maintenir une traçabilité continue et de disposer d'une documentation actualisée à chaque étape clé.";
+
+async function fetchLogoAsDataUrl(): Promise<string | null> {
+  try {
+    const res = await fetch('/logo.png');
+    if (!res.ok) return null;
+    const blob = await res.blob();
+    return await new Promise((resolve) => {
+      const r = new FileReader();
+      r.onloadend = () => resolve(typeof r.result === 'string' ? r.result : null);
+      r.onerror = () => resolve(null);
+      r.readAsDataURL(blob);
+    });
+  } catch {
+    return null;
+  }
+}
+
+const sectionTitleStyle = {
+  fontSize: '14px',
+  fontWeight: 500,
+  color: '#6B1E2E',
+  textTransform: 'uppercase' as const,
+  letterSpacing: '1px',
+};
+
+const bodyStyle = {
+  fontSize: '16px',
+  color: '#1A1A1A',
+  lineHeight: '1.8',
+};
+
+const labelDetailStyle = {
+  fontSize: '14px',
+  color: '#444444',
+};
+
+const valueDetailStyle = {
+  fontSize: '16px',
+  fontWeight: 500,
+  color: '#1A1A1A',
+};
+
+const metaStyle = {
+  fontSize: '14px',
+  color: '#444444',
+};
+
+const titleMainStyle = {
+  fontSize: '28px',
+  fontWeight: 700,
+  color: '#1A1A1A',
+};
+
+const borderLight = '1px solid #DDDDDD';
 
 export default function RapportPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [authUser, setAuthUser] = useState<User | null | undefined>(undefined);
   const [docLoading, setDocLoading] = useState(false);
   const [docData, setDocData] = useState<FicheMissionDoc | null>(null);
-
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState<number | null>(null);
-  const [isNarrow, setIsNarrow] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 599px)');
-    const sync = () => setIsNarrow(mq.matches);
-    sync();
-    mq.addEventListener('change', sync);
-    return () => mq.removeEventListener('change', sync);
-  }, []);
-
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
-      setAuthUser(u);
-    });
+    const unsub = onAuthStateChanged(auth, (u) => setAuthUser(u));
     return () => unsub();
   }, []);
 
   useEffect(() => {
     if (authUser === undefined) return;
-
     if (authUser === null) {
-      const returnPath = `${location.pathname}${location.search}`;
-      try {
-        sessionStorage.setItem('trasit_rapport_redirect', returnPath);
-      } catch {
-        /* ignore */
-      }
-      navigate(`/connexion?redirect=${encodeURIComponent(returnPath)}`, { replace: true });
+      const path = `/rapport/${id ?? ''}`;
+      navigate(`/connexion?redirect=${encodeURIComponent(path)}`, { replace: true });
       return;
     }
-
     if (!id) return;
 
     let mounted = true;
@@ -162,532 +189,368 @@ export default function RapportPage() {
     return () => {
       mounted = false;
     };
-  }, [authUser, id, navigate, location.pathname, location.search]);
+  }, [authUser, id, navigate]);
 
   const photos = useMemo(() => photosFromDoc(docData?.photos), [docData]);
 
-  const container: CSSProperties = {
-    maxWidth: 680,
-    margin: '0 auto',
-    padding: '0 20px',
-    background: '#ffffff',
-    boxSizing: 'border-box',
-    width: '100%',
+  const refDisplay = useMemo(() => {
+    const six = (id || '').slice(0, 6).toUpperCase();
+    return `TRS-${six}`;
+  }, [id]);
+
+  const emissionDisplay = useMemo(() => formatDateFr(new Date()), []);
+
+  const nomClient = safeString(docData?.nomClient) || 'Client';
+  const niveauLabel = docData ? displayNiveauService(docData.niveauService) : 'Ponctuel';
+  const typeMission = safeString(docData?.typeMission) || '—';
+  const dateVisiteStr = (() => {
+    if (!docData) return '—';
+    const d = toDate(docData.dateVisite);
+    return d ? formatDateFr(d) : '—';
+  })();
+  const prestataire = safeString(docData?.prestataire) || '—';
+  const adresse = safeString(docData?.adresse) || '—';
+  const district = safeString(docData?.district) || '—';
+  const contactSurSite = safeString(docData?.contactSurSite) || '—';
+
+  const closeGallery = () => {
+    setGalleryOpen(false);
+    setPhotoIndex(null);
   };
+
+  const generatePDF = useCallback(async () => {
+    if (!docData || !id) return;
+    const d = docData;
+    const logoData = await fetchLogoAsDataUrl();
+    const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+    const pageW = 210;
+    const m = 18;
+    const contentW = pageW - 2 * m;
+    let y = 18;
+
+    pdf.setFillColor(255, 255, 255);
+    pdf.rect(0, 0, pageW, 297, 'F');
+
+    if (logoData) {
+      try {
+        pdf.addImage(logoData, 'PNG', m, y, 28, 10);
+        y += 14;
+      } catch {
+        y += 4;
+      }
+    }
+
+    const refPdf = `TRS-${id.slice(0, 6).toUpperCase()}`;
+    const emisPdf = formatDateFr(new Date());
+
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(107, 30, 46);
+    pdf.text(`Réf. ${refPdf}`, m, y);
+    const emisLine = `Émis le ${emisPdf}`;
+    pdf.text(emisLine, pageW - m - pdf.getTextWidth(emisLine), y);
+    y += 10;
+
+    pdf.setFontSize(16);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(26, 26, 26);
+    pdf.text('Rapport de vérification', m, y);
+    y += 12;
+
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(107, 30, 46);
+    pdf.text('CLIENT', m, y);
+    y += 5;
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(26, 26, 26);
+    pdf.text(safeString(d.nomClient) || 'Client', m, y);
+    y += 5;
+    pdf.text(`Niveau de service : ${displayNiveauService(d.niveauService)}`, m, y);
+    y += 10;
+
+    const tm = safeString(d.typeMission) || '—';
+    const dv = toDate(d.dateVisite);
+    const dvs = dv ? formatDateFr(dv) : '—';
+    const pr = safeString(d.prestataire) || '—';
+    const ad = safeString(d.adresse) || '—';
+    const di = safeString(d.district) || '—';
+    const cs = safeString(d.contactSurSite) || '—';
+
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(107, 30, 46);
+    pdf.text('DÉTAILS DE LA MISSION', m, y);
+    y += 6;
+
+    const rows: [string, string][] = [
+      ['Type de mission', tm],
+      ['Date de visite', dvs],
+      ['Prestataire', pr],
+      ['Adresse', ad],
+      ['District', di],
+      ['Contact sur site', cs],
+    ];
+    const colLabel = 55;
+    pdf.setDrawColor(17, 17, 17);
+    pdf.setLineWidth(0.2);
+    for (const [label, val] of rows) {
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(26, 26, 26);
+      pdf.rect(m, y - 4, contentW, 8);
+      pdf.text(label, m + 2, y + 1);
+      pdf.setFont('helvetica', 'normal');
+      const lines = pdf.splitTextToSize(val, contentW - colLabel - 4);
+      pdf.text(lines, m + colLabel, y + 1);
+      y += Math.max(8, lines.length * 4 + 2);
+    }
+    y += 6;
+
+    const obsPdf = safeString(d.observationsAgent)
+      ? safeString(d.observationsAgent)
+      : [OBS_FALLBACK_P1, OBS_FALLBACK_P2, OBS_FALLBACK_P3].join('\n\n');
+
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(107, 30, 46);
+    pdf.text('OBSERVATIONS', m, y);
+    y += 6;
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(26, 26, 26);
+    pdf.setFontSize(9);
+    const obsLines = pdf.splitTextToSize(obsPdf, contentW);
+    pdf.text(obsLines, m, y);
+    y += obsLines.length * 4 + 8;
+
+    if (y > 235) {
+      pdf.addPage();
+      y = 18;
+    }
+
+    const avisPdf = safeString(d.avisTRASIT)
+      ? safeString(d.avisTRASIT)
+      : [AVIS_FALLBACK_P1, AVIS_FALLBACK_P2].join('\n\n');
+
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(107, 30, 46);
+    pdf.text('AVIS TRASIT', m, y);
+    y += 6;
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(26, 26, 26);
+    const avisLines = pdf.splitTextToSize(avisPdf, contentW);
+    pdf.text(avisLines, m, y);
+    y += avisLines.length * 4 + 8;
+
+    const recLines = pdf.splitTextToSize(RECOMMANDATION, contentW - 8);
+    pdf.setDrawColor(107, 30, 46);
+    pdf.setLineWidth(0.5);
+    pdf.line(m, y, m + 3, y);
+    pdf.line(m, y, m, y + Math.max(14, recLines.length * 4));
+    pdf.text(recLines, m + 6, y + 4);
+    y += Math.max(14, recLines.length * 4) + 10;
+
+    pdf.setFontSize(9);
+    pdf.text(`Photos disponibles sur : tras-it.com/rapport/${id}`, m, y);
+
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(26, 26, 26);
+    pdf.text('tras-it.com', pageW / 2 - pdf.getTextWidth('tras-it.com') / 2, 285);
+
+    pdf.save(`rapport-${refPdf.replace('TRS-', '')}.pdf`);
+  }, [docData, id]);
 
   if (authUser === undefined) {
     return (
-      <div style={{ minHeight: '100vh', background: '#ffffff', color: '#111111', overflowX: 'hidden', width: '100%' }}>
-        <div style={{ ...container, paddingTop: 48, paddingBottom: 48 }}>
-          <div style={{ fontSize: 15, fontWeight: 900, color: '#111111' }}>Chargement…</div>
-        </div>
+      <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
+        <div style={{ padding: 24, ...metaStyle }}>Chargement…</div>
       </div>
     );
   }
 
   if (authUser === null) {
     return (
-      <div style={{ minHeight: '100vh', background: '#ffffff', color: '#111111', overflowX: 'hidden', width: '100%' }}>
-        <div style={{ ...container, paddingTop: 48, paddingBottom: 48 }}>
-          <div style={{ fontSize: 15, fontWeight: 900, color: '#111111' }}>Redirection vers la connexion…</div>
-        </div>
+      <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
+        <div style={{ padding: 24, ...metaStyle }}>Redirection…</div>
       </div>
     );
   }
 
   if (docLoading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#ffffff', color: '#111111', overflowX: 'hidden', width: '100%' }}>
-        <div style={{ ...container, paddingTop: 48, paddingBottom: 48 }}>
-          <div style={{ fontSize: 15, fontWeight: 900, color: '#111111' }}>Chargement du rapport…</div>
-        </div>
+      <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
+        <div style={{ padding: 24, ...metaStyle }}>Chargement du rapport…</div>
       </div>
     );
   }
 
   if (!docData) {
     return (
-      <div style={{ minHeight: '100vh', background: '#ffffff', color: '#111111', overflowX: 'hidden', width: '100%' }}>
-        <div style={{ ...container, paddingTop: 48, paddingBottom: 48 }}>
-          <div style={{ fontSize: 15, fontWeight: 900, color: '#111111' }}>Rapport introuvable.</div>
-        </div>
+      <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
+        <div style={{ padding: 24, ...metaStyle }}>Rapport introuvable.</div>
       </div>
     );
   }
 
-  const closeGallery = () => {
-    setGalleryOpen(false);
-    setPhotoIndex(null);
-  };
-  const openZoom = (idx: number) => setPhotoIndex(idx);
-  const closeZoom = () => setPhotoIndex(null);
-  const prevPhoto = () => setPhotoIndex((i) => (i === null ? i : (i - 1 + photos.length) % photos.length));
-  const nextPhoto = () => setPhotoIndex((i) => (i === null ? i : (i + 1) % photos.length));
-
-  const generatePDF = () => {
-    if (!docData) return;
-    const d = docData as FicheMissionDoc & Record<string, unknown>;
-
-    const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
-    const pageW = 210;
-    const marginL = 20;
-    const marginR = 20;
-    const contentW = pageW - marginL - marginR;
-
-    // Données avec fallbacks réalistes pour fiche de démonstration
-    const nomClient =
-      (docData as any).nomClient && (docData as any).nomClient !== 'Agent Test'
-        ? String((docData as any).nomClient)
-        : 'Koné Adjoua Marie';
-    const niveauService = d.niveauService || d.serviceLevel || 'Ponctuel';
-    const typeMission = (() => {
-      const t = String(d.typeMission || d.missionType || '').toLowerCase();
-      if (t === 'btp') return 'BTP — Construction';
-      if (t === 'agro') return 'Agrobusiness';
-      if (t === 'elevage') return 'Élevage';
-      return String(d.typeMission || d.missionType || 'BTP — Construction');
-    })();
-    const dateVisite = (() => {
-      const dv = d.dateVisite as { seconds?: number } | undefined;
-      const ts = d.timestamp as { seconds?: number } | undefined;
-      if (dv?.seconds) return new Date(dv.seconds * 1000).toLocaleDateString('fr-FR');
-      if (ts?.seconds) return new Date(ts.seconds * 1000).toLocaleDateString('fr-FR');
-      return '08/05/2026';
-    })();
-    const prestataire = String(d.prestataire || d.providerName || 'Entreprise Koné Construction');
-    const adresse = String(d.adresse || d.siteAddress || 'Rue des Jardins, Cocody');
-    const district = String(d.district || d.siteDistrict || 'Cocody');
-    const contactSurPlace = (() => {
-      if (d.onSiteContactName) return String(d.onSiteContactName) + (d.onSiteContactPhone ? ' — ' + String(d.onSiteContactPhone) : '');
-      const cs = d.contactSite as { nom?: string; telephone?: string } | undefined;
-      if (cs?.nom) return cs.nom + (cs.telephone ? ' — ' + cs.telephone : '');
-      return 'Moussa Diabaté — +225 07 12 34 56';
-    })();
-    const statut = String(d.statut || 'Soumise');
-    const observations = String(
-      (docData as any).observationsAgent ||
-        "L'agent a effectué la visite terrain le " +
-          dateVisite +
-          ". Le chantier était actif et le contact sur place présent. Les fondations et l'élévation du premier niveau ont été documentées par photos géolocalisées. Les matériaux visibles correspondent à la phase déclarée par l'entrepreneur."
-    );
-
-    const avis = String(
-      (docData as any).avisTRASIT ||
-        (docData as any).avisTrasit ||
-        "Sur la base des éléments documentés, l'avancement du chantier est cohérent avec la phase déclarée. Aucun écart significatif n'a été relevé. Recommandation : le prochain déblocage de fonds peut être envisagé sous réserve de confirmation de la livraison du ferraillage du second niveau."
-    );
-    const refCourt = String(id || '').substring(0, 8).toUpperCase();
-
-    // ── EN-TÊTE ──
-    pdf.setFontSize(26);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(17, 17, 17);
-    pdf.text('TRASIT', marginL, 22);
-    const trasitWidth = pdf.getTextWidth('TRASIT');
-    pdf.setTextColor(166, 61, 47);
-    pdf.text('.', marginL + trasitWidth, 22);
-
-    pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(80, 80, 80);
-    pdf.text('Service de vérification terrain indépendante', marginL, 28);
-
-    pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(107, 30, 46);
-    const refText = 'Réf. ' + refCourt;
-    pdf.text(refText, pageW - marginR - pdf.getTextWidth(refText), 22);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(80, 80, 80);
-    const dateText = 'Émis le ' + new Date().toLocaleDateString('fr-FR');
-    pdf.text(dateText, pageW - marginR - pdf.getTextWidth(dateText), 27);
-
-    pdf.setDrawColor(107, 30, 46);
-    pdf.setLineWidth(0.8);
-    pdf.line(marginL, 32, pageW - marginR, 32);
-
-    // ── BLOC CLIENT ──
-    pdf.setFillColor(107, 30, 46);
-    pdf.rect(marginL, 37, contentW, 6, 'F');
-    pdf.setFontSize(8);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(255, 255, 255);
-    pdf.text('CLIENT', marginL + 3, 41.5);
-
-    pdf.setDrawColor(107, 30, 46);
-    pdf.setLineWidth(0.4);
-    pdf.rect(marginL, 37, contentW, 20);
-
-    pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(17, 17, 17);
-    pdf.text(nomClient, marginL + 3, 50);
-
-    pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(107, 30, 46);
-    pdf.text('Niveau de service : ' + niveauService, marginL + 3, 55);
-
-    // ── TITRE ──
-    let y = 68;
-    pdf.setFontSize(15);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(17, 17, 17);
-    pdf.text('Rapport de vérification terrain', marginL, y);
-    y += 3;
-    pdf.setDrawColor(107, 30, 46);
-    pdf.setLineWidth(0.5);
-    pdf.line(marginL, y, pageW - marginR, y);
-    y += 7;
-
-    // ── DÉTAILS MISSION ──
-    const details: [string, string][] = [
-      ['Type de mission', typeMission],
-      ['Date de visite', dateVisite],
-      ['Prestataire vérifié', prestataire],
-      ['Adresse du site', adresse],
-      ['District', district],
-      ['Contact sur place', contactSurPlace],
-      ['Statut', statut],
-    ];
-
-    details.forEach(([label, value]) => {
-      pdf.setFontSize(9);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor(107, 30, 46);
-      pdf.text(label + ' :', marginL, y);
-      pdf.setFont('helvetica', 'normal');
-      pdf.setTextColor(17, 17, 17);
-      const lines = pdf.splitTextToSize(value, contentW - 60);
-      pdf.text(lines, marginL + 60, y);
-      y += lines.length * 5 + 2;
-    });
-
-    // ── OBSERVATIONS TERRAIN ──
-    y += 4;
-    pdf.setDrawColor(17, 17, 17);
-    pdf.setLineWidth(0.3);
-    pdf.line(marginL, y, pageW - marginR, y);
-    y += 6;
-    pdf.setFontSize(11);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(17, 17, 17);
-    pdf.text('Observations terrain', marginL, y);
-    y += 6;
-    pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'normal');
-    const obsLines = pdf.splitTextToSize(observations, contentW);
-    pdf.text(obsLines, marginL, y);
-    y += obsLines.length * 5 + 6;
-
-    // ── AVIS TRASIT ──
-    if (y > 220) {
-      pdf.addPage();
-      y = 20;
-    }
-    pdf.setFillColor(107, 30, 46);
-    pdf.rect(marginL, y, contentW, 6, 'F');
-    pdf.setFontSize(8);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(255, 255, 255);
-    pdf.text('AVIS TRASIT', marginL + 3, y + 4.5);
-    y += 9;
-    pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(17, 17, 17);
-    const avisLines = pdf.splitTextToSize(avis, contentW);
-    pdf.text(avisLines, marginL, y);
-    y += avisLines.length * 5 + 8;
-
-    // ── FOOTER ──
-    const footerY = Math.max(y + 5, 255);
-    pdf.setDrawColor(107, 30, 46);
-    pdf.setLineWidth(0.5);
-    pdf.line(marginL, footerY, pageW - marginR, footerY);
-    pdf.setFontSize(8);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(107, 30, 46);
-    pdf.text('TRASIT — trasit.com', marginL, footerY + 5);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(17, 17, 17);
-    pdf.text('Photos et rapport complet : trasit.com/rapport/' + String(id || ''), marginL, footerY + 10);
-
-    pdf.save('rapport-trasit-' + refCourt + '.pdf');
-  };
-
-  const dView = docData as FicheMissionDoc & Record<string, unknown>;
-  const refCourtHeader = String(id || '').slice(0, 8).toUpperCase();
-  const dateEmissionHeader = new Date().toLocaleDateString('fr-FR');
-  const nomClientBloc = safeString(docData.nomClient) || 'Koné Adjoua Marie';
-  const clientInitials = initialsFromName(nomClientBloc);
-  const niveauServiceBloc = safeString(docData.niveauService) || safeString(docData.serviceLevel) || 'Ponctuel';
-  const typeMissionBloc = formatTypeMission(docData.missionType ?? docData.typeMission);
-  const dateVisiteBloc = (() => {
-    const dv = docData.dateVisite as { seconds?: number } | undefined;
-    if (dv?.seconds) return new Date(dv.seconds * 1000).toLocaleDateString('fr-FR');
-    const ts = docData.timestamp as { seconds?: number } | undefined;
-    if (ts?.seconds) return new Date(ts.seconds * 1000).toLocaleDateString('fr-FR');
-    const dt = toDate(docData.dateVisite) ?? toDate(docData.timestamp);
-    return dt ? dt.toLocaleDateString('fr-FR') : '08/05/2026';
-  })();
-  const prestataireBloc =
-    safeString(dView.prestataire) || safeString(docData.providerName) || 'Entreprise Koné Construction';
-  const adresseBloc = safeString(dView.adresse) || safeString(docData.siteAddress) || 'Rue des Jardins, Cocody';
-  const districtBloc = safeString(dView.district) || safeString(docData.siteDistrict) || 'Cocody';
-  const contactSurPlaceBloc = (() => {
-    const n = safeString(docData.onSiteContactName);
-    const p = safeString(docData.onSiteContactPhone);
-    if (n && p) return `${n} — ${p}`;
-    if (n || p) return n || p;
-    const cs = dView.contactSite as { nom?: string; telephone?: string } | undefined;
-    const cn = safeString(cs?.nom);
-    const ct = safeString(cs?.telephone);
-    if (cn && ct) return `${cn} — ${ct}`;
-    if (cn || ct) return cn || ct;
-    return 'Moussa Diabaté — +225 07 12 34 56';
-  })();
-  const statutBloc = safeString(docData.statut) || 'Soumise';
-  const observationsBloc =
-    safeString(dView.observationsAgent) ||
-    "L'agent déployé sur site a pu accéder librement au chantier en présence du contact désigné. Les fondations sont achevées et l'élévation du premier niveau est en cours d'exécution. Les matériaux présents — sacs de ciment, ferraillage, échafaudage — correspondent à la phase déclarée. Aucune anomalie visuelle n'a été relevée lors de la visite.";
-  const avisBloc =
-    safeString(dView.avisTRASIT) ||
-    safeString(docData.avisTrasit) ||
-    "Les éléments documentés lors de cette visite permettent d'établir que l'état réel du chantier est cohérent avec les informations transmises. Les photos géolocalisées et horodatées soumises par l'agent constituent une preuve documentaire fiable, consultable à tout moment depuis votre espace client.";
-
-  const fieldLabel: CSSProperties = {
-    fontSize: 12,
-    color: '#888888',
-    marginBottom: 3,
-  };
-  const fieldValue: CSSProperties = {
-    fontSize: 15,
-    fontWeight: 500,
-    color: '#111111',
-    wordBreak: 'break-word',
-  };
-  const missionGrid: CSSProperties = {
-    display: 'grid',
-    gridTemplateColumns: isNarrow ? 'minmax(0,1fr)' : 'minmax(0,1fr) minmax(0,1fr)',
-    gap: 16,
-  };
-
   return (
-    <div style={{ minHeight: '100vh', background: '#ffffff', color: '#111111', overflowX: 'hidden', width: '100%', boxSizing: 'border-box' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFF', boxSizing: 'border-box', width: '100%' }}>
       <header
         style={{
-          padding: '28px 36px',
-          borderBottom: '0.5px solid #E5E5E5',
-          background: '#ffffff',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          gap: 16,
+          padding: '20px 28px',
+          borderBottom: borderLight,
           flexWrap: 'wrap',
+          gap: 16,
         }}
       >
-        <img src="/logo.png" alt="tras•it" style={{ height: '56px', display: 'block' }} />
-        <div style={{ textAlign: isNarrow ? 'left' : 'right', minWidth: 0 }}>
-          <div style={{ fontSize: 15, fontWeight: 500, color: '#111111' }}>Réf. {refCourtHeader}</div>
-          <div style={{ fontSize: 15, fontWeight: 500, color: '#111111', marginTop: 4 }}>{dateEmissionHeader}</div>
+        <img src="/logo.png" alt="tras•it" style={{ height: '42px', display: 'block' }} />
+        <div style={{ textAlign: 'right' }}>
+          <div style={metaStyle}>Réf. {refDisplay}</div>
+          <div style={{ ...metaStyle, marginTop: 6 }}>Émis le {emissionDisplay}</div>
         </div>
       </header>
 
-      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#ffffff' }}>
-        <div style={{ fontSize: 22, fontWeight: 500, color: '#111111', marginBottom: 14 }}>Rapport de vérification</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 16 }}>
-          <div
+      <section style={{ padding: '24px 28px', borderBottom: borderLight }}>
+        <h1 style={{ ...titleMainStyle, margin: '0 0 16px' }}>Rapport de vérification</h1>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+          <span
             style={{
-              width: 22,
-              height: 22,
-              borderRadius: '50%',
               background: '#6B1E2E',
-              display: 'grid',
-              placeItems: 'center',
-              flexShrink: 0,
+              color: '#FFFFFF',
+              fontSize: '14px',
+              fontWeight: 500,
+              borderRadius: '4px',
+              padding: '4px 10px',
             }}
-            aria-hidden
           >
-            <span style={{ color: '#FFFFFF', fontSize: 13, lineHeight: 1, fontWeight: 500 }}>✓</span>
-          </div>
-          <span style={{ fontSize: 13, color: '#6B1E2E', fontWeight: 400 }}>
-            Document officiel TRASIT — indépendant et traçable
+            Document officiel TRASIT
           </span>
         </div>
         <button
           type="button"
-          onClick={generatePDF}
+          onClick={() => void generatePDF()}
           style={{
             background: '#111111',
             color: '#FFFFFF',
-            fontSize: 14,
+            fontSize: '16px',
             fontWeight: 500,
             padding: '12px 24px',
-            borderRadius: 8,
+            borderRadius: '8px',
             border: 'none',
             cursor: 'pointer',
           }}
         >
-          Télécharger le rapport PDF
+          Télécharger le PDF
         </button>
       </section>
 
-      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#ffffff' }}>
-        <div
-          style={{
-            fontSize: 12,
-            textTransform: 'uppercase',
-            letterSpacing: 1,
-            color: '#888888',
-            marginBottom: 14,
-          }}
-        >
-          CLIENT
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+      <section style={{ padding: '24px 28px', borderBottom: borderLight }}>
+        <div style={{ ...sectionTitleStyle, marginBottom: 16 }}>Client</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
           <div
             style={{
-              width: 48,
-              height: 48,
+              width: 56,
+              height: 56,
               borderRadius: '50%',
-              background: '#F5E8EB',
-              color: '#6B1E2E',
-              fontSize: 16,
-              fontWeight: 500,
+              background: '#6B1E2E',
+              color: '#FFFFFF',
+              fontSize: '16px',
+              fontWeight: 600,
               display: 'grid',
               placeItems: 'center',
               flexShrink: 0,
             }}
             aria-hidden
           >
-            {clientInitials}
+            {initialsFromNomClient(nomClient)}
           </div>
-          <div style={{ minWidth: 0 }}>
-            <div style={{ fontSize: 18, fontWeight: 500, color: '#111111', wordBreak: 'break-word' }}>{nomClientBloc}</div>
-            <div style={{ fontSize: 13, color: '#888888', marginTop: 4 }}>{niveauServiceBloc}</div>
+          <div>
+            <div style={valueDetailStyle}>{nomClient}</div>
+            <div style={{ ...metaStyle, marginTop: 6 }}>{niveauLabel}</div>
           </div>
         </div>
       </section>
 
-      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#ffffff' }}>
+      <section style={{ padding: '24px 28px', borderBottom: borderLight }}>
+        <div style={{ ...sectionTitleStyle, marginBottom: 16 }}>Détails de la mission</div>
         <div
           style={{
-            fontSize: 12,
-            textTransform: 'uppercase',
-            letterSpacing: 1,
-            color: '#888888',
-            marginBottom: 16,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gap: '20px 24px',
           }}
         >
-          DÉTAILS DE LA MISSION
-        </div>
-        <div style={missionGrid}>
-          <div style={{ minWidth: 0 }}>
-            <div style={fieldLabel}>Type de mission</div>
-            <div style={fieldValue}>{typeMissionBloc}</div>
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <div style={fieldLabel}>Date de visite</div>
-            <div style={fieldValue}>{dateVisiteBloc}</div>
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <div style={fieldLabel}>Prestataire vérifié</div>
-            <div style={fieldValue}>{prestataireBloc}</div>
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <div style={fieldLabel}>Adresse</div>
-            <div style={fieldValue}>{adresseBloc}</div>
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <div style={fieldLabel}>District</div>
-            <div style={fieldValue}>{districtBloc}</div>
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <div style={fieldLabel}>Contact sur place</div>
-            <div style={fieldValue}>{contactSurPlaceBloc}</div>
-          </div>
-          <div style={{ minWidth: 0, gridColumn: isNarrow ? undefined : '1 / -1' }}>
-            <div style={fieldLabel}>Statut</div>
-            <div>
-              <span
-                style={{
-                  display: 'inline-block',
-                  background: '#FFF5E8',
-                  color: '#854F0B',
-                  fontSize: 13,
-                  fontWeight: 500,
-                  padding: '4px 14px',
-                  borderRadius: 20,
-                }}
-              >
-                {statutBloc}
-              </span>
+          {[
+            ['Type de mission', typeMission],
+            ['Date de visite', dateVisiteStr],
+            ['Prestataire', prestataire],
+            ['Adresse', adresse],
+            ['District', district],
+            ['Contact sur site', contactSurSite],
+          ].map(([lab, val]) => (
+            <div key={lab} style={{ minWidth: 0 }}>
+              <div style={{ ...labelDetailStyle, marginBottom: 4 }}>{lab}</div>
+              <div style={valueDetailStyle}>{val}</div>
             </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#ffffff' }}>
-        <div
-          style={{
-            fontSize: 12,
-            textTransform: 'uppercase',
-            letterSpacing: 1,
-            color: '#888888',
-            marginBottom: 12,
-          }}
-        >
-          OBSERVATIONS
+      <section style={{ padding: '24px 28px', borderBottom: borderLight }}>
+        <div style={{ ...sectionTitleStyle, marginBottom: 12 }}>Observations</div>
+        <div style={bodyStyle}>
+          {safeString(docData.observationsAgent)
+            ? safeString(docData.observationsAgent)
+                .split(/\n\n+/)
+                .map((block, i) => (
+                  <p key={i} style={{ margin: i === 0 ? 0 : '1em 0 0' }}>
+                    {block}
+                  </p>
+                ))
+            : [OBS_FALLBACK_P1, OBS_FALLBACK_P2, OBS_FALLBACK_P3].map((p, i) => (
+                <p key={i} style={{ margin: i === 0 ? 0 : '1em 0 0' }}>
+                  {p}
+                </p>
+              ))}
         </div>
-        <div style={{ fontSize: 15, lineHeight: 1.8, color: '#111111' }}>{observationsBloc}</div>
       </section>
 
-      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#F9F9F8' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-          <div style={{ width: 4, height: 20, background: '#6B1E2E', flexShrink: 0 }} aria-hidden />
-          <div
-            style={{
-              fontSize: 12,
-              textTransform: 'uppercase',
-              letterSpacing: 1,
-              color: '#6B1E2E',
-              fontWeight: 500,
-            }}
-          >
-            AVIS TRASIT
-          </div>
+      <section style={{ padding: '24px 28px', borderBottom: borderLight, background: '#F7F5F2' }}>
+        <div style={{ display: 'flex', alignItems: 'stretch', gap: 12, marginBottom: 16 }}>
+          <div style={{ width: '4px', background: '#6B1E2E', flexShrink: 0, borderRadius: '2px' }} aria-hidden />
+          <div style={sectionTitleStyle}>Avis TRASIT</div>
         </div>
-        <div style={{ fontSize: 15, lineHeight: 1.8, color: '#111111', marginBottom: 14 }}>{avisBloc}</div>
+        <div style={bodyStyle}>
+          {safeString(docData.avisTRASIT)
+            ? safeString(docData.avisTRASIT)
+                .split(/\n\n+/)
+                .map((block, i) => (
+                  <p key={i} style={{ margin: i === 0 ? 0 : '1em 0 0' }}>
+                    {block}
+                  </p>
+                ))
+            : [AVIS_FALLBACK_P1, AVIS_FALLBACK_P2].map((p, i) => (
+                <p key={i} style={{ margin: i === 0 ? 0 : '1em 0 0' }}>
+                  {p}
+                </p>
+              ))}
+        </div>
         <div
           style={{
+            marginTop: '16px',
             borderLeft: '3px solid #6B1E2E',
-            background: '#ffffff',
+            padding: '12px 16px',
+            background: '#FFFFFF',
             borderRadius: '0 8px 8px 0',
-            padding: '14px 16px',
-            fontSize: 15,
-            lineHeight: 1.8,
-            color: '#111111',
+            ...bodyStyle,
           }}
         >
-          <span style={{ fontWeight: 500, color: '#6B1E2E' }}>Recommandation —</span>
-          {
-            " L'état du site observé est conforme aux informations qui vous avaient été transmises. Une prochaine vérification par notre agent permettrait de documenter la progression vers le niveau suivant et d'anticiper toute situation nécessitant votre attention."
-          }
+          {RECOMMANDATION}
         </div>
       </section>
 
-      <section style={{ padding: '24px 36px', borderBottom: '0.5px solid #E5E5E5', background: '#ffffff' }}>
-        <div
-          style={{
-            fontSize: 12,
-            textTransform: 'uppercase',
-            letterSpacing: 1,
-            color: '#888888',
-            marginBottom: 14,
-          }}
-        >
-          PHOTOS
-        </div>
+      <section style={{ padding: '24px 28px', borderBottom: borderLight }}>
+        <div style={{ ...sectionTitleStyle, marginBottom: 14 }}>Photos</div>
         <button
           type="button"
           onClick={() => {
@@ -697,13 +560,13 @@ export default function RapportPage() {
           style={{
             width: '100%',
             boxSizing: 'border-box',
-            background: '#F5F5F3',
-            border: '0.5px solid #E5E5E5',
-            borderRadius: 8,
-            padding: 14,
-            fontSize: 15,
-            color: '#111111',
+            padding: '14px 16px',
+            fontSize: '16px',
             fontWeight: 500,
+            color: '#1A1A1A',
+            background: '#FFFFFF',
+            border: borderLight,
+            borderRadius: '8px',
             cursor: 'pointer',
           }}
         >
@@ -713,19 +576,16 @@ export default function RapportPage() {
 
       <footer
         style={{
-          padding: '18px 36px',
+          padding: '18px 28px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          gap: 16,
           flexWrap: 'wrap',
-          background: '#ffffff',
+          gap: 12,
         }}
       >
-        <img src="/logo.png" alt="tras•it" style={{ height: '26px', opacity: 0.5, display: 'block' }} />
-        <div style={{ fontSize: 12, color: '#888888' }}>
-          tras-it.com/rapport/{id || ''}
-        </div>
+        <img src="/logo.png" alt="tras•it" style={{ height: '28px', opacity: 0.5, display: 'block' }} />
+        <span style={metaStyle}>tras-it.com/rapport/{id}</span>
       </footer>
 
       {galleryOpen ? (
@@ -735,79 +595,72 @@ export default function RapportPage() {
           style={{
             position: 'fixed',
             inset: 0,
-            background: '#111111',
+            background: 'rgba(0, 0, 0, 0.85)',
             zIndex: 9990,
             overflowY: 'auto',
-            overflowX: 'hidden',
-            boxSizing: 'border-box',
             padding: '56px 20px 32px',
+            boxSizing: 'border-box',
           }}
         >
           <button
             type="button"
             onClick={closeGallery}
-            aria-label="Fermer la galerie"
+            aria-label="Fermer"
             style={{
               position: 'fixed',
-              top: 18,
-              right: 18,
+              top: 16,
+              right: 16,
               zIndex: 9992,
-              background: 'transparent',
               border: 'none',
-              color: '#ffffff',
-              fontSize: 28,
-              fontWeight: 300,
+              background: 'transparent',
+              color: '#FFFFFF',
+              fontSize: '28px',
               lineHeight: 1,
-              padding: 8,
               cursor: 'pointer',
+              padding: 8,
             }}
           >
             ×
           </button>
-
           <div
             style={{
               maxWidth: 960,
               margin: '0 auto',
-              width: '100%',
               display: 'grid',
               gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-              gap: 14,
-              boxSizing: 'border-box',
+              gap: 16,
             }}
           >
-            {photos.map((item, idx) => (
-              <div key={`${item.url}-${idx}`} style={{ minWidth: 0, maxWidth: '100%', boxSizing: 'border-box' }}>
+            {photos.map((ph, idx) => (
+              <div key={`${ph.url}-${idx}`} style={{ minWidth: 0 }}>
                 <button
                   type="button"
-                  onClick={() => openZoom(idx)}
+                  onClick={() => setPhotoIndex(idx)}
                   style={{
-                    background: 'transparent',
                     border: 'none',
                     padding: 0,
                     margin: 0,
+                    background: 'transparent',
                     cursor: 'pointer',
                     width: '100%',
-                    textAlign: 'left',
                     display: 'block',
                   }}
                 >
                   <img
-                    src={item.url}
-                    alt={item.label}
+                    src={ph.url}
+                    alt={formatZoneLabel(ph.zone || '')}
                     style={{
                       width: '100%',
-                      maxWidth: '100%',
                       height: 160,
                       objectFit: 'cover',
                       borderRadius: 8,
                       display: 'block',
-                      border: '2px solid #ffffff',
-                      boxSizing: 'border-box',
                     }}
                   />
                 </button>
-                <div style={{ marginTop: 8, fontSize: 15, fontWeight: 700, color: '#ffffff', wordBreak: 'break-word' }}>{item.label}</div>
+                <div style={{ marginTop: 8, fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>
+                  {formatZoneLabel(ph.zone || '')}
+                </div>
               </div>
             ))}
           </div>
@@ -818,89 +671,81 @@ export default function RapportPage() {
         <div
           role="dialog"
           aria-modal="true"
-          onClick={closeZoom}
+          onClick={() => setPhotoIndex(null)}
           style={{
             position: 'fixed',
             inset: 0,
-            background: '#111111',
+            background: 'rgba(0, 0, 0, 0.85)',
             zIndex: 10000,
             display: 'flex',
             flexDirection: 'column',
-            minHeight: 0,
           }}
         >
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              closeZoom();
+              setPhotoIndex(null);
             }}
             aria-label="Fermer le zoom"
             style={{
               position: 'absolute',
-              top: 18,
-              right: 18,
+              top: 16,
+              right: 16,
               zIndex: 10001,
-              background: 'transparent',
               border: 'none',
-              color: '#ffffff',
-              fontSize: 28,
-              fontWeight: 300,
-              lineHeight: 1,
-              padding: 8,
+              background: 'transparent',
+              color: '#FFFFFF',
+              fontSize: '28px',
               cursor: 'pointer',
+              padding: 8,
             }}
           >
             ×
           </button>
-
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
               flex: 1,
               display: 'grid',
               placeItems: 'center',
-              padding: '56px 18px 18px',
+              padding: '56px 20px 20px',
               minHeight: 0,
             }}
           >
             <img
               src={photos[photoIndex].url}
-              alt={photos[photoIndex].label}
+              alt={formatZoneLabel(photos[photoIndex].zone || '')}
               style={{
-                maxWidth: '90vw',
-                maxHeight: '90vh',
-                width: 'auto',
-                height: 'auto',
+                maxWidth: '92vw',
+                maxHeight: '82vh',
                 objectFit: 'contain',
-                border: '2px solid #ffffff',
-                borderRadius: 12,
-                display: 'block',
+                borderRadius: 8,
               }}
             />
           </div>
-
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
               display: 'flex',
               justifyContent: 'space-between',
-              padding: 18,
+              padding: '16px 24px 24px',
               gap: 12,
-              flexShrink: 0,
             }}
           >
             <button
               type="button"
-              onClick={prevPhoto}
+              onClick={() =>
+                setPhotoIndex((i) => (i === null ? i : (i - 1 + photos.length) % photos.length))
+              }
               style={{
+                border: '2px solid #FFFFFF',
                 background: 'transparent',
-                border: '2px solid #ffffff',
-                color: '#ffffff',
-                fontSize: 15,
-                fontWeight: 900,
-                padding: '12px 16px',
-                borderRadius: 10,
+                color: '#FFFFFF',
+                fontSize: '16px',
+                fontWeight: 500,
+                padding: '12px 20px',
+                borderRadius: 8,
                 cursor: 'pointer',
               }}
             >
@@ -908,15 +753,15 @@ export default function RapportPage() {
             </button>
             <button
               type="button"
-              onClick={nextPhoto}
+              onClick={() => setPhotoIndex((i) => (i === null ? i : (i + 1) % photos.length))}
               style={{
+                border: '2px solid #FFFFFF',
                 background: 'transparent',
-                border: '2px solid #ffffff',
-                color: '#ffffff',
-                fontSize: 15,
-                fontWeight: 900,
-                padding: '12px 16px',
-                borderRadius: 10,
+                color: '#FFFFFF',
+                fontSize: '16px',
+                fontWeight: 500,
+                padding: '12px 20px',
+                borderRadius: 8,
                 cursor: 'pointer',
               }}
             >
