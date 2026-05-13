@@ -259,6 +259,42 @@ export default function RapportPage() {
     const contentW = pageW - 2 * m;
     let y = 18;
 
+    const SECTION_GAP = 8;
+    const PAGE_TEXT_BOTTOM = 270;
+    const PAGE_TOP_AFTER_BREAK = 20;
+
+    const lineHeightMm = () => {
+      const fs = pdf.getFontSize();
+      const j = pdf as jsPDF & { getLineHeightFactor?: () => number };
+      const factor = typeof j.getLineHeightFactor === 'function' ? j.getLineHeightFactor() : 1.15;
+      return (fs * factor * 25.4) / 72;
+    };
+
+    const bumpPageIfNeeded = (blockHeightMm: number) => {
+      if (y + blockHeightMm > PAGE_TEXT_BOTTOM) {
+        pdf.addPage();
+        y = PAGE_TOP_AFTER_BREAK;
+      }
+    };
+
+    /** Dessine des lignes découpées ; met à jour y (saut de page si besoin). */
+    const drawWrappedLines = (lines: string[], x: number) => {
+      const lh = lineHeightMm();
+      const queue = [...lines];
+      while (queue.length > 0) {
+        let fit = Math.floor((PAGE_TEXT_BOTTOM - y) / lh);
+        if (fit < 1) {
+          pdf.addPage();
+          y = PAGE_TOP_AFTER_BREAK;
+          fit = Math.floor((PAGE_TEXT_BOTTOM - y) / lh);
+        }
+        const n = Math.min(fit, queue.length);
+        const chunk = queue.splice(0, n);
+        pdf.text(chunk, x, y);
+        y += chunk.length * lh;
+      }
+    };
+
     pdf.setFillColor(255, 255, 255);
     pdf.rect(0, 0, pageW, 297, 'F');
 
@@ -280,26 +316,13 @@ export default function RapportPage() {
     pdf.text(`Réf. ${refPdf}`, m, y);
     const emisLine = `Émis le ${emisPdf}`;
     pdf.text(emisLine, pageW - m - pdf.getTextWidth(emisLine), y);
-    y += 10;
+    y += lineHeightMm() + 4;
 
     pdf.setFontSize(16);
     pdf.setFont('helvetica', 'bold');
     pdf.setTextColor(26, 26, 26);
     pdf.text('Rapport de vérification', m, y);
-    y += 12;
-
-    pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(107, 30, 46);
-    pdf.text('CLIENT', m, y);
-    y += 5;
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(26, 26, 26);
-    pdf.text(safeString(d.nomClient) || safeString(d.nom) || 'Client', m, y);
-    y += 5;
-    pdf.text(`Niveau de service : ${displayNiveauService(d.frequency)}`, m, y);
-    y += 10;
+    y += lineHeightMm() + SECTION_GAP;
 
     const tm = formatMissionType(d.missionType);
     const dv = toDate(d.dateAssignation);
@@ -309,11 +332,26 @@ export default function RapportPage() {
     const di = safeString(d.siteDistrict) || 'Abidjan Sud';
     const cs = safeString(d.onSiteContactName) || '—';
 
+    bumpPageIfNeeded(42);
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(107, 30, 46);
+    pdf.text('CLIENT', m, y);
+    y += lineHeightMm() + 4;
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(26, 26, 26);
+    pdf.text(safeString(d.nomClient) || safeString(d.nom) || 'Client', m, y);
+    y += lineHeightMm();
+    pdf.text(`Niveau de service : ${displayNiveauService(d.frequency)}`, m, y);
+    y += lineHeightMm() + SECTION_GAP;
+
+    bumpPageIfNeeded(50);
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
     pdf.setTextColor(107, 30, 46);
     pdf.text('DÉTAILS DE LA MISSION', m, y);
-    y += 6;
+    y += lineHeightMm() + 4;
 
     const xColLeft = 20;
     const xColRight = 110;
@@ -321,8 +359,6 @@ export default function RapportPage() {
     const wColRight = 82;
     const gapLabelValueMm = (6 / 96) * 25.4;
     const gapPairMm = (14 / 96) * 25.4;
-    const labelLineHmm = 11 * 0.352778;
-    const valueLineHmm = 13 * 0.352778;
 
     const pdfDetailCellBottom = (x: number, yTop: number, maxW: number, label: string, value: string): number => {
       let yCur = yTop;
@@ -330,13 +366,13 @@ export default function RapportPage() {
       pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(68, 68, 68);
       pdf.text(label, x, yCur);
-      yCur += labelLineHmm + gapLabelValueMm;
+      yCur += lineHeightMm() + gapLabelValueMm;
       pdf.setFontSize(13);
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor(26, 26, 26);
       const valLines = pdf.splitTextToSize(value, maxW);
       pdf.text(valLines, x, yCur);
-      yCur += valLines.length * valueLineHmm;
+      yCur += valLines.length * lineHeightMm();
       return yCur;
     };
 
@@ -345,72 +381,84 @@ export default function RapportPage() {
       ['Prestataire', pr, 'Adresse', ad],
       ['District', di, 'Contact sur site', cs],
     ];
-    for (const [labL, valL, labR, valR] of rowPairs) {
+    rowPairs.forEach(([labL, valL, labR, valR], idx) => {
+      bumpPageIfNeeded(48);
       const bottomL = pdfDetailCellBottom(xColLeft, y, wColLeft, labL, valL);
       const bottomR = pdfDetailCellBottom(xColRight, y, wColRight, labR, valR);
-      y = Math.max(bottomL, bottomR) + gapPairMm;
-    }
+      y = Math.max(bottomL, bottomR) + (idx < rowPairs.length - 1 ? gapPairMm : 0);
+    });
+    y += SECTION_GAP;
 
     const obsPdf = safeString(d.observationsAgent)
       ? safeString(d.observationsAgent)
       : [OBS_FALLBACK_P1, OBS_FALLBACK_P2, OBS_FALLBACK_P3].join('\n\n');
 
+    bumpPageIfNeeded(28);
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
     pdf.setTextColor(107, 30, 46);
     pdf.text('OBSERVATIONS', m, y);
-    y += 6;
+    y += lineHeightMm() + 4;
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(26, 26, 26);
     pdf.setFontSize(13);
     const obsLines = pdf.splitTextToSize(obsPdf, contentW);
-    pdf.text(obsLines, m, y);
-    y += obsLines.length * 4 + 8;
-
-    if (y > 235) {
-      pdf.addPage();
-      y = 18;
-    }
+    drawWrappedLines(obsLines, m);
+    y += SECTION_GAP;
 
     const avisPdf = safeString(d.avisTRASIT)
       ? safeString(d.avisTRASIT)
       : [AVIS_FALLBACK_P1, AVIS_FALLBACK_P2].join('\n\n');
 
+    bumpPageIfNeeded(28);
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
     pdf.setTextColor(107, 30, 46);
     pdf.text('AVIS TRASIT', m, y);
-    y += 6;
+    y += lineHeightMm() + 4;
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(26, 26, 26);
     pdf.setFontSize(13);
     const avisLines = pdf.splitTextToSize(avisPdf, contentW);
-    pdf.text(avisLines, m, y);
-    y += avisLines.length * 4 + 8;
+    drawWrappedLines(avisLines, m);
+    y += SECTION_GAP;
 
+    bumpPageIfNeeded(40);
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
     pdf.setTextColor(107, 30, 46);
     pdf.text('RECOMMANDATION', m, y);
-    y += 6;
+    y += lineHeightMm() + 4;
 
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(26, 26, 26);
     pdf.setFontSize(13);
     const recLines = pdf.splitTextToSize(RECOMMANDATION, contentW - 8);
+    const recLh = lineHeightMm();
+    const recTextH = recLines.length * recLh + 4;
+    const recBoxH = Math.max(14, recTextH);
+    bumpPageIfNeeded(recBoxH + SECTION_GAP + 8);
+
+    const yDecorTop = y;
     pdf.setDrawColor(107, 30, 46);
     pdf.setLineWidth(0.5);
-    pdf.line(m, y, m + 3, y);
-    pdf.line(m, y, m, y + Math.max(14, recLines.length * 4));
-    pdf.text(recLines, m + 6, y + 4);
-    y += Math.max(14, recLines.length * 4) + 10;
+    pdf.line(m, yDecorTop, m + 3, yDecorTop);
+    pdf.line(m, yDecorTop, m, yDecorTop + recBoxH);
+    pdf.text(recLines, m + 6, yDecorTop + 4);
+    y = yDecorTop + recBoxH + SECTION_GAP;
 
+    bumpPageIfNeeded(20);
     pdf.setFontSize(11);
-    pdf.text(`Photos disponibles sur : tras-it.com/rapport/${id}`, m, y);
-
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(26, 26, 26);
-    pdf.text('tras-it.com', pageW / 2 - pdf.getTextWidth('tras-it.com') / 2, 285);
+    pdf.text(`Photos disponibles sur : tras-it.com/rapport/${id}`, m, y);
+    y += lineHeightMm() + SECTION_GAP;
+
+    bumpPageIfNeeded(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(26, 26, 26);
+    pdf.setFontSize(11);
+    pdf.text('tras-it.com', pageW / 2 - pdf.getTextWidth('tras-it.com') / 2, y);
 
     pdf.save(`rapport-${refPdf.replace('TRS-', '')}.pdf`);
   }, [docData, id]);
