@@ -13,9 +13,9 @@ type FicheMissionDoc = {
   frequency?: string;
   missionType?: string;
   dateAssignation?: unknown;
-  prestataire?: string;
-  adresse?: string;
-  district?: string;
+  providerName?: string;
+  siteAddress?: string;
+  siteDistrict?: string;
   onSiteContactName?: string;
   observationsAgent?: string;
   avisTRASIT?: string;
@@ -239,9 +239,9 @@ export default function RapportPage() {
     const d = toDate(docData.dateAssignation);
     return d ? formatDateFr(d) : '—';
   })();
-  const prestataire = safeString(docData?.prestataire) || 'Entreprise Construction Moderne';
-  const adresse = safeString(docData?.adresse) || 'Quartier Cocody, Abidjan';
-  const district = safeString(docData?.district) || 'Abidjan Sud';
+  const prestataire = safeString(docData?.providerName) || 'Entreprise Construction Moderne';
+  const adresse = safeString(docData?.siteAddress) || 'Quartier Cocody, Abidjan';
+  const district = safeString(docData?.siteDistrict) || 'Abidjan Sud';
   const contactSurSite = safeString(docData?.onSiteContactName) || '—';
 
   const closeGallery = () => {
@@ -303,9 +303,9 @@ export default function RapportPage() {
     const tm = formatMissionType(d.missionType);
     const dv = toDate(d.dateAssignation);
     const dvs = dv ? formatDateFr(dv) : '—';
-    const pr = safeString(d.prestataire) || 'Entreprise Construction Moderne';
-    const ad = safeString(d.adresse) || 'Quartier Cocody, Abidjan';
-    const di = safeString(d.district) || 'Abidjan Sud';
+    const pr = safeString(d.providerName) || 'Entreprise Construction Moderne';
+    const ad = safeString(d.siteAddress) || 'Quartier Cocody, Abidjan';
+    const di = safeString(d.siteDistrict) || 'Abidjan Sud';
     const cs = safeString(d.onSiteContactName) || '—';
 
     pdf.setFont('helvetica', 'bold');
