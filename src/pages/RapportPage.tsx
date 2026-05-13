@@ -313,29 +313,41 @@ export default function RapportPage() {
     pdf.text('DÉTAILS DE LA MISSION', m, y);
     y += 6;
 
-    const rows: [string, string][] = [
-      ['Type de mission', tm],
-      ['Date de visite', dvs],
-      ['Prestataire', pr],
-      ['Adresse', ad],
-      ['District', di],
-      ['Contact sur site', cs],
-    ];
-    const colLabel = 55;
-    pdf.setDrawColor(17, 17, 17);
-    pdf.setLineWidth(0.2);
-    for (const [label, val] of rows) {
-      pdf.setFontSize(9);
+    const xColLeft = 20;
+    const xColRight = 110;
+    const wColLeft = 82;
+    const wColRight = 82;
+    const gapLabelValueMm = (6 / 96) * 25.4;
+    const gapPairMm = (14 / 96) * 25.4;
+    const labelLineHmm = 14 * 0.352778;
+    const valueLineHmm = 16 * 0.352778;
+
+    const pdfDetailCellBottom = (x: number, yTop: number, maxW: number, label: string, value: string): number => {
+      let yCur = yTop;
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(68, 68, 68);
+      pdf.text(label, x, yCur);
+      yCur += labelLineHmm + gapLabelValueMm;
+      pdf.setFontSize(16);
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor(26, 26, 26);
-      pdf.rect(m, y - 4, contentW, 8);
-      pdf.text(label, m + 2, y + 1);
-      pdf.setFont('helvetica', 'normal');
-      const lines = pdf.splitTextToSize(val, contentW - colLabel - 4);
-      pdf.text(lines, m + colLabel, y + 1);
-      y += Math.max(8, lines.length * 4 + 2);
+      const valLines = pdf.splitTextToSize(value, maxW);
+      pdf.text(valLines, x, yCur);
+      yCur += valLines.length * valueLineHmm;
+      return yCur;
+    };
+
+    const rowPairs: [string, string, string, string][] = [
+      ['Type de mission', tm, 'Date de visite', dvs],
+      ['Prestataire', pr, 'Adresse', ad],
+      ['District', di, 'Contact sur site', cs],
+    ];
+    for (const [labL, valL, labR, valR] of rowPairs) {
+      const bottomL = pdfDetailCellBottom(xColLeft, y, wColLeft, labL, valL);
+      const bottomR = pdfDetailCellBottom(xColRight, y, wColRight, labR, valR);
+      y = Math.max(bottomL, bottomR) + gapPairMm;
     }
-    y += 6;
 
     const obsPdf = safeString(d.observationsAgent)
       ? safeString(d.observationsAgent)
