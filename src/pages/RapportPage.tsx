@@ -288,11 +288,12 @@ export default function RapportPage() {
     pdf.text('Rapport de vérification', m, y);
     y += 12;
 
-    pdf.setFontSize(10);
+    pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
     pdf.setTextColor(107, 30, 46);
     pdf.text('CLIENT', m, y);
     y += 5;
+    pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(26, 26, 26);
     pdf.text(safeString(d.nomClient) || safeString(d.nom) || 'Client', m, y);
@@ -308,6 +309,7 @@ export default function RapportPage() {
     const di = safeString(d.siteDistrict) || 'Abidjan Sud';
     const cs = safeString(d.onSiteContactName) || '—';
 
+    pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
     pdf.setTextColor(107, 30, 46);
     pdf.text('DÉTAILS DE LA MISSION', m, y);
@@ -319,17 +321,17 @@ export default function RapportPage() {
     const wColRight = 82;
     const gapLabelValueMm = (6 / 96) * 25.4;
     const gapPairMm = (14 / 96) * 25.4;
-    const labelLineHmm = 10 * 0.352778;
-    const valueLineHmm = 12 * 0.352778;
+    const labelLineHmm = 11 * 0.352778;
+    const valueLineHmm = 13 * 0.352778;
 
     const pdfDetailCellBottom = (x: number, yTop: number, maxW: number, label: string, value: string): number => {
       let yCur = yTop;
-      pdf.setFontSize(10);
+      pdf.setFontSize(11);
       pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(68, 68, 68);
       pdf.text(label, x, yCur);
       yCur += labelLineHmm + gapLabelValueMm;
-      pdf.setFontSize(12);
+      pdf.setFontSize(13);
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor(26, 26, 26);
       const valLines = pdf.splitTextToSize(value, maxW);
@@ -353,13 +355,14 @@ export default function RapportPage() {
       ? safeString(d.observationsAgent)
       : [OBS_FALLBACK_P1, OBS_FALLBACK_P2, OBS_FALLBACK_P3].join('\n\n');
 
+    pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
     pdf.setTextColor(107, 30, 46);
     pdf.text('OBSERVATIONS', m, y);
     y += 6;
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(26, 26, 26);
-    pdf.setFontSize(11);
+    pdf.setFontSize(13);
     const obsLines = pdf.splitTextToSize(obsPdf, contentW);
     pdf.text(obsLines, m, y);
     y += obsLines.length * 4 + 8;
@@ -373,24 +376,28 @@ export default function RapportPage() {
       ? safeString(d.avisTRASIT)
       : [AVIS_FALLBACK_P1, AVIS_FALLBACK_P2].join('\n\n');
 
+    pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
     pdf.setTextColor(107, 30, 46);
     pdf.text('AVIS TRASIT', m, y);
     y += 6;
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(26, 26, 26);
+    pdf.setFontSize(13);
     const avisLines = pdf.splitTextToSize(avisPdf, contentW);
     pdf.text(avisLines, m, y);
     y += avisLines.length * 4 + 8;
 
+    pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
     pdf.setTextColor(107, 30, 46);
     pdf.text('RECOMMANDATION', m, y);
     y += 6;
 
-    const recLines = pdf.splitTextToSize(RECOMMANDATION, contentW - 8);
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(26, 26, 26);
+    pdf.setFontSize(13);
+    const recLines = pdf.splitTextToSize(RECOMMANDATION, contentW - 8);
     pdf.setDrawColor(107, 30, 46);
     pdf.setLineWidth(0.5);
     pdf.line(m, y, m + 3, y);
