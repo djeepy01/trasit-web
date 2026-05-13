@@ -319,17 +319,17 @@ export default function RapportPage() {
     const wColRight = 82;
     const gapLabelValueMm = (6 / 96) * 25.4;
     const gapPairMm = (14 / 96) * 25.4;
-    const labelLineHmm = 14 * 0.352778;
-    const valueLineHmm = 16 * 0.352778;
+    const labelLineHmm = 10 * 0.352778;
+    const valueLineHmm = 12 * 0.352778;
 
     const pdfDetailCellBottom = (x: number, yTop: number, maxW: number, label: string, value: string): number => {
       let yCur = yTop;
-      pdf.setFontSize(14);
+      pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(68, 68, 68);
       pdf.text(label, x, yCur);
       yCur += labelLineHmm + gapLabelValueMm;
-      pdf.setFontSize(16);
+      pdf.setFontSize(12);
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor(26, 26, 26);
       const valLines = pdf.splitTextToSize(value, maxW);
@@ -359,7 +359,7 @@ export default function RapportPage() {
     y += 6;
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(26, 26, 26);
-    pdf.setFontSize(9);
+    pdf.setFontSize(11);
     const obsLines = pdf.splitTextToSize(obsPdf, contentW);
     pdf.text(obsLines, m, y);
     y += obsLines.length * 4 + 8;
@@ -398,7 +398,7 @@ export default function RapportPage() {
     pdf.text(recLines, m + 6, y + 4);
     y += Math.max(14, recLines.length * 4) + 10;
 
-    pdf.setFontSize(9);
+    pdf.setFontSize(11);
     pdf.text(`Photos disponibles sur : tras-it.com/rapport/${id}`, m, y);
 
     pdf.setFont('helvetica', 'normal');
