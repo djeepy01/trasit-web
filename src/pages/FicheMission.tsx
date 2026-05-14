@@ -8,7 +8,7 @@ import { onAuthStateChanged, type User } from 'firebase/auth';
 
 type MissionType = 'btp' | 'agro' | 'commerce' | '';
 type Frequency = 'unique' | 'suivi' | '';
-type ServiceLevel = 'standard' | 'renforce' | '';
+type ServiceLevel = 'ponctuel' | 'renforce' | '';
 
 type AgroExploitationType = 'elevage' | 'culture' | 'mixte' | '';
 type AgroSpeciesMain = 'poulet' | 'lapin' | 'porc' | 'autre' | '';
@@ -227,7 +227,7 @@ export default function FicheMission() {
   const [formData, setFormData] = useState<FormData>({
     missionType: 'btp',
     siteAddress: 'Rue des Jardins, Cocody',
-    serviceLevel: 'standard',
+    serviceLevel: 'ponctuel',
 
     agroExploitationType: '',
     agroSpeciesMain: '',
@@ -256,7 +256,7 @@ export default function FicheMission() {
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
 
   // SECTION G
-  const [serviceLevel, setServiceLevel] = useState<ServiceLevel>('standard');
+  const [serviceLevel, setServiceLevel] = useState<ServiceLevel>('ponctuel');
 
   useEffect(() => {
     setFormData((prev) => ({
@@ -1306,16 +1306,16 @@ export default function FicheMission() {
                     <div
                       role="button"
                       tabIndex={0}
-                      onClick={() => setServiceLevel('standard')}
+                      onClick={() => setServiceLevel('ponctuel')}
                       onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') setServiceLevel('standard');
+                        if (e.key === 'Enter' || e.key === ' ') setServiceLevel('ponctuel');
                       }}
                       data-select-card="true"
                       style={{
                         width: '100%',
                         borderRadius: '8px',
-                        border: serviceLevel === 'standard' ? `2px solid ${COLORS.primary}` : '2px solid #94A3B8',
-                        background: serviceLevel === 'standard' ? COLORS.light : COLORS.white,
+                        border: serviceLevel === 'ponctuel' ? `2px solid ${COLORS.primary}` : '2px solid #94A3B8',
+                        background: serviceLevel === 'ponctuel' ? COLORS.light : COLORS.white,
                         boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
                         padding: '16px 20px',
                         cursor: 'pointer',
@@ -1439,7 +1439,7 @@ export default function FicheMission() {
                     <div>
                       <div style={{ fontSize: '16px', fontWeight: 700, color: COLORS.text }}>Niveau de service</div>
                       <div style={{ fontSize: '16px', fontWeight: 500, color: COLORS.text, lineHeight: 1.7 }}>
-                        {serviceLevel === 'standard' ? 'Rapport Standard' : serviceLevel === 'renforce' ? 'Suivi Renforcé' : ''}
+                        {serviceLevel === 'ponctuel' ? 'Rapport Standard' : serviceLevel === 'renforce' ? 'Suivi Renforcé' : ''}
                       </div>
                     </div>
                   </div>
