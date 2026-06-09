@@ -88,10 +88,10 @@ export default function HowItWorksPage() {
                 )}
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <h3 className="text-xl md:text-2xl font-bold tracking-tight" style={{ color: navy }}>
+                <h3 className="font-bold tracking-tight" style={{ color: navy, fontSize: '18px', lineHeight: '1.3' }}>
                   {step.title}
                 </h3>
-                <p className="mt-4 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '20px', fontWeight: 500 }}>
+                <p className="mt-4 leading-[1.65]" style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 400, lineHeight: '1.65', marginTop: '8px' }}>
                   {step.description}
                 </p>
               </div>

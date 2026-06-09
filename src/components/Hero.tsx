@@ -88,14 +88,17 @@ export default function Hero() {
                 Décisions fondées sur la réalité.
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight mb-6">
+            <h1
+              className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight mb-6"
+              style={{ overflowWrap: 'break-word', wordBreak: 'break-word', maxWidth: '100%' }}
+            >
               Votre investissement mérite plus d'attention.
             </h1>
             <div
               className="mt-14 flex items-center gap-6"
-              style={{ background: 'rgba(0,0,0,0.4)', padding: '12px 24px', borderRadius: '8px' }}
+              style={{ background: 'rgba(0,0,0,0.4)', padding: '12px 16px', borderRadius: '8px', display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center', width: '100%', boxSizing: 'border-box' }}
             >
-              <div className="text-center">
+              <div className="text-center" style={{ textAlign: 'center', minWidth: '80px' }}>
                 <div
                   className="text-2xl font-black text-white"
                   style={{ fontSize: '48px', fontWeight: '800', color: 'white' }}
@@ -109,8 +112,8 @@ export default function Hero() {
                   Interventions
                 </div>
               </div>
-              <div className="w-px h-8 bg-white/20" />
-              <div className="text-center">
+              <div className="w-px h-8 bg-white/20" style={{ display: 'none' }} />
+              <div className="text-center" style={{ textAlign: 'center', minWidth: '80px' }}>
                 <div
                   className="text-2xl font-black text-white"
                   style={{ fontSize: '48px', fontWeight: '800', color: 'white' }}
@@ -124,8 +127,8 @@ export default function Hero() {
                   Pays couverts
                 </div>
               </div>
-              <div className="w-px h-8 bg-white/20" />
-              <div className="text-center">
+              <div className="w-px h-8 bg-white/20" style={{ display: 'none' }} />
+              <div className="text-center" style={{ textAlign: 'center', minWidth: '80px' }}>
                 <div
                   className="text-2xl font-black text-white"
                   style={{ fontSize: '48px', fontWeight: '800', color: 'white' }}
