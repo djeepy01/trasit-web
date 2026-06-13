@@ -54,13 +54,6 @@ export default function Dashboard() {
     }
   }, [navigate]);
 
-  const openWhatsApp = useCallback(() => {
-    // NOTE: Remplacer par le numéro WhatsApp officiel TRASIT (format international sans +)
-    const trasitWhatsAppNumber = '0000000000';
-    const url = `https://wa.me/${trasitWhatsAppNumber}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
-  }, []);
-
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       setLoading(true);
@@ -302,7 +295,7 @@ export default function Dashboard() {
                 Aucune mission en cours
               </div>
               <div className="mt-3" style={{ fontSize: '16px', fontWeight: 500, color: '#1A1A1A' }}>
-                Soumettez votre première demande via WhatsApp.
+                Créez votre première fiche de mission ci-dessous.
               </div>
 
               <div style={{ marginTop: '22px', display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
@@ -321,22 +314,6 @@ export default function Dashboard() {
                   }}
                 >
                   Créer une fiche de mission
-                </button>
-                <button
-                  type="button"
-                  onClick={openWhatsApp}
-                  style={{
-                    background: '#8B1A1A',
-                    color: 'white',
-                    fontSize: '18px',
-                    fontWeight: 600,
-                    borderRadius: '8px',
-                    padding: '14px 26px',
-                    border: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  Soumettre via WhatsApp
                 </button>
               </div>
             </div>
