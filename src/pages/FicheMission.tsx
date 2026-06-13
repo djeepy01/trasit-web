@@ -37,9 +37,6 @@ type FormData = {
 
   commerceType: CommerceType;
   commerceTypeOther: string;
-  commerceStockDeclared: string;
-  commerceRevenueDeclared: string;
-  commerceEmployeesDeclared: string;
   commerceToVerify: string;
 };
 
@@ -204,8 +201,6 @@ export default function FicheMission() {
 
   // SECTION A
   const [providerName, setProviderName] = useState('Entreprise Koné Construction');
-  const [providerRegistration, setProviderRegistration] = useState('CI-ABJ-2023-456');
-  const [providerOtherInfo, setProviderOtherInfo] = useState('Entrepreneur actif depuis 2018');
 
   // SECTION B
   const [siteAddress, setSiteAddress] = useState('Rue des Jardins, Cocody');
@@ -219,8 +214,6 @@ export default function FicheMission() {
 
   // SECTION D (dynamic)
   const [btpConstructionType, setBtpConstructionType] = useState('Villa R+1');
-  const [btpLevels, setBtpLevels] = useState('2');
-  const [btpSurface, setBtpSurface] = useState('180m²');
   const [btpCurrentState, setBtpCurrentState] = useState('Fondations et dalle du rez-de-chaussée posées selon l entrepreneur');
   const [btpToVerify, setBtpToVerify] = useState('Vérifier l avancement réel des travaux et la qualité des matériaux utilisés');
 
@@ -241,9 +234,6 @@ export default function FicheMission() {
 
     commerceType: '',
     commerceTypeOther: '',
-    commerceStockDeclared: '',
-    commerceRevenueDeclared: '',
-    commerceEmployeesDeclared: '',
     commerceToVerify: '',
   });
 
@@ -303,7 +293,6 @@ export default function FicheMission() {
 
     if (missionType === 'btp') {
       if (!btpConstructionType.trim()) errs.push('Mission BTP: Type de construction (obligatoire).');
-      if (!btpLevels.trim()) errs.push('Mission BTP: Nombre de niveaux (obligatoire).');
       if (!btpCurrentState.trim()) errs.push('Mission BTP: État actuel déclaré des travaux (obligatoire).');
       if (!btpToVerify.trim()) errs.push('Mission BTP: Ce que vous souhaitez vérifier (obligatoire).');
     }
@@ -344,7 +333,6 @@ export default function FicheMission() {
     onSiteContactPhone,
     missionType,
     btpConstructionType,
-    btpLevels,
     btpCurrentState,
     btpToVerify,
     formData,
@@ -424,13 +412,31 @@ export default function FicheMission() {
         onSiteContactPhone,
         frequency,
         serviceLevel,
+        siteLandmarks,
+        siteExtraInfo,
+        followupSteps,
+        btpConstructionType,
+        btpCurrentState,
+        btpToVerify,
+        agroExploitationType: formData.agroExploitationType,
+        agroSpeciesMain: formData.agroSpeciesMain,
+        agroSpeciesOther: formData.agroSpeciesOther,
+        agroHeadsDeclared: formData.agroHeadsDeclared,
+        agroElevageStage: formData.agroElevageStage,
+        agroCropType: formData.agroCropType,
+        agroAreaHa: formData.agroAreaHa,
+        agroCultureStage: formData.agroCultureStage,
+        agroToVerify: formData.agroToVerify,
+        commerceType: formData.commerceType,
+        commerceTypeOther: formData.commerceTypeOther,
+        commerceToVerify: formData.commerceToVerify,
       });
       console.log('FICHE SAUVEGARDÉE:', docRef.id);
 
       const emailFormData = {
         providerName,
-        providerRegistration,
-        providerOther: providerOtherInfo,
+        providerRegistration: '',
+        providerOther: '',
         siteAddress,
         siteDistrict,
         siteLandmarks,
@@ -440,7 +446,7 @@ export default function FicheMission() {
         missionType,
         missionDescription:
           missionType === 'btp'
-            ? `Type: ${btpConstructionType || ''}\nNiveaux: ${btpLevels || ''}\nSuperficie: ${btpSurface || ''}\nÉtat déclaré: ${btpCurrentState || ''}\nÀ vérifier: ${btpToVerify || ''}`
+            ? `Type: ${btpConstructionType || ''}\nÉtat déclaré: ${btpCurrentState || ''}\nÀ vérifier: ${btpToVerify || ''}`
             : missionType === 'agro'
               ? `Type d'exploitation: ${formData.agroExploitationType || ''}\nEspèce: ${
                   formData.agroSpeciesMain === 'autre' ? formData.agroSpeciesOther || '' : formData.agroSpeciesMain || ''
@@ -450,9 +456,7 @@ export default function FicheMission() {
               : missionType === 'commerce'
                 ? `Type de commerce: ${
                     formData.commerceType === 'autre' ? formData.commerceTypeOther || '' : formData.commerceType || ''
-                  }\nStock déclaré: ${formData.commerceStockDeclared || ''}\nChiffre d'affaires déclaré: ${
-                    formData.commerceRevenueDeclared || ''
-                  }\nEmployés déclarés: ${formData.commerceEmployeesDeclared || ''}\nÀ vérifier: ${formData.commerceToVerify || ''}`
+                  }\nÀ vérifier: ${formData.commerceToVerify || ''}`
                 : '',
         frequency,
         serviceLevel,
@@ -784,19 +788,9 @@ export default function FicheMission() {
                     </HelperNote>
                   </div>
 
-                  <div style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '14px' }}>
-                    <div>
-                      <FieldLabel>Nom complet ou raison sociale *</FieldLabel>
-                      <TextInput value={providerName} onChange={(e) => setProviderName(e.target.value)} />
-                    </div>
-                    <div>
-                      <FieldLabel>Numéro d'immatriculation</FieldLabel>
-                      <TextInput value={providerRegistration} onChange={(e) => setProviderRegistration(e.target.value)} />
-                    </div>
-                  </div>
-                  <div style={{ marginTop: '14px' }}>
-                    <FieldLabel>Autres informations connues</FieldLabel>
-                    <TextArea value={providerOtherInfo} onChange={(e) => setProviderOtherInfo(e.target.value)} />
+                  <div style={{ marginTop: '16px' }}>
+                    <FieldLabel>Nom complet ou raison sociale *</FieldLabel>
+                    <TextInput value={providerName} onChange={(e) => setProviderName(e.target.value)} />
                   </div>
                 </div>
 
@@ -903,19 +897,10 @@ export default function FicheMission() {
 
                   {missionType === 'btp' ? (
                     <div style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '14px' }}>
-                      <div>
+                      <div style={{ gridColumn: '1 / -1' }}>
                         <FieldLabel>Type de construction *</FieldLabel>
                         <TextInput value={btpConstructionType} onChange={(e) => setBtpConstructionType(e.target.value)} />
                       </div>
-                      <div>
-                        <FieldLabel>Nombre de niveaux *</FieldLabel>
-                        <TextInput value={btpLevels} onChange={(e) => setBtpLevels(e.target.value)} />
-                      </div>
-                      <div>
-                        <FieldLabel>Superficie approximative</FieldLabel>
-                        <TextInput value={btpSurface} onChange={(e) => setBtpSurface(e.target.value)} />
-                      </div>
-                      <div />
                       <div style={{ gridColumn: '1 / -1' }}>
                         <FieldLabel>État actuel déclaré des travaux *</FieldLabel>
                         <TextArea value={btpCurrentState} onChange={(e) => setBtpCurrentState(e.target.value)} />
@@ -1072,34 +1057,6 @@ export default function FicheMission() {
 
                   {missionType === 'commerce' ? (
                     <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                      <div>
-                        <FieldLabel>Détails commerce</FieldLabel>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                          <div>
-                            <FieldLabel>Stock déclaré par le prestataire</FieldLabel>
-                            <TextInput
-                              value={formData.commerceStockDeclared}
-                              onChange={(e) => setFormData((p) => ({ ...p, commerceStockDeclared: e.target.value }))}
-                            />
-                          </div>
-                          <div>
-                            <FieldLabel>Chiffre d'affaires déclaré</FieldLabel>
-                            <TextInput
-                              value={formData.commerceRevenueDeclared}
-                              onChange={(e) => setFormData((p) => ({ ...p, commerceRevenueDeclared: e.target.value }))}
-                            />
-                          </div>
-                          <div>
-                            <FieldLabel>Nombre d'employés déclaré</FieldLabel>
-                            <TextInput
-                              type="number"
-                              inputMode="numeric"
-                              value={formData.commerceEmployeesDeclared}
-                              onChange={(e) => setFormData((p) => ({ ...p, commerceEmployeesDeclared: e.target.value }))}
-                            />
-                          </div>
-                        </div>
-                      </div>
                       <div>
                         <FieldLabel>Ce que vous souhaitez vérifier *</FieldLabel>
                         <TextArea
